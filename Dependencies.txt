@@ -1,1 +1,0 @@
-sudo dnf install pyjamas.noarch pyjamas-doc.noarch pyjamas-examples.noarch pyjamas-ui.noarch
