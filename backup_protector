@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+import BackupProtector.Scanda
+
+app = Scanda()
+app.main()
+
