@@ -4,6 +4,8 @@ import os
 import json
 from crontab import CronTab
 
+from SetLog import SetLog
+
 class Cron():
 	time = 0
 	time_type = "dias"
@@ -11,6 +13,8 @@ class Cron():
 
 	# Lee los parametros de configuracion para crear un cron
 	def readConf(self):
+		# Set Log
+		log = SetLog()
 		cron_time = "* * * * * "
 		# Proceso que realizara la subida de archivos
 		cron_backend = "/async.py"
@@ -27,12 +31,14 @@ class Cron():
 				self.time = str(self.time)
 				self.time_type = data['time_type']
 		else :
-			print "Ocurrio un error al guardar la configuracion"
+			log.newLog("load_config_file", "E", "")
 		# Concatena el cron
 		self.cron = "/usr/bin/python " + location + cron_backend
 
 	# crea un cron
 	def sincronizar(self):
+		# Set Log
+		log = SetLog()
 		self.readConf()
 		# Este comando se utiliza para extraer el usuario que ejecutara el cron
 		linux_user = "echo $USER"
@@ -51,9 +57,11 @@ class Cron():
 
 		try:
 			tab.write()
-			print tab.render()
+			#print tab.render()
+			return True
 		except:
-			print "Ocurrio un error al programar las tareas"
+			log.newLog("cron_error", "E", "")
+			return False
 
 #cr = Cron()
 #cr.sincronizar()

@@ -6,31 +6,43 @@ import urllib2
 import psutil
 
 from Login import Login
+from SetLog import SetLog
 
 
 class BackgroundProcess():
     # Obtiene el nombre del proceso de la API de SCANDA
     def getProcessName(self):
+        # Set Log
+        log = SetLog()
+        # Exception
+        ex = ""
+        # Mombre por default
         process = 'SQLDBproc'
+        '''
+            Version del Sistema Operativo
+            2 = Linux
+            1 = Windows
+        '''
+        so = 2
         # extrae la informacion del usuario del archivo de configuracion
         login = Login()
         user = login.returnUserData()
 
         # Url de la api REST para autenticarse
-        url = 'http://201.140.108.22:2017/DBProtector/DBBackUpProcess_GET?IdPlatform=2&User='+ user['user'] +'&Password=' + user['password']
+        url = 'http://201.140.108.22:2017/DBProtector/DBBackUpProcess_GET?IdPlatform=' + str(so) + '&User='+ user['user'] +'&Password=' + user['password']
 
         try:
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
-            print "Error: " + e.fp.read()
+            log.newLog("http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:
             process = res['Process']
         else:
-            print "Ocurrio un error al autenticarse con la API REST"
+            log.newLog("process_api", "E", "")
         return process
 
     def isRunning(self):
@@ -57,8 +69,8 @@ class BackgroundProcess():
             print "Ocurrio un error al autenticarse con la API REST"
 
 
-s = BackgroundProcess()
-if s.isRunning():
-    print "Esta corriendo el proceso"
-else:
-    print "Inicia la subida"
+#s = BackgroundProcess()
+#if s.isRunning():
+#    print "Esta corriendo el proceso"
+#else:
+#    print "Inicia la subida"

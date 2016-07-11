@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import pygtk
 import gtk
-import gobject
+import pygtk
+
 pygtk.require('2.0')
 gtk.gdk.threads_init()
 
 import os
-import sys
 import Preferences as p
-import Recover as r
-import Login as l
+#import Login as l
 
 class Scanda():
 	# Nombre del icono que se mostrara en el panel
@@ -57,11 +55,11 @@ class Scanda():
 		# Activa el item, y le asigna le accion que realizara
 		# Descomentar
 		action = p.Preferences()
-		login = l.Login()
+		#login = l.Login()
 		#recover.connect("activate", mr.recover)
 		timeout.connect("activate", action.preferencesTime)
 		route.connect("activate", action.preferencesPath)
-		loginMenu.connect("activate", login.loginMain)
+		#loginMenu.connect("activate", login.loginMain)
 		quit.connect("activate", action.salir)
 
 		# Agrega los items al menu

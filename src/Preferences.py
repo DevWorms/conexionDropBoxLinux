@@ -184,7 +184,7 @@ class Preferences():
 			if not data['path']:
 				data['path'] = "/"
 			# escribe la nueva variable time en el archivo json junto con la variable value
-			with open(self.CONFIG_FILE, 'w') as f:
+			with open(file, 'w') as f:
 				json.dump({
 					'path': data['path'],
 					'time': self.time,

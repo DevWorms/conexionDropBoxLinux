@@ -1,0 +1,10 @@
+{
+  "error_report": "Error: enviar Log: ",
+  "load_config_file": "Error: abrir archivo de configuracion: ",
+  "load_errors_file": "Error: abrir archivo de errores: ",
+  "login_api_error": "Error: autenticarse con API REST: ",
+  "login_status_error": "Usuario con Status: ",
+  "http_error": "Error: enviar solicitud HTTP: ",
+  "process_api": "Error: obtener nombre de proceso con API",
+  "cron_error": "Error al crear cron"
+}

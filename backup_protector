@@ -3,4 +3,3 @@ import BackupProtector.Scanda
 
 app = Scanda()
 app.main()
-

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-from gi.repository import Gtk, WebKit
-import os, re
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('WebKit', '3.0')
+from gi.repository import WebKit, Gtk
+import os
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,7 +14,7 @@ class WebWindow(Gtk.Window):
         self.view = WebKit.WebView()
         self.add(self.view)
         settings = self.view.get_settings()
-        settings.set_property('enable-default-context-menu', False)
+        settings.set_property('enable-default-context-menu', True)
         self.view.set_settings(settings)
         self.progress = 0
         if html:
@@ -43,6 +46,7 @@ class WebWindow(Gtk.Window):
         elif scheme == 'admin' and path == "getMonths":
             fd = open(ROOT_DIR + "/html/year.html", "r")
             self.tmp_page = fd.read()
+            fd.close()
             output_page = self.tmp_page.replace("{var1}", "2016")
             output_page = output_page.replace("{month1}", "Enero"
                                                             "")
