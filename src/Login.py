@@ -121,6 +121,8 @@ class Login():
                     return True
 
     def loginMaterial(self):
+        import gi
+        gi.require_version('Gtk', '3.0')
         from gi.repository import Gtk
 
         data = {"alert": ""}
@@ -133,5 +135,5 @@ class Login():
         win.show_all()
         Gtk.main()
 
-login = Login()
-login.loginMaterial()
+#login = Login()
+#login.loginMaterial()

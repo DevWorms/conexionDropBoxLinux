@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta content="IE=edge" http-equiv="X-UA-Compatible">
-	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
-	<!-- css -->
-	<link href="https://daemonite.github.io/material/css/base.min.css" rel="stylesheet">
-	<link href="https://daemonite.github.io/material/css/project.min.css" rel="stylesheet">
-	<style type="text/css">
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <!-- css -->
+    <link href="https://daemonite.github.io/material/css/base.min.css" rel="stylesheet">
+    <link href="https://daemonite.github.io/material/css/project.min.css" rel="stylesheet">
+    <style type="text/css">
 		.card-scanda {
 			background-color: #4fc3f7;
 			color: rgba(0, 0, 0, 0.87);
@@ -30,159 +30,185 @@
 			padding: 8px 0 7px;
 			width:40%;
 		}
-	</style>
+
+    </style>
 </head>
 <body class="page-brand">
-	<header class="header header-transparent header-waterfall ui-header">
-		<ul class="nav nav-list pull-left">
-			<li>
-				<a data-toggle="menu" href="#ui_menu">
-					<span class="icon icon-lg">menu</span>
-				</a>
-			</li>
-		</ul>
-		<span class="header-logo">Backup Protector</span>
-	</header>
-	<nav aria-hidden="true" class="menu" id="ui_menu" tabindex="-1">
-		<div class="menu-scroll">
-			<div class="menu-content">
-				<ul class="nav">
-					<li>
-						<ul class="menu-collapse collapse in" id="ui_menu_components">
-							<li>
-								<p class="text-center">
+<header class="header header-transparent header-waterfall ui-header">
+    <ul class="nav nav-list pull-left">
+        <li>
+            <a data-toggle="menu" href="#ui_menu">
+                <span class="icon icon-lg">menu</span>
+            </a>
+        </li>
+    </ul>
+    <span class="header-logo">Backup Protector</span>
+</header>
+<nav aria-hidden="true" class="menu" id="ui_menu" tabindex="-1">
+    <div class="menu-scroll">
+        <div class="menu-content">
+            <ul class="nav">
+                <li>
+                    <ul class="menu-collapse collapse in" id="ui_menu_components">
+                        <li>
+                            <p class="text-center">
 									<span class="avatar avatar-inline avatar-lg">
-										<img alt="Login" src="https://daemonite.github.io/material/images/users/avatar-001.jpg">
+										<img alt="Login"
+                                             src="https://daemonite.github.io/material/images/users/avatar-001.jpg">
 									</span>
-								</p>
-							</li>
-							<li>
-								<a class="padding-right-lg waves-attach" href="index.html"><span class="icon icon-lg margin-right">folder</span>Mis Respaldos</a>
-							</li>
-							<li>
-								<a class="padding-right-lg waves-attach" href="settings.html#tab_account"><span class="icon icon-lg margin-right">account_box</span>Mi cuenta</a>
-							</li>
-							<li>
-								<a class="padding-right-lg waves-attach" href="settings.html#tab_config"><span class="icon icon-lg margin-right">build</span>Configuración</a>
-							</li>
-							<li>
-								<a class="padding-right-lg waves-attach" href="page-login.html"><span class="icon icon-lg margin-right">backup</span>Status:</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<main class="content">
-		<div class="content-header ui-content-header">
-			<div class="container">
-				
-			</div>
-		</div>
-		<div class="container">
-			<section class="content-inner margin-top-no">
-				<div class="row">
-					<div class="col-lg-8 col-md-9">
-						<div class="card margin-bottom-no">
-							<div class="card-main">
-								<div class="card-inner">
-									<p>Ajustes.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="card">
-							<div class="card-main">
-								<nav class="tab-nav margin-top-no">
-									<ul class="nav nav-justified">
-										<li class="active">
-											<a class="waves-attach" data-toggle="tab" href="#tab_account">Mi Cuenta</a>
-										</li>
-										<li>
-											<a class="waves-attach" data-toggle="tab" href="#tab_config">Configuración</a>
-										</li>
-									</ul>
-								</nav>
-								<div class="card-inner">
-									<div class="tab-content">
-										<div class="tab-pane fade active in" id="tab_account">
-											<table class="table" title="A basic table">
-												<tbody>
-													<tr>
-														<td>Usuario</td>
-														<td>value</td>
-													</tr>
-													<tr>
-														<td>Espacio Disponible</td>
-														<td>1 TB</td>
-													</tr>
-													<tr>
-														<td>Espacio usado</td>
-														<td>520 GB</td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
-										<!-- Configuracion -->
-										<div class="tab-pane fade" id="tab_config">
-											<form class="form" action="#">
-												<!-- Ruta de respaldos -->
-												<div class="form-group form-group-label">
-													<div class="row">
-														<div class="col-md-10 col-md-push-1">
-															<label class="floating-label" for="ui_login_username">Ruta de respaldos</label>
-															<input class="form-control" id="ui_login_username" type="text">
-														</div>
-													</div>
-												</div>
-												<!-- Frecuencia de respaldo -->
-												<div class="form-group form-group-label">
-													<div class="row">
-														<div class="col-md-10 col-md-push-1 form-control">
-															<label class="floating-label" for="ui_login_password">Respaldar cada...</label>
-															<input class="form-scanda" id="ui_login_password">
-															<select class="form-scanda" >
-																<option class="form-scanda" value="horas">Horas</option>
-																<option class="form-scanda" value="dias">Dias</option>
-															</select>
-														</div>
-													</div>
-												</div>
-												<div class="form-group">
-													<div class="row">
-														<div class="col-md-10 col-md-push-1">
-															<button class="btn btn-block btn-brand waves-attach waves-light">Guardar</button>
-														</div>
-													</div>
-												</div>
-											</form>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
-	</main>
-	<!-- Float Button -->
-	<div class="fbtn-container">
-		<div class="fbtn-inner">
-			<a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" data-toggle="dropdown"><span class="fbtn-text fbtn-text-left">Links</span><span class="fbtn-ori icon">apps</span><span class="fbtn-sub icon">close</span></a>
-			<div class="fbtn-dropup">
-				<a class="fbtn waves-attach waves-circle" href="https://github.com/Daemonite/material" target="_blank"><span class="fbtn-text fbtn-text-left">Fork me on GitHub</span><span class="icon">code</span></a>
-				<a class="fbtn fbtn-brand waves-attach waves-circle waves-light" href="https://twitter.com/daemonites" target="_blank"><span class="fbtn-text fbtn-text-left">Follow Daemon on Twitter</span><span class="icon">share</span></a>
-				<a class="fbtn fbtn-green waves-attach waves-circle" href="http://www.daemon.com.au/" target="_blank"><span class="fbtn-text fbtn-text-left">Visit Daemon Website</span><span class="icon">link</span></a>
-			</div>
-		</div>
-	</div>
+                            </p>
+                        </li>
+                        <li>
+                            <a class="padding-right-lg waves-attach" href="index.html"><span
+                                    class="icon icon-lg margin-right">folder</span>Mis Respaldos</a>
+                        </li>
+                        <li>
+                            <a class="padding-right-lg waves-attach" onclick="getRecover(true)" ><span
+                                    class="icon icon-lg margin-right">contacts</span>Mi cuenta</a>
+                        </li>
+                        <li>
+                            <a class="padding-right-lg waves-attach" onclick="getRecover(true)" ><span
+                                    class="icon icon-lg margin-right">build</span>Configuración</a>
+                        </li>
+                        <li>
+                            <a class="padding-right-lg waves-attach" href="page-login.html"><span
+                                    class="icon icon-lg margin-right">backup</span>Status:</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<main class="content">
+    <div class="content-header ui-content-header">
+        <div class="container">
 
-	<!-- js -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-	<script src="https://daemonite.github.io/material/js/base.min.js"></script>
-	<script src="https://daemonite.github.io/material/js/project.min.js"></script>
+        </div>
+    </div>
+    <div class="container">
+        <section class="content-inner margin-top-no">
+            <div class="row">
+                <div class="col-lg-8 col-md-9">
+                    <div class="card margin-bottom-no">
+                        <div class="card-main">
+                            <div class="card-inner">
+                                <p>Ajustes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-main">
+                    {alert}
+                    <nav class="tab-nav margin-top-no">
+                        <ul class="nav nav-justified">
+                            <li class="active">
+                                <a class="waves-attach" data-toggle="tab" href="#tab_account">Mi Cuenta</a>
+                            </li>
+                            <li>
+                                <a class="waves-attach" data-toggle="tab" href="#tab_config">Configuración</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="card-inner">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active in" id="tab_account">
+                                <table class="table" title="A basic table">
+                                    <tbody>
+                                    <tr>
+                                        <td>Usuario</td>
+                                        <td>{user}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Espacio Total</td>
+                                        <td>{space} MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Espacio Disponible</td>
+                                        <td>{space-available} MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Espacio usado</td>
+                                        <td>{space-used} MB</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Configuracion -->
+                            <div class="tab-pane fade" id="tab_config">
+                                <!-- Ruta de respaldos -->
+                                <div class="form-group form-group-label">
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-push-1">
+                                            <label class="floating-label" for="ui_path">Ruta de respaldos</label>
+                                            <input class="form-control" id="ui_path" type="text" value="{path}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Frecuencia de respaldo -->
+                                <div class="form-group form-group-label">
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-push-1 form-control">
+                                            <label class="floating-label" for="ui_time">Respaldar cada...</label>
+                                            <input class="form-scanda" id="ui_time" value="{time}">
+                                            <select class="form-scanda" id="ui_time_type">
+                                                {time_type}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-10 col-md-push-1">
+                                            <button onclick="preferences(true)"
+                                                    class="btn btn-block btn-brand waves-attach waves-light">Guardar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </div>
+    </section>
+    </div>
+</main>
+<!-- Float Button -->
+<div class="fbtn-container">
+    <div class="fbtn-inner">
+        <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" data-toggle="dropdown"><span
+                class="fbtn-text fbtn-text-left">Links</span><span class="fbtn-ori icon">apps</span><span
+                class="fbtn-sub icon">close</span></a>
+    </div>
+</div>
+
+<!-- js -->
+<script>
+	var preferences = function(click) {
+	    if (click) {
+	        var path = document.getElementById("ui_path").value;
+	        var time = document.getElementById("ui_time").value;
+	        var time_type = document.getElementById("ui_time_type").value;
+	        if (path && time) {
+                window.location = "admin://preferences";
+            }
+	    }
+	}
+	var getRecover = function(click) {
+	    if (click) {
+	        window.location = "admin://getRecover";
+	    }
+	}
+	window.onload = preferences(false);
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://daemonite.github.io/material/js/base.min.js"></script>
+<script src="https://daemonite.github.io/material/js/project.min.js"></script>
 </body>
 </html>

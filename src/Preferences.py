@@ -1,312 +1,204 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import pygtk
-import gtk
-import sys
-import os
 import json
+import urllib2
+
+import pygtk
+import gi
+import os
+from Ui import Ui
+from Login import Login
+from SetLog import SetLog
+
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 pygtk.require('2.0')
-gtk.gdk.threads_init()
 
 class Preferences():
-	dir_path = '/'
-	time = 0
-	value = 0
-	pw = ""
-	CONFIG_FILE = "settings/configuration.json"
-	LOCATION = os.path.dirname(os.path.realpath(__file__))
+    CONFIG_FILE = "settings/configuration.json"
+    LOCATION = os.path.dirname(os.path.realpath(__file__))
 
-	# Accion: Salir
-	def salir(self):
-		print 'Cerrando...'
-		gtk.main_quit()
+    def timeValidation(self, time, value, path):
+        if value == "minutos":
+            if time > 59:
+                time = 59
+            elif time < 0:
+                time = 0
+        elif value == "horas":
+            if time > 23:
+                time = 23
+            elif time < 0:
+                time = 0
+        elif value == "dias":
+            if time > 31:
+                time = 31
+            elif time < 1:
+                time = 1
+        else:
+            value = "horas"
+            time = time
+        self.writePreferences(path, time, value)
 
-	# Recupera el texto del Entry y lo almacena en la configuracion
-	def getPath(widget, entry):
-		entry_text = entry.get_text()
+    # guarda los datos del usuario recibidos
+    def writePreferences(self, path, time, time_type):
+        log = SetLog()
+        # Carga el archivo configuration.json
+        file = os.path.join(self.LOCATION, self.CONFIG_FILE)
+        # Si el archivo existe...
+        if (os.path.exists(file)):
+            # abre el archivo y guarda la variable 'path' del archivo json
+            with open(file, 'r') as f:
+                data = json.load(f)
+            # escribe la nueva variable time en el archivo json junto con la variable value
+            with open(file, 'w') as f:
+                json.dump({
+                    'path': path,
+                    'time': time,
+                    'time_type': time_type,
+                    'IdCustomer': data['IdCustomer'],
+                    'user': data['user'],
+                    'password': data['password'],
+                    'tokenDropbox': data['tokenDropbox'],
+                }, f)
+            return True
+        else:
+            log.newLog("load_config_file", "E", "")
+            return False
 
-	# Escribe los datos de configuracion del usuario en el archivo JSON
-	def writePath(self, arg):
-		# Carga el archivo configuration.json
-		file = os.path.join(self.LOCATION, self.CONFIG_FILE)
+    '''
+        Cada vez que se da click se ejecuta esta funcion,
+        dependiendo de la accion...
+    '''
+    def preferencesClicked(self, webview, webFrame, networkRequest):
+        uri = networkRequest.get_uri()
+        if uri.find("://") > 0:
+            scheme, path = uri.split("://", 1)
+        else:
+            return False
 
-		# Estrae el nuevo valor de path
-		global dir_path
-		new_path = dir_path.get_text()
+        # extrae path y frecuencia de respaldo de los forms HTML
+        route = webFrame.get_dom_document().get_element_by_id("ui_path").get_value()
+        time = webFrame.get_dom_document().get_element_by_id("ui_time").get_value()
+        time_type = webFrame.get_dom_document().get_element_by_id("ui_time_type").get_value()
+        # se utiliza scheme y path para evitar un loop
+        if scheme == 'admin' and path == "preferences":
+            if time and route:
+                # vuelve a cargar los datos del usuario
+                user = self.returnUserData()
+                if user["time_type"] == "dias":
+                    options = '<option class="form-scanda" value="dias">Dias</option>' \
+                              '<option class="form-scanda" value="horas">Horas</option>'
+                else:
+                    options = '<option class="form-scanda" value="horas">Horas</option>' \
+                              '<option class="form-scanda" value="dias">Dias</option>'
 
-		# Si el archivo existe...
-		if ( os.path.exists(file) ):
-			# abre el archivo y guarda la variable 'time' del archivo json
-			with open(file, 'r') as f:
-				data = json.load(f)
-			# Si la variable de time es nula, entonces la setea en 0
-			if not data['time']:
-				data['time'] = 0
-			# Si la variable de time_type es nula, entonces la setea en 0
-			if not data['time_type']:
-				data['time_type'] = "horas"
-			# escribe la nueva variable path en el archivo json junto con la time
-			with open(self.CONFIG_FILE, 'w') as f:
-				json.dump({
-					'path': new_path,
-					'time': data['time'],
-					'time_type': data['time_type'],
-					'IdCustomer': data['IdCustomer'],
-					'user': data['user'],
-					'password': data['password'],
-					'tokenDropbox': data['tokenDropbox'],
-				}, f)
-		else :
-			print "Ocurrio un error al guardar la configuracion"
-		# Cierra la ventana
-		pw.destroy()
+                # vuelve a cargar la vista de settings
+                fd = open(self.LOCATION + "/gui/settings.html", "r")
+                tmp_page = fd.read()
+                fd.close()
 
-	# Ventana para configurar las preferencias del usuario
-	def preferencesPath(self, widget = None, data = None):
-		# Crea una nueva ventana
-		global pw
-		pw = gtk.Window()
-		pw.set_position(gtk.WIN_POS_CENTER)
-		pw.set_size_request(600, 100)
-		pw.set_title("Configuración")
-		pw.set_resizable(False);
+                # REemplaza los datos del usuario
+                tmp_page = tmp_page.replace("{user}", str(user['user']))
+                tmp_page = tmp_page.replace("{space}", str(user['space']))
+                tmp_page = tmp_page.replace("{space-available}", str(user['freeSpace']))
+                tmp_page = tmp_page.replace("{space-used}", str(user['spaceUsed']))
+                tmp_page = tmp_page.replace("{path}", str(user['path']))
+                tmp_page = tmp_page.replace("{time}", str(user['time']))
+                tmp_page = tmp_page.replace("{time_type}", str(options))
 
-		# Contenedores VBox & HBox
-		vbox = gtk.VBox()
-		hbox = gtk.HBox()
-		hbox_buttons = gtk.HBox()
-		pw.add(vbox)
-		vbox.pack_start(hbox, fill = False)
-		vbox.pack_start(hbox_buttons, fill = False)
+                # Escribe los datos
+                if self.writePreferences(route, time, time_type):
+                    # reemplaza alert con un mensaje
+                    tmp_page = tmp_page.replace("{alert}", '<div class="tile-wrap">'
+                                                           '<div class="tile tile-collapse tile-brand">'
+                                                           '<div data-target="#ui_tile_example_red" data-toggle="tile">'
+                                                           '<div class="tile-inner">'
+                                                           '<div class="text-overflow">Cambios guardados correctamente</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>')
 
-		# Crea un Entry para almacenar la ruta de los respaldos
-		global dir_path
-		dir_path = gtk.Entry()
-		# Asigna un Listener a la funcion saveText
-		dir_path.connect("activate", self.getPath, dir_path)
-		# Obtiene el directorio "HOME" del usuario y lo muestra
-		from os.path import expanduser
-		# Extrae el valor de path del archivoi de configuracion
-		location_ = os.path.join(self.LOCATION, "../")
-		file = os.path.join(self.LOCATION, self.CONFIG_FILE)
-		# si el archivo existe...
-		if ( os.path.exists(file) ):
-			with open(file, 'r') as f:
-				data = json.load(f)
+                    webview.load_html_string(tmp_page, self.LOCATION + '/html/')
+                    return True
+                else:
+                    # reemplaza alert con un mensaje
+                    tmp_page = tmp_page.replace("{alert}", '<div class="tile-wrap">'
+                                                           '<div class="tile tile-collapse tile-red">'
+                                                           '<div data-target="#ui_tile_example_red" data-toggle="tile">'
+                                                           '<div class="tile-inner">'
+                                                           '<div class="text-overflow">Ocurrio un error al guardar los datos</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>')
 
-		home = data['path']
-		# Si home es null, entonces le asigna el dir HOME
-		if not home:
-			home = expanduser("~")
-		# Coloca la varialble home
-		dir_path.set_text(data['path'])
-		# Agregar el Entry al contenedor y muestra el widget
-		hbox.pack_start(dir_path, gtk.TRUE, gtk.TRUE, 0)
-		dir_path.show()
+                    webview.load_html_string(tmp_page, self.LOCATION + '/html/')
+                    return True
+        elif scheme == 'admin' and path == "getRecover":
+            print "saliendo"
+            Gtk.main_quit()
+            return True
 
-		# Crea un Boton para seleccionar una nueva ruta
-		button = gtk.Button("Seleccionar")
-		# Cuando se presiona llama la funcion selectDir
-		button.connect_object("clicked", self.selectPath, pw)
-		hbox.pack_start(button, gtk.TRUE, gtk.TRUE, 0)
-		button.set_flags(gtk.CAN_DEFAULT)
-		button.grab_default()
-		button.show()
+    def returnUserData(self):
+        log = SetLog()
+        # Datos del usuario
+        l = Login()
+        user = l.returnUserData()  # Url de la api REST para autenticarse
+        url = 'http://201.140.108.22:2017/DBProtector/Account_GET?User=' + user['user'] + '&Password=' + user[
+            'password']
+        try:
+            # Realiza la peticion
+            req = urllib2.Request(url)
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError, e:
+            log.newLog("http_error", "E", e.fp.read())
+        # Devuelve la info
+        res = json.loads(response.read())
+        # Si el inicio de sesion es correcto
+        if res['Success'] == 1:
+            # si  StorageLimit == -1 el espacio es Ilimitado
+            if res['StorageLimit'] == -1:
+                user['space'] = "Ilimitado"
+                user['freeSpace'] = "Ilimitado"
+            else:
+                user['space'] = res['StorageLimit']
+                user['freeSpace'] = res['StorageLimit'] - res['UsedStorage']
+            user['spaceUsed'] = res['UsedStorage']
+        else:
+            log.newLog("login_api_error", "E", "")
+        # devuelve todos los datos del usuario
+        return user
 
-		'''
-		# Style
-		map = button.get_colormap()
-		color = map.alloc_color("red")
+    def preferences(self):
+        # Extrae los datos del usuario y los reemplaza en la vista
+        user = self.returnUserData()
+        if user["time_type"] == "dias":
+            options = '<option class="form-scanda" value="dias">Dias</option>' \
+                      '<option class="form-scanda" value="horas">Horas</option>'
+        else:
+            options = '<option class="form-scanda" value="horas">Horas</option>' \
+                      '<option class="form-scanda" value="dias">Dias</option>'
+        data = {
+            "user": user['user'],
+            "space": user["space"],
+            "space-available": user['freeSpace'],
+            "space-used": user["spaceUsed"],
+            "path": user["path"],
+            "time": user["time"],
+            "time_type": options,
+            "alert": ""
+        }
+        # carga la vista
+        HTML = self.LOCATION + "/gui/settings.html"
+        win = Ui(HTML, data)
+        win.set_default_size(800, 600)
+        win.set_position(Gtk.WindowPosition.CENTER)
+        win.connect("delete-event", Gtk.main_quit)
+        win.view.connect("navigation-requested", self.preferencesClicked)
+        win.show_all()
+        Gtk.main()
 
-		# copy the current style and replace the background
-		style = button.get_style().copy()
-		style.bg[gtk.STATE_NORMAL] = color
-
-		# set the button's style to the one you created
-		button.set_style(style)
-		'''
-		# Boton de guardar
-		button_save = gtk.Button("Guardar")
-		button_save.connect_object("clicked", self.writePath, self)
-		button_save.show()
-		hbox_buttons.pack_start(button_save, gtk.TRUE, gtk.FALSE, 0)
-
-		vbox.show()
-		hbox.show()
-		hbox_buttons.show()
-		pw.show()
-
-	def selectPath(self, arg):
-		# Crea un dialogo para seleccionar la nueva ruta
-		dialog = gtk.FileChooserDialog("Seleccionar un Directorio",
-			None,
-			# Solo se pueden seleccionar directorios
-			gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER,
-			(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
-				gtk.STOCK_OPEN, gtk.RESPONSE_OK))
-		dialog.set_default_response(gtk.RESPONSE_OK)
-
-		# Solo se pueden seleccionar directorios
-		filtro = gtk.FileFilter()
-		filtro.set_name("Folder")
-		filtro.add_pattern("/")
-		dialog.add_filter(filtro)
-
-		response = dialog.run()
-		# Si se presiona el Boton ok, coloca la ruta en el Entry
-		if response == gtk.RESPONSE_OK:
-			dir_path.set_text(dialog.get_filename())
-		# Si se presiona el boton Cancel, coloca '/' en el Entry
-		elif response == gtk.RESPONSE_CANCEL:
-			dir_path.set_text('/')
-		dialog.destroy()
-
-	# Metodos de configuracion de tiempo
-	# Guarda la opcion seleccionada en el ComboBox
-	def saveTimeType(self, combobox):
-		model = combobox.get_model()
-		index = combobox.get_active()
-		if index:
-			self.value = model[index][0]
-		return
-
-	# Escribe los datos de configuracion del usuario en el archivo JSON
-	def writeTime(self, args):
-		# Carga el archivo configuration.json
-		file = os.path.join(self.LOCATION, self.CONFIG_FILE)
-		# Si el archivo existe...
-		if (os.path.exists(file)):
-			# abre el archivo y guarda la variable 'path' del archivo json
-			with open(file, 'r') as f:
-				data = json.load(f)
-			# Si la variable de path es nula, entonces la setea en /
-			if not data['path']:
-				data['path'] = "/"
-			# escribe la nueva variable time en el archivo json junto con la variable value
-			with open(file, 'w') as f:
-				json.dump({
-					'path': data['path'],
-					'time': self.time,
-					'time_type': self.value,
-					'IdCustomer': data['IdCustomer'],
-					'user': data['user'],
-					'password': data['password'],
-					'tokenDropbox': data['tokenDropbox'],
-				}, f)
-		else:
-			print "Ocurrio un error al guardar la configuracion"
-
-	def timeValidation(self, btn, args):
-		global dir_path
-		self.time = dir_path.get_value_as_int()
-
-		if self.value == "minutos":
-			if self.time > 59:
-				self.time = 59
-			elif self.time < 0:
-				self.time = 0
-		elif self.value == "horas":
-			if self.time > 23:
-				self.time = 23
-			elif self.time < 0:
-				self.time = 0
-		elif self.value == "dias":
-			if self.time > 31:
-				self.time = 31
-			elif self.time < 1:
-				self.time = 1
-		else:
-			self.value = "horas"
-			self.time = self.time
-		# Escribe los cambios
-		self.writeTime(self)
-		# Cierra la ventana
-		pw.destroy()
-
-	# Ventana para configurar las preferencias del usuario
-	def preferencesTime(self, widget=None, data=None):
-		# Crea una nueva ventana
-		global pw
-		pw = gtk.Window()
-		pw.set_position(gtk.WIN_POS_CENTER)
-		pw.set_size_request(300, 100)
-		pw.set_title("Configuración")
-		pw.set_resizable(False);
-
-		# Contenedores VBox & HBox
-		vbox = gtk.VBox()
-		hbox = gtk.HBox()
-		hbox_buttons = gtk.HBox()
-		pw.add(vbox)
-		vbox.pack_start(hbox, fill=False)
-		vbox.pack_start(hbox_buttons, fill=False)
-
-		# Carga el valor del tiempo de respaldo del archivo de configuracion
-		# Carga el archivo configuration.json
-		file = os.path.join(self.LOCATION, self.CONFIG_FILE)
-		time_backup = 0
-		time_backup_type = "dias"
-		# Si el archivo existe...
-		if (os.path.exists(file)):
-			# abre el archivo y guarda la variable 'path' del archivo json
-			with open(file, 'r') as f:
-				data = json.load(f)
-			# Si la variable de path es nula, entonces la setea en /
-			if not data['time']:
-				data['time'] = 7.0
-			if not data['time_type']:
-				data['time_type'] = "dias"
-			time_backup = data['time']
-			time_backup_type = data['time_type']
-		else:
-			print "Ocurrio un error al guardar la configuracion"
-
-		# Crea un Entry para almacenar el tiempo de repaldos
-		global dir_path
-		adj = gtk.Adjustment(time_backup, 0.0, 365.0, 1.0, 100.0, 0.0)
-		dir_path = gtk.SpinButton(adj, 0, 0)
-		dir_path.set_wrap(True)
-		# dir_path.set_text("168")
-		# Agregar el Entry al contenedor y muestra el widget
-		hbox.pack_start(dir_path, gtk.TRUE, gtk.TRUE, 0)
-		dir_path.show()
-
-		if time_backup_type == "minutos":
-			time_backup_type = 1
-		elif time_backup_type == "horas":
-			# time_backup_type = 2
-			time_backup_type = 1
-		elif time_backup_type == "dias":
-			#time_backup_type = 3
-			time_backup_type = 2
-		else:
-			time_backup_type = 0
-
-		# Crea un Boton para seleccionar una nueva ruta
-		combobox = gtk.combo_box_new_text()
-		hbox.pack_start(combobox, gtk.TRUE, gtk.TRUE, 0)
-		combobox.append_text('')
-		#combobox.append_text('minutos')
-		combobox.append_text('horas')
-		combobox.append_text('dias')
-		combobox.connect('changed', self.saveTimeType)
-		combobox.set_active(time_backup_type)
-		combobox.show()
-
-		button_save = gtk.Button("Guardar")
-		button_save.connect_object("clicked", self.timeValidation, pw, self)
-		button_save.show()
-
-		hbox_buttons.pack_start(button_save, gtk.TRUE, gtk.FALSE, 0)
-
-		vbox.show()
-		hbox.show()
-		hbox_buttons.show()
-		pw.show()
-
-	def main(self):
-		self.LOCATION = os.path.dirname(os.path.realpath(__file__))
-		self.CONFIG_FILE = "settings/configuration.json"
-		self.value = ""
-		self.time = 0.0
+app = Preferences()
+app.preferences()

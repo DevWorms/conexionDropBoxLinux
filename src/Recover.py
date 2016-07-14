@@ -1,269 +1,238 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import json
+import urllib2
+
 import pygtk
+import gi
+import os
+from Ui import Ui
+from Login import Login
+from SetLog import SetLog
+from Upload import Upload
+
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 pygtk.require('2.0')
-import gobject
-import gtk
 
-#   columns
-(
-    DATE_NAME_COLUMN,
-    SIZE_COLUMN,
-    TYPE_COLUMN,
-    DOWNLOAD_COLUMN,
-    VISIBLE_COLUMN,
-    NUM_COLUMNS,
-    WORLD_COLUMN,
-    DAVE_COLUMN
-) = range(8)
+class Recover():
+    CONFIG_FILE = "settings/configuration.json"
+    LOCATION = os.path.dirname(os.path.realpath(__file__))
+    BACKUPS = []
 
-#   tree data
-january = \
-    [
-        ["Respaldo 1.bak", True, True, True]
-    ]
-
-february = \
-    [
-        ["Respaldo 2.bak", True, True, True]
-    ]
-
-march = \
-    [
-        ["Respaldo 1.bak", True, True, True],
-        ["Respaldo 1.bak", True, True, True]
-    ]
-april = \
-    [
-        ["Respaldo 1.bak", True, True, True]
-    ]
-
-may = \
-    [
-        ["Respaldo 3.bak", True, True, True],
-        ["Respaldo 4.bak", True, True, True]
-    ]
-
-june = \
-    [
-        ["Respaldo 1.bak", True, True, True]
-    ]
-
-july = \
-    [
-        ["Respaldo 1.bak", True, True, True]
-    ]
-
-august = \
-    [
-        ["Respaldo 5.bak", True, True, True],
-        ["Respaldo 6.bak", True, True, True],
-        ["Respaldo 8.bak", True, True, True]
-    ]
-
-september = \
-    [
-        ["Respaldo 10.bak", True, True, True]
-    ]
-
-october = \
-    [
-        ["Respaldo 11.bak", True, True, True],
-        ["Respaldo 12.bak", True, True, True]
-    ]
-
-november = \
-    [
-        ["Respaldo 14.bak", True, True, True]
-    ]
-
-december = \
-    [
-        ["Respaldo 21.bak", True, True, True]
-    ]
-
-months = \
-    [
-        ["Enero", False, False, False, False, False, False, january],
-        ["Febrero", False, False, False, False, False, False, february],
-        ["Marzo", False, False, False, False, False, False, march],
-        ["Abril", False, False, False, False, False, False, april],
-        ["Mayo", False, False, False, False, False, False, may],
-        ["Junio", False, False, False, False, False, False, june],
-        ["Julio", False, False, False, False, False, False, july],
-        ["Agosto", False, False, False, False, False, False, august],
-        ["Septiembre", False, False, False, False, False, False, september],
-        ["Octubre", False, False, False, False, False, False, october],
-        ["Noviembre", False, False, False, False, False, False, november],
-        ["Diciembre", False, False, False, False, False, False, december]
-    ]
-
-years = \
-    [
-        ["2015", months],
-        ["2016", months],
-        ["2017", months]
-    ]
-
-
-class TreeStoreDemo(gtk.Window):
-    def __init__(self, parent=None):
-        gtk.Window.__init__(self)
-        try:
-            self.set_screen(parent.get_screen())
-        except AttributeError:
-            self.connect('destroy', lambda *w: gtk.main_quit())
-        self.set_title("Recuperar Respaldo")
-        self.set_default_size(650, 400)
-        self.set_border_width(8)
-
-        vbox = gtk.VBox(False, 8)
-        self.add(vbox)
-
-        label = gtk.Label("Selecciona un respaldo")
-        vbox.pack_start(label, False, False)
-
-        sw = gtk.ScrolledWindow()
-        sw.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        vbox.pack_start(sw)
-
-        # create model
-        model = self.__create_model()
-
-        # create treeview
-        treeview = gtk.TreeView(model)
-        treeview.set_rules_hint(True)
-
-        self.__add_columns(treeview)
-
-        sw.add(treeview)
-
-        # expand all rows after the treeview widget has been realized
-        treeview.connect('realize', lambda tv: tv.expand_all())
-
-        self.show_all()
-
-    def __create_model(self):
-
-        # create tree store
-        model = gtk.TreeStore(
-            gobject.TYPE_STRING,
-            gobject.TYPE_BOOLEAN,
-            gobject.TYPE_BOOLEAN,
-            gobject.TYPE_BOOLEAN,
-            gobject.TYPE_BOOLEAN)
-
-        # add data to the tree store
-        for year in years:
-            iter = model.append(None)
-            model.set(iter,
-                DATE_NAME_COLUMN, year[DATE_NAME_COLUMN]
-            )
-            for month in months:
-                month_iter = model.append(iter)
-                model.set(month_iter,
-                          DATE_NAME_COLUMN, month[DATE_NAME_COLUMN]
-                          )
-
-                # add children
-                for backup in month[-1]:
-                    child_iter = model.append(month_iter);
-                    model.set(child_iter,
-                              DATE_NAME_COLUMN, backup[DATE_NAME_COLUMN],
-                              SIZE_COLUMN, backup[SIZE_COLUMN],
-                              TYPE_COLUMN, backup[TYPE_COLUMN],
-                              DOWNLOAD_COLUMN, backup[DOWNLOAD_COLUMN],
-                              VISIBLE_COLUMN, True,
-                              )
-
-        return model
-
-    def on_item_toggled(self, cell, path_str, model):
-
-        # get selected column
-        column = cell.get_data('column')
-
-        # get toggled iter
-        iter = model.get_iter_from_string(path_str)
-        toggle_item = model.get_value(iter, column)
-
-        # do something with the value
-        toggle_item = not toggle_item
-
-        # set new value
-        model.set(iter, column, toggle_item)
-
-    def __add_columns(self, treeview):
-        model = treeview.get_model()
-
-        # column for holiday names
-        renderer = gtk.CellRendererText()
-        renderer.set_property("xalign", 0.0)
-
-        column = gtk.TreeViewColumn("Fecha", renderer, text=DATE_NAME_COLUMN)
-        # column = gtk_tree_view_get_column(GTK_TREE_VIEW(treeview), col_offset - 1);
-        column.set_clickable(True)
-
-        treeview.append_column(column)
-
-        # alex column */
-        renderer = gtk.CellRendererText()
-        renderer.set_property("xalign", 0.0)
-
-        if SIZE_COLUMN:
-            column = gtk.TreeViewColumn("Tamaño", renderer, text=SIZE_COLUMN)
+    '''
+        Cada vez que se da click en algun cardview, ya sea anio o mes
+        llama esta funcion
+    '''
+    def recoverClicked(self, webview, webFrame, networkRequest):
+        uri = networkRequest.get_uri()
+        if uri.find("://") > 0:
+            scheme, path = uri.split("://", 1)
         else:
-            column = gtk.TreeViewColumn("Tamaño", renderer, text = "")
+            return False
+        if scheme == 'admin' and path == "recover":
+            # Extrae el anio seleccionado
+            year = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
+            # vuelve a cargar la vista de index
+            fd = open(self.LOCATION + "/gui/index.html", "r")
+            tmp_page = fd.read()
+            fd.close()
 
-        # set this column to a fixed sizing(of 50 pixels)
-        # column = gtk_tree_view_get_column(GTK_TREE_VIEW(treeview), col_offset - 1);
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        column.set_fixed_width(100)
-        column.set_clickable(True)
+            tmp_page = tmp_page.replace("{card}", self.loadMonths(year))
+            tmp_page = tmp_page.replace("{status}", "")
+            tmp_page = tmp_page.replace("{msg}", "")
+            webview.load_html_string(tmp_page, self.LOCATION + '/html/')
+            return True
+        elif scheme == 'admin' and path == "recoverMonth":
+            # extrae el mes y anio seleccionado
+            val = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
+            y, m = val.split("-")
+            # vuelve a cargar la vista de index
+            fd = open(self.LOCATION + "/gui/index.html", "r")
+            tmp_page = fd.read()
+            fd.close()
 
-        treeview.append_column(column)
+            tmp_page = tmp_page.replace("{card}", self.loadBackups(y, m))
+            tmp_page = tmp_page.replace("{status}", "")
+            tmp_page = tmp_page.replace("{msg}", "")
+            webview.load_html_string(tmp_page, self.LOCATION + '/html/')
+            return True
+        elif scheme == 'admin' and path == "downloadBackup":
+            # Extrae el respaldo seleccionado
+            backup = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
+            # vuelve a cargar la vista de index
+            fd = open(self.LOCATION + "/gui/index.html", "r")
+            tmp_page = fd.read()
+            fd.close()
 
-        # havoc column
-        renderer = gtk.CellRendererToggle();
-        renderer.set_property("xalign", 0.0)
-        renderer.set_data("column", DOWNLOAD_COLUMN)
+            # Descarga el archivo
+            print self.downloadFile(backup)
 
-        renderer.connect("toggled", self.on_item_toggled, model)
+            # Recupera anio y mes
+            y, m, file = backup.split("-")
+            # Remplaza los parametros
+            tmp_page = tmp_page.replace("{status}", "Descargando")
+            tmp_page = tmp_page.replace("{card}", self.loadBackups(y, m))
+            tmp_page = tmp_page.replace("{msg}", '<div class="tile-wrap">'
+                                                           '<div class="tile tile-collapse tile-brand">'
+                                                           '<div data-target="#ui_tile_example_red" data-toggle="tile">'
+                                                           '<div class="tile-inner">'
+                                                           '<div class="text-overflow">Descargando respaldo: '+file+'</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>'
+                                                           '</div>')
+            webview.load_html_string(tmp_page, self.LOCATION + '/html/')
+            return True
 
-        column = gtk.TreeViewColumn("Tipo", renderer, active=TYPE_COLUMN,
-                                    visible=VISIBLE_COLUMN)
+    def downloadFile(self, args):
+        year, month, file = args.split("-")
+        month = self.monthsToInt(month)
+        return "/"+str(self.user['IdCustomer'])+"/"+year+"/"+month+"/"+file
 
-        # column = treeview.get_column(col_offset - 1)
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        column.set_fixed_width(50)
-        column.set_clickable(True)
+    def monthsToInt(self, month):
+        if month == "Enero":
+            month = "01"
+        elif month == "Febrero":
+            month = "02"
+        elif month == "Marzo":
+            month = "03"
+        elif month == "Abril":
+            month = "04"
+        elif month == "Mayo":
+            month = "05"
+        elif month == "Junio":
+            month = "06"
+        elif month == "Julio":
+            month = "07"
+        elif month == "Agosto":
+            month = "08"
+        elif month == "Septiembre":
+            month = "09"
+        elif month == "Octubre":
+            month = "10"
+        elif month == "Noviembre":
+            month = "11"
+        elif month == "Diciembre":
+            month = "12"
+        return month
 
-        treeview.append_column(column)
+    # Devuelve una lista de backups por un mes determinado
+    def getBackups(self, year, month):
+        backups = []
+        month = self.monthsToInt(month)
+        files = self.u.getRemoteFilesList("/" + str(self.user['IdCustomer']) + "/"+year+"/"+month+"/")
+        for i in files:
+            path, name = os.path.split(i)
+            backups.append(name)
+        return backups
 
-        # tim column
-        renderer = gtk.CellRendererToggle();
-        renderer.set_property("xalign", 0.0)
-        renderer.set_data("column", DOWNLOAD_COLUMN)
+    def loadBackups(self, y, m):
+        cardsBackups = '<div class="table-responsive">' \
+                       '<table class="table" title="A basic table">' \
+                       '<tbody>'
+        backups = self.getBackups(y, m)
+        for i in backups:
+            cardsBackups = cardsBackups + '<tr>' \
+                                          '<td>' + str(i) + '</td>' \
+                                          '<td><button class="btn btn-flat btn-brand" id="card_year_' + str(
+                i) + '" onClick="downloadBackup(true, \'' + y + '-' + m + '-' + str(i) + '\')">Descargar</button></td>'
+        return cardsBackups + "</tbody></table></div>"
 
-        renderer.connect("toggled", self.on_item_toggled, model)
+    # Devuelve una lista de meses por un anio determinado
+    def getMonths(self, year):
+        months = []
+        files = self.u.getRemoteFilesList("/" + str(self.user['IdCustomer']) + "/"+year+"/")
+        for path in files:
+            id, month = os.path.split(path)
+            if month == "01":
+                months.append("Enero")
+            elif month == "02":
+                months.append("Febrero")
+            elif month == "03":
+                months.append("Marzo")
+            elif month == "04":
+                months.append("Abril")
+            elif month == "05":
+                months.append("Mayo")
+            elif month == "06":
+                months.append("Junio")
+            elif month == "07":
+                months.append("Julio")
+            elif month == "08":
+                months.append("Agosto")
+            elif month == "09":
+                months.append("Septiembre")
+            elif month == "10":
+                months.append("Octubre")
+            elif month == "11":
+                months.append("Noviembre")
+            elif month == "12":
+                months.append("Diciembre")
+        return  months
 
-        column = gtk.TreeViewColumn("Descargar", renderer, active=DOWNLOAD_COLUMN,
-                                    visible=VISIBLE_COLUMN)
+    # Devuelve un string HTML con los cardviews por cada mes
+    def loadMonths(self, year):
+        cardsMonths = ""
+        months = self.getMonths(year)
+        for i in months:
+            cardsMonths = cardsMonths + '<div class="col-md-4 col-sm-4">' \
+                                      '<div class="card card-scanda">' \
+                                      '<div class="card-main">' \
+                                      '<div class="card-inner">' \
+                                      '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
+                i) + '" onClick="recoverMonth(true, \''+year+'-' + str(i) + '\')">' + str(i) + '</button>' \
+                                                                             '</div>' \
+                                                                             '</div>' \
+                                                                             '</div>' \
+                                                                             '</div>'
+        return cardsMonths
 
-        # column = treeview.get_column(col_offset - 1)
-        column.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
-        column.set_fixed_width(50)
-        column.set_clickable(True)
+    # Devuelve una lista de anios por usuario
+    def getYears(self):
+        years = []
+        for path in self.u.getRemoteFilesList("/"+str(self.user['IdCustomer'])+"/"):
+            id, year = os.path.split(path)
+            years.append(year)
+        return years
 
-        treeview.append_column(column)
+    # Devuelve un string HTML con los cardviews por cada anio
+    def loadYears(self):
+        cardsYears = ""
+        years = self.getYears()
+        for i in years:
+            cardsYears = cardsYears + '<div class="col-md-4 col-sm-4">' \
+                                      '<div class="card card-scanda">' \
+                                      '<div class="card-main">' \
+                                      '<div class="card-inner">' \
+                                      '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" onClick="recover(true, '+str(i)+')">' + str(i) + '</button>' \
+                                                                                                                                                                      '</div>' \
+                                                                                                                                                                      '</div>' \
+                                                                                                                                                                      '</div>' \
+                                                                                                                                                                      '</div>'
+        return cardsYears
 
+    def recover(self):
+        data = {
+            "card": self.loadYears(),
+            "status": "",
+            "msg": ""
+        }
+        # carga la vista
+        HTML = self.LOCATION + "/gui/index.html"
+        win = Ui(HTML, data)
+        win.set_default_size(800, 600)
+        win.set_position(Gtk.WindowPosition.CENTER)
+        win.connect("delete-event", Gtk.main_quit)
+        win.view.connect("navigation-requested", self.recoverClicked)
+        win.show_all()
+        Gtk.main()
 
-def main():
-    TreeStoreDemo()
-    gtk.main()
+    def __init__(self):
+        self.u = Upload()
+        self.l = Login()
+        self.user = self.l.returnUserData()
 
-
-if __name__ == '__main__':
-    main()
+#app = Recover()
+#app.recover()

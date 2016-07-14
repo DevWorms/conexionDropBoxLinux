@@ -23,7 +23,7 @@ setup (
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    install_requires=['python-pygtk', 'python-crontab'],
+    install_requires=['PyGTK', 'python-crontab', 'python-gi', 'dropbox'],
     keywords = 'databases backups',
     #dependency_links = ["http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.0/pygtk-2.0.0.tar.gz"],
     packages = ['src'],

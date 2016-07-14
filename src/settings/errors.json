@@ -6,5 +6,8 @@
   "login_status_error": "Usuario con Status: ",
   "http_error": "Error: enviar solicitud HTTP: ",
   "process_api": "Error: obtener nombre de proceso con API",
-  "cron_error": "Error al crear cron"
+  "cron_error": "Error al crear cron",
+  "error_path": "Ruta respaldos incorrecta",
+  "error_size": "Espacio insuficiente",
+  "error_upload": "Error subir archivo"
 }

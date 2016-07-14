@@ -53,7 +53,7 @@
 								<a class="padding-right-lg waves-attach" href="settings.html#tab_config"><span class="icon icon-lg margin-right">build</span>Configuración</a>
 							</li>
 							<li>
-								<a class="padding-right-lg waves-attach" href="page-login.html"><span class="icon icon-lg margin-right">backup</span>Status:</a>
+								<a class="padding-right-lg waves-attach" ><span class="icon icon-lg margin-right">backup</span>Status: {status}</a>
 							</li>
 						</ul>
 					</li>
@@ -82,46 +82,12 @@
 				</div>
 				<!-- Cards, Muestra una card por cada anio -->
 				<div class="ui-card-wrap">
+					{msg}
 					<div class="row">
 						<!-- Individual Card -->
-						<div class="col-md-4 col-sm-4">
-							<div class="card card-scanda">
-								<div class="card-main">
-									<div class="card-inner">
-										<a class="btn btn-flat card-heading waves-attach" href="javascript:void(0)"><span class="icon">check</span>2014</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-4">
-							<div class="card card-scanda">
-								<div class="card-main">
-									<div class="card-inner">
-										<a class="btn btn-flat card-heading waves-attach" href="javascript:void(0)"><span class="icon">check</span>2015</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-4">
-							<div class="card card-scanda">
-								<div class="card-main">
-									<div class="card-inner">
-										<a class="btn btn-flat card-heading waves-attach" href="javascript:void(0)"><span class="icon">check</span>2016</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 col-sm-4">
-							<div class="card card-scanda">
-								<div class="card-main">
-									<div class="card-inner">
-										<a class="btn btn-flat card-heading waves-attach" href="javascript:void(0)"><span class="icon">check</span>2017</a>
-									</div>
-								</div>
-							</div>
-						</div>
-
+						{card}
 						<!-- Individual Card END -->
+						<input type="hidden" id="card_clicked" value="">
 					</div>
 				</div>
 			</section>
@@ -131,15 +97,31 @@
 	<div class="fbtn-container">
 		<div class="fbtn-inner">
 			<a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" data-toggle="dropdown"><span class="fbtn-text fbtn-text-left">Links</span><span class="fbtn-ori icon">apps</span><span class="fbtn-sub icon">close</span></a>
-			<div class="fbtn-dropup">
-				<a class="fbtn waves-attach waves-circle" href="https://github.com/Daemonite/material" target="_blank"><span class="fbtn-text fbtn-text-left">Fork me on GitHub</span><span class="icon">code</span></a>
-				<a class="fbtn fbtn-brand waves-attach waves-circle waves-light" href="https://twitter.com/daemonites" target="_blank"><span class="fbtn-text fbtn-text-left">Follow Daemon on Twitter</span><span class="icon">share</span></a>
-				<a class="fbtn fbtn-green waves-attach waves-circle" href="http://www.daemon.com.au/" target="_blank"><span class="fbtn-text fbtn-text-left">Visit Daemon Website</span><span class="icon">link</span></a>
-			</div>
 		</div>
 	</div>
 
 	<!-- js -->
+	<script>
+	var recover = function(click, year) {
+		document.getElementById('card_clicked').value=year;
+	    if (click) {
+	    	window.location = "admin://recover";
+	    }
+	}
+	var recoverMonth = function(click, month) {
+		document.getElementById('card_clicked').value=month;
+		if (click) {
+			window.location = "admin://recoverMonth";
+		}
+	}
+	var downloadBackup = function(click, backup) {
+		document.getElementById('card_clicked').value=backup;
+		if (click) {
+			window.location = "admin://downloadBackup";
+		}
+	}
+	window.onload = recover(false);
+	</script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="https://daemonite.github.io/material/js/base.min.js"></script>
 	<script src="https://daemonite.github.io/material/js/project.min.js"></script>

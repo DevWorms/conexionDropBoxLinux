@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('WebKit', '3.0')
@@ -26,5 +27,5 @@ class Ui(Gtk.Window):
         fd.close()
         output_page = self.tmp_page
         for key, value in tpl.items():
-            output_page = output_page.replace("{%s}" % key, value)
+            output_page = output_page.replace("{%s}" % key, str(value))
         self.view.load_html_string(output_page, ROOT_DIR + '/html/')
