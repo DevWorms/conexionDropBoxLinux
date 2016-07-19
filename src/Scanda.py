@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import pygtk
-import gi
 import os
-
+import gi
+from Ui import GUI
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-pygtk.require('2.0')
 
 class Scanda():
     # Nombre del icono que se mostrara en el panel
@@ -34,29 +32,21 @@ class Scanda():
         # Items del menu
         recover = Gtk.MenuItem()
         recover.set_label('Recuperar respaldo')
-        route = Gtk.MenuItem()
-        route.set_label('Configuración')
-        about = Gtk.MenuItem()
-        about.set_label('Sincronizar ahora')
+        settings = Gtk.MenuItem()
+        settings.set_label('Configuración')
+        sync = Gtk.MenuItem()
+        sync.set_label('Sincronizar ahora')
         status = Gtk.MenuItem()
         status.set_label('Cargando archivo')
-        quit = Gtk.MenuItem()
-        quit.set_label('Salir')
 
         # Activa el item, y le asigna le accion que realizara
-        #action = p.Preferences()
-        # login = l.Login()
-        # recover.connect("activate", mr.recover)
-        #timeout.connect("activate", action.preferencesTime)
-        #route.connect("activate", action.preferencesPath)
-        # loginMenu.connect("activate", login.loginMain)
-        quit.connect("activate", Gtk.main_quit)
+        settings.connect("activate", self.setActionMenu, 1)
+        recover.connect("activate", self.setActionMenu)
 
         # Agrega los items al menu
         self.menu.append(recover)
-        self.menu.append(route)
-        self.menu.append(about)
-        self.menu.append(quit)
+        self.menu.append(settings)
+        self.menu.append(sync)
 
         # Muestra el menu
         self.menu.show_all()
@@ -64,6 +54,15 @@ class Scanda():
         # Crea el popup
         #self.menu.popup(None, None, None, button, time, icon)
         self.menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
+
+    def setActionMenu(self, option):
+        print "Rocks"
+        if option == 1:
+            action = GUI()
+            action.recover()
+        elif option == 2:
+            action = GUI()
+            action.preferences()
 
     # Esta funcion sera la que coloque el icono en el panel
     def set_icon(self):

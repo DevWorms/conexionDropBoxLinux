@@ -1,20 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
-import urllib2
 
-import pygtk
-import gi
 import os
-from Ui import Ui
 from Login import Login
-from SetLog import SetLog
 from Upload import Upload
 
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-
-pygtk.require('2.0')
+'''
+    Faltan logs, y descargar archivo
+'''
 
 class Recover():
     CONFIG_FILE = "settings/configuration.json"
@@ -134,8 +127,10 @@ class Recover():
                        '<tbody>'
         backups = self.getBackups(y, m)
         for i in backups:
+            vals = str(i).split(".")
+            name = vals[0]
             cardsBackups = cardsBackups + '<tr>' \
-                                          '<td>' + str(i) + '</td>' \
+                                          '<td>' + str(name) + '</td>' \
                                           '<td><button class="btn btn-flat btn-brand" id="card_year_' + str(
                 i) + '" onClick="downloadBackup(true, \'' + y + '-' + m + '-' + str(i) + '\')">Descargar</button></td>'
         return cardsBackups + "</tbody></table></div>"
@@ -213,26 +208,7 @@ class Recover():
                                                                                                                                                                       '</div>'
         return cardsYears
 
-    def recover(self):
-        data = {
-            "card": self.loadYears(),
-            "status": "",
-            "msg": ""
-        }
-        # carga la vista
-        HTML = self.LOCATION + "/gui/index.html"
-        win = Ui(HTML, data)
-        win.set_default_size(800, 600)
-        win.set_position(Gtk.WindowPosition.CENTER)
-        win.connect("delete-event", Gtk.main_quit)
-        win.view.connect("navigation-requested", self.recoverClicked)
-        win.show_all()
-        Gtk.main()
-
     def __init__(self):
         self.u = Upload()
         self.l = Login()
         self.user = self.l.returnUserData()
-
-#app = Recover()
-#app.recover()

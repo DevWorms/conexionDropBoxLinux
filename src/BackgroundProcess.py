@@ -8,6 +8,12 @@ import psutil
 from Login import Login
 from SetLog import SetLog
 
+'''
+    Recibe de la API SCANDA el nombre del proceso usado para realizar los respaldos de BD
+    lista todos los procesos del sistema, si encuentra alguno con el nombre recibido,
+    revisa su status, si esta en 'running' o 'waiting' no inicia la subida.
+    si no inicia la subida de archivos
+'''
 
 class BackgroundProcess():
     # Obtiene el nombre del proceso de la API de SCANDA
@@ -69,8 +75,8 @@ class BackgroundProcess():
             print "Ocurrio un error al autenticarse con la API REST"
 
 
-#s = BackgroundProcess()
-#if s.isRunning():
-#    print "Esta corriendo el proceso"
-#else:
-#    print "Inicia la subida"
+s = BackgroundProcess()
+if s.isRunning():
+    print "Esta corriendo el proceso"
+else:
+    print "Inicia la subida"

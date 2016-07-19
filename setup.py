@@ -23,11 +23,14 @@ setup (
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    install_requires=['PyGTK', 'python-crontab', 'python-gi', 'dropbox'],
+    install_requires=['python-crontab',
+                      #'python-gi',
+                      'pyminizip',
+                      'dropbox'],
     keywords = 'databases backups',
     #dependency_links = ["http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.0/pygtk-2.0.0.tar.gz"],
     packages = ['src'],
-    scripts = ["backup_protector"],
+    scripts = ["dbprotector_scanda", "dbprotector_sync"],
     package_data = {'src' : files },
     long_description = """BackupProtector allows you create automantically backups and backup this on cloud"""
 )

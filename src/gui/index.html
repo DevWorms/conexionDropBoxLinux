@@ -44,13 +44,13 @@
 								</p>
 							</li>
 							<li>
-								<a class="padding-right-lg waves-attach" href="index.html"><span class="icon icon-lg margin-right">folder</span>Mis Respaldos</a>
+								<a class="padding-right-lg waves-attach" ><span class="icon icon-lg margin-right">folder</span>Mis Respaldos</a>
 							</li>
 							<li>
-								<a class="padding-right-lg waves-attach" href="settings.html#tab_account"><span class="icon icon-lg margin-right">contacts</span>Mi cuenta</a>
+								<a class="padding-right-lg waves-attach" onclick="getSettings(true)"><span class="icon icon-lg margin-right">contacts</span>Mi cuenta</a>
 							</li>
 							<li>
-								<a class="padding-right-lg waves-attach" href="settings.html#tab_config"><span class="icon icon-lg margin-right">build</span>Configuración</a>
+								<a class="padding-right-lg waves-attach" onclick="getSettings(true)"><span class="icon icon-lg margin-right">build</span>Configuración</a>
 							</li>
 							<li>
 								<a class="padding-right-lg waves-attach" ><span class="icon icon-lg margin-right">backup</span>Status: {status}</a>
@@ -118,6 +118,11 @@
 		document.getElementById('card_clicked').value=backup;
 		if (click) {
 			window.location = "admin://downloadBackup";
+		}
+	}
+	var getSettings = function(click) {
+		if (click) {
+			window.location = "admin://getSettings";
 		}
 	}
 	window.onload = recover(false);

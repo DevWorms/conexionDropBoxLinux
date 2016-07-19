@@ -9,5 +9,8 @@
   "cron_error": "Error al crear cron",
   "error_path": "Ruta respaldos incorrecta",
   "error_size": "Espacio insuficiente",
-  "error_upload": "Error subir archivo"
+  "error_upload": "Error subir archivo",
+  "error_compress": "Error comprimir arhivo",
+  "error_404": "Error archivo inexistente",
+  "error_ext": "Error extension invalida"
 }

@@ -1,4 +1,5 @@
-# Include the Dropbox SDK
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import contextlib
 import datetime
 import json
@@ -14,6 +15,36 @@ from Login import Login
 from Preferences import Preferences
 from SetLog import SetLog
 
+'''
+    Metodos usados para trabajar con la API de Dropbox
+    getData: Devuelve los datos del usuario:
+        {'freeSpace': 624, u'tokenDropbox': u'', 'space': 1024, u'IdCustomer': 1, 'ext': [u'BAK', u'ZIP'], u'user': u'Jguerrero', u'time': u'20', u'path': u'/home/backups', u'password': u'Jguerrero', 'spaceUsed': 400, u'time_type': u'dias'}
+    getLocalFilesList: Lista de archivos en la carpeta local
+    filtradoPorExtension: Un archivo tiene extension valida para ser subido
+    uploadFile: Sube archivo a Dropbox
+        Estructura de carpetas en Dropbox
+            /Aplicaciones/DBProtector/user-id/año/mes/archivo
+        Estructura de carpetas en Aplicacion Dropbox
+            /user-id/año/mes/archivo
+            la Api trabaja a nivel Root de la aplicacion, ej: /1/2016/07
+        Validaciones:
+            -Archivo existe?
+            -El tamaño del archivo debe ser menor al espacio disponible (proporcionado por la API de SCANDA)
+            -El archivo debe tener una extension valida (proporcionado por la API de SCANDA)
+            -Si el archivo es mayor que CHUNK_SIZE (10MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
+        - Return
+            - 1 = Archivo inexistente
+            - 2 = Espacio insuficiente
+            - 3 = Extension invalida
+            - None = El archivo no se subio
+            - res = JSON array con los detalles del archivo subido
+    rutaDestino: genera la ruta donde se subira el archivo dentro de Dropbox formato: /user-id/año/mes/
+    stopwatch: Unicamente devuelve el tiempo que tardo en realizarse una tarea
+    getRemoteFilesList: Devuelve una lista de archivos/carpetas en una ruta especifica (no recursivo)
+    updateSpace: Actualiza el espacio disponible en la API SCANDA restando el espacio usado
+    downloadFile: Descarga un archivo en Dropbox, se le pasa una ruta ej: /1/2016/07/backup.bak
+        (la ruta donde el archivo se descargara en la ruta configurada por el usuario)
+'''
 
 class Upload():
     # Token de la cuenta
@@ -63,9 +94,9 @@ class Upload():
                 files.append(archivo)
         except:
             log.newLog("error_path", "E", "")
-            file = None
+            files = None
         return files
-
+    # filtro = array de extensiones
     def filtradoPorExtension(self, archivo, filtro):
         if filtro is None:
             return True
@@ -75,6 +106,7 @@ class Upload():
                 return True
         return False
 
+    # Sube un archivo, solo recibe el nombre del archivo
     def uploadFile(self, file):
         log = SetLog()
         # Extrae los datos del usuario
@@ -87,7 +119,7 @@ class Upload():
             # Tamano en MB
             size = float(float(int(size_bytes) / 1024) / 1024)
             # Si el tamano del archivo es menor que el tamano disponible
-            if size > user['freeSpace']:
+            if size < user['freeSpace']:
                 # Extrae el nombre, la extension y la fecha de modificacion del archivo
                 name, ext = os.path.splitext(file)
                 ext = ext.replace(".", "")
@@ -112,10 +144,11 @@ class Upload():
                                         mute=True)
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
+                                    return res
                                 except dropbox.exceptions.ApiError as err:
                                     log.newLog("error_upload", "T", err)
                                     return None
-                            return res
+                            #return res
                         # Subida de archivos Grandes
                         else:
                             with self.stopwatch('upload %d bytes' % size):
@@ -139,11 +172,15 @@ class Upload():
                                     log.newLog("error_upload", "T", err)
                                     # Error de subida
                                     return None
+                else:
+                    log.newLog("error_ext", "T", "Upload.uploadFile")
+                    return 3
             else:
                 log.newLog("error_size", "T", "Upload.uploadFile")
                 # Espacio insuficiente
                 return 2
         else:
+            log.newLog("error_404", "T", "Upload.uploadFile")
             # Archivo invalido
             return 1
 
@@ -174,6 +211,18 @@ class Upload():
         respuesta = cliente.metadata(ruta)
         for file in respuesta["contents"]:
             files.append(file["path"])
+        return files
+
+    def getAllRemoteFilesList(self, user_id):
+        files = []
+        cliente = DropboxClient(self.TOKEN)
+        respuesta = cliente.metadata("/" + str(user_id) + "/")
+        for anio in respuesta["contents"]:
+            meses = cliente.metadata(str(anio["path"]))
+            for mes in meses["contents"]:
+                backups = cliente.metadata(str(mes["path"]))
+                for file in backups["contents"]:
+                    files.append(file["path"])
         return files
 
     # Actualiza los datos de espacio del usuario en la Api de SCANDA
@@ -213,18 +262,36 @@ class Upload():
                 print('*** HTTP error', err)
                 return False
 
-app = Upload()
-# Sube un archivo
-#app.uploadFile("backup6.bak")
-# Devuelve toda la info del usuario
-#user = app.getData()
-# Devuelve la lista de respaldos de un usario por ruta especifica
-#app.getRemoteFilesList(str(user['IdCustomer']), "/" + str(user['IdCustomer']) +"/2015")
-# Actualiza el espacio disponible
-#app.updateSpace(user, 6)
+    def sync(self):
+        from SetLog import SetLog
+        log = SetLog()
+        # Usado para comprimir el archivo
+        from Compress import Compress
+        zip = Compress()
+        # Extrae la info del usuario
+        user = self.getData()
+        # Lista de archivos validos para ser subidos
+        files = self.getLocalFilesList(user["path"], user["ext"])
+        for file in files:
+            name, ext = file.split(".")
+            file = os.path.join(user["path"], file)
+            # Comprime el archivo
+            if zip.compress(file):
+                # Datos del archivo subido
+                data = self.uploadFile(name + ".zip")
+            else:
+                log.newLog("error_compress", "E", "")
+
+    # El archivo ya ha sido subido? si la fecha de modificacion/contenido es diferente sube el archivo
+    def isFileSynced(self, file):
+        vals = file.split(".")
+        name = vals[0]
+        ext = vals[1]
+        fileSearch = name + "." + ext
+        files = []
+        cliente = DropboxClient(self.TOKEN)
+
 '''
-if app.downloadFile(user, "/1/2016/07/backup5.bak"):
-    print "ok"
-else:
-    print "nop"
+app = Upload()
+app.sync()
 '''

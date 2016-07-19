@@ -3,8 +3,12 @@ import sys
 import os
 import json
 from crontab import CronTab
-
 from SetLog import SetLog
+
+'''
+	Crea un CRON para el usuario del sistema, el cron ejecutara el archivo
+	/usr/bin/dbprotector_sync este archivo instancia una nueva clase Upload, que subira los respaldos
+'''
 
 class Cron():
 	time = 0
