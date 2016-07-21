@@ -1,5 +1,14 @@
 #!/usr/bin/env python
-import BackupProtector.Scanda
+# -*- coding: utf-8 -*-
+from scanda.Scanda import Scanda
+from scanda.Login import Login
+from scanda.Ui import GUI
 
-app = Scanda()
-app.main()
+l = Login()
+
+if l.isActive():
+    app = Scanda()
+    app.main()
+else:
+    app = GUI()
+    app.login()

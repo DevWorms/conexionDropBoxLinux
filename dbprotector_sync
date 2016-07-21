@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from scanda.Upload import Upload
+from scanda.Login import Login
+from scanda.Ui import GUI
+
+l = Login()
+
+if l.isActive():
+    app = Upload()
+    app.sync()
+else:
+    app = GUI()
+    app.login()
