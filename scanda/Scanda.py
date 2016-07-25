@@ -56,7 +56,6 @@ class Scanda():
         self.menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
 
     def setActionMenu(self, widget, action):
-        print action
         get = GUI()
         if action == 1:
             get.recover()

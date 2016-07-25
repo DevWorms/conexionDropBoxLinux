@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="998ee007-36f2-4827-ac83-3f4e338fb651" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/install.sh" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/Preferences.py" afterPath="$PROJECT_DIR$/scanda/Preferences.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/Scanda.py" afterPath="$PROJECT_DIR$/scanda/Scanda.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/Ui.py" afterPath="$PROJECT_DIR$/scanda/Ui.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/gui/assets/css/base.min.css" afterPath="$PROJECT_DIR$/scanda/gui/assets/css/base.min.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/gui/index.html" afterPath="$PROJECT_DIR$/scanda/gui/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/gui/login.html" afterPath="$PROJECT_DIR$/scanda/gui/login.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scanda/gui/settings.html" afterPath="$PROJECT_DIR$/scanda/gui/settings.html" />
     </list>
     <ignored path="conexionDropBoxLinux.iws" />
@@ -32,8 +31,8 @@
       <file leaf-file-name="Scanda.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scanda/Scanda.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="57" column="44" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
+            <state relative-caret-position="-7">
+              <caret line="66" column="18" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
               <folding>
                 <element signature="e#46#55#0" expanded="true" />
               </folding>
@@ -76,8 +75,8 @@
       <file leaf-file-name="settings.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scanda/gui/settings.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1770">
-              <caret line="124" column="51" selection-start-line="124" selection-start-column="51" selection-end-line="124" selection-end-column="51" />
+            <state relative-caret-position="180">
+              <caret line="210" column="131" selection-start-line="208" selection-start-column="0" selection-end-line="210" selection-end-column="131" />
               <folding />
             </state>
           </provider>
@@ -87,7 +86,27 @@
         <entry file="file://$PROJECT_DIR$/scanda/gui/assets/css/base.min.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="86">
-              <caret line="12" column="42844" selection-start-line="12" selection-start-column="42823" selection-end-line="12" selection-end-column="42844" />
+              <caret line="12" column="19505" selection-start-line="12" selection-start-column="19505" selection-end-line="12" selection-end-column="19505" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scanda/gui/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="136" column="4" selection-start-line="136" selection-start-column="4" selection-end-line="136" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scanda/gui/login.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="194">
+              <caret line="78" column="131" selection-start-line="78" selection-start-column="131" selection-end-line="78" selection-end-column="131" />
               <folding />
             </state>
           </provider>
@@ -109,7 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/modules/Login.py" />
         <option value="$PROJECT_DIR$/modules/crons.py" />
         <option value="$PROJECT_DIR$/src/crons.py" />
@@ -149,16 +167,17 @@
         <option value="$PROJECT_DIR$/scanda/SetLog.py" />
         <option value="$PROJECT_DIR$/dbprotector_scanda" />
         <option value="$PROJECT_DIR$/dbprotector_sync" />
-        <option value="$PROJECT_DIR$/scanda/gui/login.html" />
         <option value="$PROJECT_DIR$/scanda/Compress.py" />
         <option value="$PROJECT_DIR$/scanda/settings/configuration.json" />
         <option value="$PROJECT_DIR$/scanda/Login.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/scanda/Upload.py" />
-        <option value="$PROJECT_DIR$/scanda/Scanda.py" />
-        <option value="$PROJECT_DIR$/scanda/gui/settings.html" />
         <option value="$PROJECT_DIR$/scanda/Ui.py" />
         <option value="$PROJECT_DIR$/scanda/Preferences.py" />
+        <option value="$PROJECT_DIR$/scanda/Scanda.py" />
+        <option value="$PROJECT_DIR$/scanda/gui/settings.html" />
+        <option value="$PROJECT_DIR$/scanda/gui/index.html" />
+        <option value="$PROJECT_DIR$/scanda/gui/login.html" />
         <option value="$PROJECT_DIR$/scanda/gui/assets/css/base.min.css" />
       </list>
     </option>
@@ -211,8 +230,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -292,6 +311,10 @@
               <option name="myItemId" value="assets" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -332,7 +355,7 @@
       <recent name="$PROJECT_DIR$/src/settings" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Preferences">
+  <component name="RunManager" selected="Python.Scanda">
     <configuration default="false" name="Compress" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -595,7 +618,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1366" height="738" extended-state="6" />
+    <frame x="0" y="0" width="1366" height="738" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25447762" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -678,13 +701,6 @@
     <entry file="file://$PROJECT_DIR$/tests/html/progress.html" />
     <entry file="file://$PROJECT_DIR$/tests/main.py" />
     <entry file="file://$PROJECT_DIR$/src/GUI.py" />
-    <entry file="file://$PROJECT_DIR$/scanda/gui/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1935">
-          <caret line="129" column="49" selection-start-line="129" selection-start-column="39" selection-end-line="129" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test.py" />
     <entry file="file://$PROJECT_DIR$/scanda/WebK.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -722,13 +738,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scanda/gui/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="66" column="20" selection-start-line="66" selection-start-column="20" selection-end-line="66" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scanda/Crons.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-578">
@@ -744,19 +753,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/install.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-141">
-          <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/install.sh" />
     <entry file="file://$PROJECT_DIR$/scanda/settings/errors.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="20" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -780,7 +781,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
           <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -810,21 +810,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scanda/Scanda.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="57" column="44" selection-start-line="57" selection-start-column="44" selection-end-line="57" selection-end-column="44" />
-          <folding>
-            <element signature="e#46#55#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scanda/Login.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
           <caret line="23" column="35" selection-start-line="23" selection-start-column="35" selection-end-line="23" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -856,10 +845,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/scanda/Scanda.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="66" column="18" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
+          <folding>
+            <element signature="e#46#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scanda/gui/settings.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1770">
-          <caret line="124" column="51" selection-start-line="124" selection-start-column="51" selection-end-line="124" selection-end-column="51" />
+        <state relative-caret-position="180">
+          <caret line="210" column="131" selection-start-line="208" selection-start-column="0" selection-end-line="210" selection-end-column="131" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scanda/gui/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="136" column="4" selection-start-line="136" selection-start-column="4" selection-end-line="136" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scanda/gui/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="78" column="131" selection-start-line="78" selection-start-column="131" selection-end-line="78" selection-end-column="131" />
           <folding />
         </state>
       </provider>
@@ -867,7 +882,7 @@
     <entry file="file://$PROJECT_DIR$/scanda/gui/assets/css/base.min.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="86">
-          <caret line="12" column="42844" selection-start-line="12" selection-start-column="42823" selection-end-line="12" selection-end-column="42844" />
+          <caret line="12" column="19505" selection-start-line="12" selection-start-column="19505" selection-end-line="12" selection-end-column="19505" />
           <folding />
         </state>
       </provider>
