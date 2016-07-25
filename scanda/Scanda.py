@@ -80,3 +80,5 @@ class Scanda():
 
     def main(self):
         Gtk.main()
+app = Scanda()
+app.main()

@@ -65,17 +65,28 @@ class GUI():
         else:
             options = '<option class="form-scanda" value="horas">Horas</option>' \
                       '<option class="form-scanda" value="dias">Dias</option>'
+
+        if user['space'] == -1:
+            user['space'] = "Ilimitado"
+            espacioLibre = "Ilimitado"
+            espacioUsado = user['spaceUsed'] + " MB"
+        else:
+            espacioLibre = p.returnPercent(int(user['space']), int(user['freeSpace'])) + "%"
+            espacioUsado = p.returnPercent(int(user['space']), int(user['spaceUsed'])) + "%"
+            user['space'] = str(user['space']) + " MB"
+
         data = {
             "user": user['user'],
             "space": user["space"],
-            "space-available": user['freeSpace'],
-            "space-used": user["spaceUsed"],
+            "space-available": espacioLibre,
+            "space-used": espacioUsado,
             "path": user["path"],
             "time": user["time"],
             "time_type": options,
             "alert": "",
             "status": ""
         }
+
         # carga la vista
         HTML = LOCATION + "/gui/settings.html"
         win = WebK(HTML, data)
@@ -118,11 +129,21 @@ class GUI():
                 tmp_page = fd.read()
                 fd.close()
 
+                # Ajusta los datos a porcentajes
+                if user['space'] == -1:
+                    user['space'] = "Ilimitado"
+                    espacioLibre = "Ilimitado"
+                    espacioUsado = user['spaceUsed'] + " MB"
+                else:
+                    espacioLibre = p.returnPercent(int(user['space']), int(user['freeSpace'])) + "%"
+                    espacioUsado = p.returnPercent(int(user['space']), int(user['spaceUsed'])) + "%"
+                    user['space'] = str(user['space']) + " MB"
+
                 # REemplaza los datos del usuario
                 tmp_page = tmp_page.replace("{user}", str(user['user']))
                 tmp_page = tmp_page.replace("{space}", str(user['space']))
-                tmp_page = tmp_page.replace("{space-available}", str(user['freeSpace']))
-                tmp_page = tmp_page.replace("{space-used}", str(user['spaceUsed']))
+                tmp_page = tmp_page.replace("{space-available}", espacioLibre)
+                tmp_page = tmp_page.replace("{space-used}", espacioUsado)
                 tmp_page = tmp_page.replace("{path}", str(user['path']))
                 tmp_page = tmp_page.replace("{time}", str(user['time']))
                 tmp_page = tmp_page.replace("{time_type}", str(options))
@@ -291,11 +312,21 @@ class GUI():
         tmp_page = fd.read()
         fd.close()
 
+        # Ajusta los datos a porcentajes
+        if user['space'] == -1:
+            user['space'] = "Ilimitado"
+            espacioLibre = "Ilimitado"
+            espacioUsado = user['spaceUsed'] + " MB"
+        else:
+            espacioLibre = p.returnPercent(int(user['space']), int(user['freeSpace'])) + "%"
+            espacioUsado = p.returnPercent(int(user['space']), int(user['spaceUsed'])) + "%"
+            user['space'] = str(user['space']) + " MB"
+
         # REemplaza los datos del usuario
         tmp_page = tmp_page.replace("{user}", str(user['user']))
         tmp_page = tmp_page.replace("{space}", str(user['space']))
-        tmp_page = tmp_page.replace("{space-available}", str(user['freeSpace']))
-        tmp_page = tmp_page.replace("{space-used}", str(user['spaceUsed']))
+        tmp_page = tmp_page.replace("{space-available}", espacioLibre)
+        tmp_page = tmp_page.replace("{space-used}", espacioUsado)
         tmp_page = tmp_page.replace("{path}", str(user['path']))
         tmp_page = tmp_page.replace("{time}", str(user['time']))
         tmp_page = tmp_page.replace("{time_type}", str(options))

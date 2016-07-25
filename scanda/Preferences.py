@@ -3,6 +3,7 @@
 import json
 import urllib2
 import os
+from decimal import Decimal
 from scanda.Login import Login
 from scanda.SetLog import SetLog
 from scanda.Crons import Cron
@@ -10,6 +11,12 @@ from scanda.Crons import Cron
 class Preferences():
     CONFIG_FILE = "settings/configuration.json"
     LOCATION = os.path.dirname(os.path.realpath(__file__))
+
+    def returnPercent(self, total, value):
+        total = int(total)
+        value = int(value)
+        porcentaje = Decimal(value * 100)
+        return str(round(porcentaje / total))
 
     def timeValidation(self, time, value, path):
         if value == "minutos":
@@ -81,11 +88,10 @@ class Preferences():
         if res['Success'] == 1:
             # si  StorageLimit == -1 el espacio es Ilimitado
             if res['StorageLimit'] == -1:
-                user['space'] = "Ilimitado"
-                user['freeSpace'] = "Ilimitado"
+                user['freeSpace'] = res['StorageLimit']
             else:
-                user['space'] = res['StorageLimit']
                 user['freeSpace'] = res['StorageLimit'] - res['UsedStorage']
+            user['space'] = res['StorageLimit']
             user['spaceUsed'] = res['UsedStorage']
         else:
             log.newLog("login_api_error", "E", "")
