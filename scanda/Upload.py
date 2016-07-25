@@ -53,7 +53,7 @@ from scanda.Compress import Compress
 
 class Upload():
     # Token de la cuenta
-    TOKEN = ""
+    TOKEN = "f-taP7WG2wAAAAAAAAAAEPgxbzHQ7EDctvivjSJCqLwCA0tcsgyuRT7H9vnxqwVK"
     # tamano del bloque de subida MAX 150 MB
     CHUNK_SIZE = 1024 * 1024 * 10
 
@@ -153,7 +153,8 @@ class Upload():
                                     self.updateSpace(user, size)
                                     return res
                                 except dropbox.exceptions.ApiError as err:
-                                    log.newLog("error_upload", "T", err)
+                                    #corregir esta parte
+                                    log.newLog("error_upload", "T", err )
                                     return None
                             #return res
                         # Subida de archivos Grandes

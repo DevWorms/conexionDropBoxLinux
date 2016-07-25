@@ -14,6 +14,14 @@ scanda/Ui.py
 scanda/Upload.py
 scanda/WebK.py
 scanda/__init__.py
+scanda/gui/index.html
+scanda/gui/login.html
+scanda/gui/settings.html
+scanda/gui/assets/css/base.min.css
+scanda/gui/assets/css/project.min.css
+scanda/gui/assets/js/base.min.js
+scanda/gui/assets/js/jquery.min.js
+scanda/gui/assets/js/project.min.js
 scanda/img/icon.png
 scanda/settings/configuration.json
 scanda/settings/errors.json

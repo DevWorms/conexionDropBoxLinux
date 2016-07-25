@@ -82,7 +82,7 @@ class Login():
 
     def isActive(self):
         user = self.returnUserData()
-        if not user['user'] and not user['password']:
+        if not user['user'] or not user['password'] or not user['IdCustomer']:
             return False
         else:
             if self.loginApi(user['user'], user['password']):

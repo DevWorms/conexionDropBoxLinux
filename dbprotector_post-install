@@ -1,0 +1,5 @@
+#! /bin/bash
+sudo chmod -R 777 /usr/lib/python2.7/site-packages/scanda/settings/
+sudo ln -s /usr/bin/dbprotector_scanda /etc/init.d/
+sudo ln -s /etc/init.d/dbprotector_scanda /etc/rc.d/
+#dbprotector_scanda

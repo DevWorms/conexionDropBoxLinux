@@ -2,10 +2,10 @@ from distutils.core import setup
 
 '''
     Empaqueta en RPM:
-        python setup.py bdist_rpm --requires python-pip --requires python-setuptools --requires libwebkitgtk3-devel
+    python setup.py bdist_rpm --requires 'gcc python3-devel python-pip python-setuptools libwebkitgtk3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''
 
-files = ["img/*.png", "settings/*.json"]
+files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html"]
 
 setup (
     name='DBProtector',
@@ -25,7 +25,6 @@ setup (
         'Programming Language :: Python :: 3',
     ],
     install_requires=['python-crontab',
-                      #'python-gi',
                       'pyminizip',
                       'dropbox'],
     keywords = 'databases backups',

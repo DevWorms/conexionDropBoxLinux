@@ -1,0 +1,4 @@
+pip install --upgrade pip
+pip install python-crontab pyminizip dropbox
+
+python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
