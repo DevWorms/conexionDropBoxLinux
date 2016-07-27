@@ -5,15 +5,11 @@ import gi
 from scanda.Ui import GUI
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+import scanda.Constants as const
 
 class Scanda():
-    # Nombre del icono que se mostrara en el panel
-    ICONO = 'img/icon.png'
-
     # Constructor
     def __init__(self):
-        # Almacena la ruta actual del script
-        self.location = os.path.dirname(os.path.realpath(__file__))
         # Crea el icono
         self.set_icon()
         # Asigna el "listener" al boton derecho
@@ -27,8 +23,11 @@ class Scanda():
 
     # Cada vez que se da click derecho en el icono despliega un menu popup
     def set_menu(self, icon, button, time):
-        self.menu = Gtk.Menu()
+        from scanda.Status import Status
+        s = Status()
+        status  = s.getDownloadStatus()
 
+        self.menu = Gtk.Menu()
         # Items del menu
         recover = Gtk.MenuItem()
         recover.set_label('Recuperar respaldo')
@@ -36,17 +35,25 @@ class Scanda():
         settings.set_label('Configuración')
         sync = Gtk.MenuItem()
         sync.set_label('Sincronizar ahora')
-        status = Gtk.MenuItem()
-        status.set_label('Cargando archivo')
+        statusMenu = Gtk.MenuItem()
 
         # Activa el item, y le asigna le accion que realizara
-        settings.connect("activate", self.setActionMenu, 2)
         recover.connect("activate", self.setActionMenu, 1)
+        settings.connect("activate", self.setActionMenu, 2)
+        sync.connect("activate", self.setActionMenu, 3)
+
+        if status['status'] == 1:
+            statusMenu.set_label("Subiendo " + status['file'] + " " + status['chunk'] + "%")
+        elif status['status'] == 2:
+            statusMenu.set_label(status['file'] + " sincronizado")
+        else:
+            statusMenu.set_label("Sincronizado")
 
         # Agrega los items al menu
         self.menu.append(recover)
         self.menu.append(settings)
         self.menu.append(sync)
+        self.menu.append(statusMenu)
 
         # Muestra el menu
         self.menu.show_all()
@@ -55,17 +62,27 @@ class Scanda():
         #self.menu.popup(None, None, None, button, time, icon)
         self.menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
 
+    # abre una nueva interfaz
     def setActionMenu(self, widget, action):
-        get = GUI()
-        if action == 1:
-            get.recover()
-        elif action == 2:
-            get.preferences()
+        if action == 1 or action == 2:
+            get = GUI()
+            if action == 1:
+                get.recover()
+            elif action == 2:
+                get.preferences()
+        elif action == 3:
+            os.system('/usr/bin/dbprotector_sync')
+
+    # se utilizara para mostrar que se esta realizando una accion Subida / Descarga
+    def setActionActive(self):
+        download = Gtk.MenuItem()
+        download.set_label('Recuperar respaldo')
+        self.menu.append(download)
 
     # Esta funcion sera la que coloque el icono en el panel
     def set_icon(self):
         # Crea la ruta del icono
-        icon_file = os.path.join(self.location, self.ICONO)
+        icon_file = os.path.join(const.LOCATION, const.ICONO)
         # Valida que exista el icono
         assert os.path.exists(icon_file), 'No se encontro el archivo: %s' % icon_file
         # Valida si existe icon dentro de la clase
@@ -79,5 +96,6 @@ class Scanda():
 
     def main(self):
         Gtk.main()
+
 app = Scanda()
 app.main()

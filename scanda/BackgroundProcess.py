@@ -7,6 +7,7 @@ import psutil
 
 from scanda.Login import Login
 from scanda.SetLog import SetLog
+import scanda.Constants as const
 
 '''
     Recibe de la API SCANDA el nombre del proceso usado para realizar los respaldos de BD
@@ -41,7 +42,7 @@ class BackgroundProcess():
         user = login.returnUserData()
 
         # Url de la api REST para autenticarse
-        url = 'http://201.140.108.22:2017/DBProtector/DBBackUpProcess_GET?IdPlatform=' + str(so) + '&User='+ user['user'] +'&Password=' + user['password']
+        url = const.IP_SERVER + '/DBProtector/DBBackUpProcess_GET?IdPlatform=' + str(so) + '&User='+ user['user'] +'&Password=' + user['password']
 
         try:
             # Realiza la peticion

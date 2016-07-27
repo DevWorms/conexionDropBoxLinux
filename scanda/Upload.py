@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import base64
 import contextlib
 import datetime
 import json
@@ -16,6 +17,9 @@ from scanda.Login import Login
 from scanda.Preferences import Preferences
 from scanda.SetLog import SetLog
 from scanda.Compress import Compress
+from scanda.Crons import Cron
+from scanda.Crypt import Crypt
+import scanda.Constants as const
 
 '''
     Metodos usados para trabajar con la API de Dropbox
@@ -33,7 +37,7 @@ from scanda.Compress import Compress
             -Archivo existe?
             -El tamaño del archivo debe ser menor al espacio disponible (proporcionado por la API de SCANDA)
             -El archivo debe tener una extension valida (proporcionado por la API de SCANDA)
-            -Si el archivo es mayor que CHUNK_SIZE (10MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
+            -Si el archivo es mayor que CHUNK_SIZE (5MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
         - Return
             - 1 = Archivo inexistente
             - 2 = Espacio insuficiente
@@ -53,9 +57,17 @@ from scanda.Compress import Compress
 
 class Upload():
     # Token de la cuenta
-    TOKEN = "f-taP7WG2wAAAAAAAAAAEPgxbzHQ7EDctvivjSJCqLwCA0tcsgyuRT7H9vnxqwVK"
-    # tamano del bloque de subida MAX 150 MB
-    CHUNK_SIZE = 1024 * 1024 * 10
+    crypt = Crypt()
+    '''
+        Para mas info leer Crypt.py
+    '''
+    TOKEN = base64.b64decode(
+        repr(
+            crypt.obfuscate(
+                '*]BC.f3W&\x04\x10\n\x13\x004&!a51&e4&!a55"w\x16P)Z\x03:"d\x16""s=C\x13]\x1eV\x11X=8&\x034)\x14\x04=1:x \x0e\x13\x06\x17F\x13f81>\x04\x14F\x13]GP\x13l\x17$$GOY'.decode('utf-8')
+            )
+        )
+    )
 
     # Devuelve los datos del usuario y la lista de extensiones
     def getData(self):
@@ -65,7 +77,7 @@ class Upload():
         user = l.returnUserData()
         p = Preferences()
         spaceData = p.returnUserData()
-        url = 'http://201.140.108.22:2017/DBProtector/Extensions_GET?User=' + user['user'] + '&Password=' + user['password']
+        url = const.IP_SERVER + '/DBProtector/Extensions_GET?User=' + user['user'] + '&Password=' + user['password']
 
         try:
             # Realiza la peticion
@@ -113,7 +125,9 @@ class Upload():
 
     # Sube un archivo, solo recibe el nombre del archivo
     def uploadFile(self, file):
+        from scanda.Status import Status
         log = SetLog()
+        status = Status()
         # Extrae los datos del usuario
         user = self.getData()
         # Si es un archivo / existe
@@ -134,51 +148,63 @@ class Upload():
                     # abre una sesion
                     dbx = dropbox.Dropbox(self.TOKEN)
                     # Ruta donde se almacenara
-                    dest = self.rutaDestino(user['IdCustomer']) + name + "." + ext
+                    dest = self.pathToUpload(user['IdCustomer']) + name + "." + ext
                     # Abre el archivo
                     with open(fullFile, 'rb') as f:
                         # Si el archivo es mas grande que CHUNK_SIZE
-                        if os.path.getsize(fullFile) <= self.CHUNK_SIZE:
+                        if os.path.getsize(fullFile) <= const.CHUNK_SIZE:
                             data = f.read()
                             # Inicia la subida
-                            with self.stopwatch('upload %d bytes' % len(data)):
+                            with self.stopwatch('upload %d MB' % len(data)):
                                 try:
-                                    res = dbx.files_upload(
-                                        data, dest,
-                                        client_modified=datetime.datetime(*time.gmtime(mtime)[:6]),
-                                        mute=True)
+                                    res = dbx.files_upload(data, dest)
+                                    # "borrando archivo: "
+                                    os.remove(fullFile)
                                     # Notifica a la API
                                     log.newLog("success_upload", "T", "")
+                                    # Muestra al usuario, que se subio el archivo
+                                    status.setDownloadStatus(file, str(f.tell()), str(size_bytes), 2)
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
                                     return res
                                 except dropbox.exceptions.ApiError as err:
-                                    #corregir esta parte
-                                    log.newLog("error_upload", "T", err )
+                                    # eliminar archivo
+                                    os.remove(fullFile)
+                                    log.newLog("error_upload", "T", "")
+                                    # los logs de dropbox son demasiado grandes para ser enviados como log
+                                    #print err
                                     return None
                             #return res
                         # Subida de archivos Grandes
                         else:
-                            with self.stopwatch('upload %d bytes' % size):
+                            with self.stopwatch('upload %d MB' % size):
                                 try:
                                     # Sube el archivo por bloques, maximo 150 mb
-                                    upload_session_start_result = dbx.files_upload_session_start(f.read(self.CHUNK_SIZE))
+                                    upload_session_start_result = dbx.files_upload_session_start(f.read(const.CHUNK_SIZE))
                                     cursor = dropbox.files.UploadSessionCursor(session_id=upload_session_start_result.session_id,
                                                                                offset=f.tell())
                                     commit = dropbox.files.CommitInfo(path=dest)
 
                                     while f.tell() < size_bytes:
                                         # tamano subido y id de la sesion de subida
-                                        #print str(upload_session_start_result.session_id) + " uploaded: " + str(f.tell())
-                                        if ((size_bytes - f.tell()) <= self.CHUNK_SIZE):
+                                        if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
+                                            # Muestra al usuario que se esta subiendo
+                                            status.setDownloadStatus(file, f.tell(), size_bytes, 2)
+                                            res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
                                             self.updateSpace(user, size)
-                                            return dbx.files_upload_session_finish(f.read(self.CHUNK_SIZE), cursor, commit)
+                                            # "borrando archivo: "
+                                            os.remove(fullFile)
+                                            # Notifica a la API
+                                            log.newLog("success_upload", "T", "")
                                         else:
-                                            dbx.files_upload_session_append(f.read(self.CHUNK_SIZE), cursor.session_id, cursor.offset)
+                                            # Muestra al usuario que se esta subiendo
+                                            status.setDownloadStatus(file, f.tell(), size_bytes, 1)
+                                            dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
                                             cursor.offset = f.tell()
                                 except dropbox.exceptions.ApiError as err:
-                                    log.newLog("error_upload", "T", err)
-                                    # Error de subida
+                                    # "borrando archivo: "
+                                    os.remove(fullFile)
+                                    log.newLog("error_upload", "T", "")
                                     return None
                 else:
                     log.newLog("error_ext", "T", "Upload.uploadFile")
@@ -193,7 +219,7 @@ class Upload():
             return 1
 
     # Devuelve la ruta donde se almacenara el archivo en Dropbox
-    def rutaDestino(self, user_id):
+    def pathToUpload(self, user_id):
         path = "/" + str(user_id) + "/"
         path = path + str(datetime.date.today().year) + "/"
         if datetime.date.today().month < 10:
@@ -212,7 +238,7 @@ class Upload():
             t1 = time.time()
             print('Total elapsed time for %s: %.3f' % (message, t1 - t0))
 
-    # Devuelve la lista de respaldos
+    # Devuelve la lista de archivos por una ruta
     def getRemoteFilesList(self, ruta):
         files = []
         cliente = DropboxClient(self.TOKEN)
@@ -221,6 +247,7 @@ class Upload():
             files.append(file["path"])
         return files
 
+    # devuelve la lista completa de respaldos de un usario
     def getAllRemoteFilesList(self, user_id):
         files = []
         cliente = DropboxClient(self.TOKEN)
@@ -237,7 +264,7 @@ class Upload():
     def updateSpace(self, user, spaceFile):
         log = SetLog()
         space = int(user["spaceUsed"]) + int(spaceFile)
-        url = 'http://201.140.108.22:2017/DBProtector/CustomerStorage_SET?UsedStorage=' + str(space) + '&User=' + user['user'] + '&Password=' + user['password']
+        url = const.IP_SERVER + '/DBProtector/CustomerStorage_SET?UsedStorage=' + str(space) + '&User=' + user['user'] + '&Password=' + user['password']
 
         try:
             # Realiza la peticion
@@ -268,32 +295,68 @@ class Upload():
                 out = open(localFile, 'wb')
                 with cliente.get_file(file) as f:
                     out.write(f.read())
-                # Descomprime el archivo
                 zip.uncompress(localFile)
                 os.remove(localFile)
                 log.newLog("success_download", "T", file)
                 return True
             except dropbox.exceptions.HttpError as err:
-                print('*** HTTP error', err)
+                log.newLog()
                 return False
+
+    '''
+        Que se hace con el archivo original, despues de respaldarlo?
+        recibe solo el nombre del archivo, no la ruta completa
+    '''
+    def actionAfterUpload(self, file):
+        c = Cron()
+        user = self.getData()
+        action = c.getCloudSync()
+        # si la accion es 1, mueve el archivo a la carpeta "uploaded"
+        if action['FileTreatmen'] == 1:
+            dest = os.path.join(user['path'], "uploaded")
+            # si la carpeta no existe, la crea
+            if not os.path.exists(dest):
+                os.makedirs(dest)
+            # mueve el; archivo
+            os.rename(os.path.join(user['path'], file), os.path.join(dest, file))
+        elif action['FileTreatmen'] == 2:
+            dest = "/home/baclups"
+            os.rename(os.path.join(user['path'], file), os.path.join(dest, file))
+        # si la accion es 3, elimina el archivo
+        elif action['FileTreatmen'] == 3:
+            os.remove(file)
+
 
     def sync(self):
         background = BackgroundProcess()
-        while not background.isRunning():
-            from scanda.SetLog import SetLog
-            log = SetLog()
-            # Usado para comprimir el archivo
-            zip = Compress()
-            # Extrae la info del usuario
-            user = self.getData()
-            # Lista de archivos validos para ser subidos
-            files = self.getLocalFilesList(user["path"], user["ext"])
-            for file in files:
+        from scanda.SetLog import SetLog
+        log = SetLog()
+        # Usado para comprimir el archivo
+        zip = Compress()
+        # Extrae la info del usuario
+        user = self.getData()
+        # Lista de archivos validos para ser subidos
+        files = self.getLocalFilesList(user["path"], user["ext"])
+        for file in files:
+            if not background.isRunning():
                 name, ext = file.split(".")
                 file = os.path.join(user["path"], file)
                 # Comprime el archivo
                 if zip.compress(file):
                     # Datos del archivo subido
                     data = self.uploadFile(name + ".zip")
+                    # que se hace con el archivo?
+                    self.actionAfterUpload(file)
                 else:
+                    if os.path.isfile(os.path.join(user['path'], file)):
+                        os.remove(os.path.join(user['path'], file))
                     log.newLog("error_compress", "E", "")
+        '''
+            Una vez que se han terminado las subidas, se sincroniza con la api
+            para actualizar la frecuencia de respaldo y generar un nuevo cron
+        '''
+        c = Cron()
+        c.cloudSync()
+
+app =Upload()
+app.sync()

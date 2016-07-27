@@ -3,19 +3,16 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('WebKit', '3.0')
-from gi.repository import WebKit, Gtk
+from gi.repository import Gtk
 import os
 from scanda.WebK import WebK
+import scanda.Constants as const
 
 '''
-    La interfaz grafica crea un webkit (Ui) y carga las vistas en /scanda/gui/*.html
+    La interfaz grafica crea un webkit (WebK) y carga las vistas en /scanda/gui/*.html
     La clase Gui se encarga de cargar las vistas y crear los listeners
     usados para ejecutar las acciones de la aplicacion
 '''
-CONFIG_FILE = "settings/configuration.json"
-LOCATION = os.path.dirname(os.path.realpath(__file__))
-
-
 class GUI():
     # ---------- GUI.py's  ----------
     # Muestra el inicio de sesion
@@ -24,7 +21,7 @@ class GUI():
             "css": self.loadStyles(),
             "alert": ""
         }
-        HTML = LOCATION + "/gui/login.html"
+        HTML = const.LOCATION + "/gui/login.html"
         win = WebK(HTML, data)
         win.set_default_size(800, 600)
         win.set_position(Gtk.WindowPosition.CENTER)
@@ -38,12 +35,12 @@ class GUI():
         from scanda.Recover import Recover
         r = Recover()
         data = {
+            "goBakcButton": '',
             "card": r.loadYears(),
-            "status": "",
             "msg": ""
         }
         # carga la vista
-        HTML = LOCATION + "/gui/index.html"
+        HTML = const.LOCATION + "/gui/index.html"
         win = WebK(HTML, data)
         win.set_default_size(800, 600)
         win.set_position(Gtk.WindowPosition.CENTER)
@@ -83,12 +80,11 @@ class GUI():
             "path": user["path"],
             "time": user["time"],
             "time_type": options,
-            "alert": "",
-            "status": ""
+            "alert": ""
         }
 
         # carga la vista
-        HTML = LOCATION + "/gui/settings.html"
+        HTML = const.LOCATION + "/gui/settings.html"
         win = WebK(HTML, data)
         win.set_default_size(800, 600)
         win.set_position(Gtk.WindowPosition.CENTER)
@@ -106,7 +102,12 @@ class GUI():
             scheme, path = uri.split("://", 1)
         else:
             return False
-        # se utiliza scheme y path para evitar un loop
+        '''
+            se utiliza scheme y path para evitar un loop
+            todos los schme's deben ser bajo admin
+            si el path es preferences guarda los cambios del usuario
+            y recarga la página
+        '''
         if scheme == 'admin' and path == "preferences":
             from scanda.Preferences import Preferences
             p = Preferences()
@@ -125,7 +126,7 @@ class GUI():
                               '<option class="form-scanda" value="dias">Dias</option>'
 
                 # vuelve a cargar la vista de settings
-                fd = open(LOCATION + "/gui/settings.html", "r")
+                fd = open(const.LOCATION + "/gui/settings.html", "r")
                 tmp_page = fd.read()
                 fd.close()
 
@@ -147,10 +148,15 @@ class GUI():
                 tmp_page = tmp_page.replace("{path}", str(user['path']))
                 tmp_page = tmp_page.replace("{time}", str(user['time']))
                 tmp_page = tmp_page.replace("{time_type}", str(options))
-                tmp_page = tmp_page.replace("{status}", "")
 
                 # Escribe los datos
-                if p.writePreferences(route, time, time_type):
+                '''
+                    en esta version se usara por defecto el tipo de frecuencia como días,
+                    si se permite al usuario configurarlo, solo hay que cambiarlo por la
+                    variable time_type
+                '''
+                #if p.writePreferences(route, time, time_type):
+                if p.writePreferences(route, time, "dias"):
                     # reemplaza alert con un mensaje
                     tmp_page = tmp_page.replace("{alert}", '<div class="tile-wrap">'
                                                            '<div class="tile tile-collapse tile-brand">'
@@ -162,7 +168,7 @@ class GUI():
                                                            '</div>'
                                                            '</div>')
 
-                    webview.load_html_string(tmp_page, LOCATION + '/html/')
+                    webview.load_html_string(tmp_page, const.LOCATION + '/html/')
                     return True
                 else:
                     # reemplaza alert con un mensaje
@@ -176,11 +182,11 @@ class GUI():
                                                            '</div>'
                                                            '</div>')
 
-                    webview.load_html_string(tmp_page, LOCATION + '/html/')
+                    webview.load_html_string(tmp_page, const.LOCATION + '/html/')
                     return True
         # Redirecciona a los respaldos del usuario
         elif scheme == 'admin' and path == "getRecover":
-            webview.load_html_string(self.loadRecover(), LOCATION + '/html/')
+            webview.load_html_string(self.loadRecover(), const.LOCATION + '/html/')
             return True
         # inicia session
         elif scheme == 'admin' and path == "login":
@@ -194,7 +200,7 @@ class GUI():
             if user and password:
                 # Si el login es correcto
                 if l.loginApi(user, password):
-                    webview.load_html_string(self.loadPreferences(), LOCATION + '/html/')
+                    webview.load_html_string(self.loadPreferences(), const.LOCATION + '/html/')
                     from scanda.Scanda import Scanda
                     app = Scanda()
                     app.main()
@@ -202,7 +208,7 @@ class GUI():
                 # Si el login NO es correcto
                 else:
                     # vuelve a cargar la vista de login
-                    fd = open(LOCATION + "/gui/login.html", "r")
+                    fd = open(const.LOCATION + "/gui/login.html", "r")
                     tmp_page = fd.read()
                     fd.close()
                     # reemplaza alert con un mensaje de usuario incorrecto
@@ -216,7 +222,7 @@ class GUI():
                                                            '</div>'
                                                            '</div>'
                                                            '</div>')
-                    webview.load_html_string(tmp_page, LOCATION + '/html/')
+                    webview.load_html_string(tmp_page, const.LOCATION + '/html/')
                     return True
         # Muestra la lista de anios disponibles en los respaldos
         elif scheme == 'admin' and path == "recover":
@@ -225,14 +231,14 @@ class GUI():
             # Extrae el anio seleccionado
             year = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
             # vuelve a cargar la vista de index
-            fd = open(LOCATION + "/gui/index.html", "r")
+            fd = open(const.LOCATION + "/gui/index.html", "r")
             tmp_page = fd.read()
             fd.close()
 
+            tmp_page = tmp_page.replace("{goBakcButton}", '<a class="btn waves-attach" onclick="getRecover(true)"><span class="icon icon-lg margin-right">undo</span>volver</a>')
             tmp_page = tmp_page.replace("{card}", r.loadMonths(year))
-            tmp_page = tmp_page.replace("{status}", "")
             tmp_page = tmp_page.replace("{msg}", "")
-            webview.load_html_string(tmp_page, LOCATION + '/html/')
+            webview.load_html_string(tmp_page, const.LOCATION + '/html/')
             return True
         # Muestra los meses de un anio
         elif scheme == 'admin' and path == "recoverMonth":
@@ -242,33 +248,37 @@ class GUI():
             val = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
             y, m = val.split("-")
             # vuelve a cargar la vista de index
-            fd = open(LOCATION + "/gui/index.html", "r")
+            fd = open(const.LOCATION + "/gui/index.html", "r")
             tmp_page = fd.read()
             fd.close()
 
+            tmp_page = tmp_page.replace("{goBakcButton}", '<a class="btn waves-attach" onclick="getRecover(true)"><span class="icon icon-lg margin-right">undo</span>volver</a>')
             tmp_page = tmp_page.replace("{card}", r.loadBackups(y, m))
-            tmp_page = tmp_page.replace("{status}", "")
             tmp_page = tmp_page.replace("{msg}", "")
-            webview.load_html_string(tmp_page, LOCATION + '/html/')
+            webview.load_html_string(tmp_page, const.LOCATION + '/html/')
             return True
         # Reabre la lista de respaldos, una vez que se descargo uno
         elif scheme == 'admin' and path == "downloadBackup":
             from scanda.Recover import Recover
+            from scanda.Upload import Upload
+            u = Upload()
             r = Recover()
             # Extrae el respaldo seleccionado
             backup = webFrame.get_dom_document().get_element_by_id("card_clicked").get_value()
             # vuelve a cargar la vista de index
-            fd = open(LOCATION + "/gui/index.html", "r")
+            fd = open(const.LOCATION + "/gui/index.html", "r")
             tmp_page = fd.read()
             fd.close()
 
             # Descarga el archivo
-            print r.downloadFile(backup)
+            u.downloadFile(u.getData(), r.downloadFile(backup))
+            #print r.downloadFile(backup)
 
             # Recupera anio y mes
             y, m, file = backup.split("-")
             # Remplaza los parametros
-            tmp_page = tmp_page.replace("{status}", "Descargando")
+            tmp_page = tmp_page.replace("{goBakcButton}",
+                                        '<a class="btn waves-attach" onclick="getRecover(true)"><span class="icon icon-lg margin-right">undo</span>volver</a>')
             tmp_page = tmp_page.replace("{card}", r.loadBackups(y, m))
             tmp_page = tmp_page.replace("{msg}", '<div class="tile-wrap">'
                                                  '<div class="tile tile-collapse tile-brand">'
@@ -277,17 +287,17 @@ class GUI():
                                                  '<div class="text-overflow">Descargando respaldo: ' + file + '</div>'
                                                                                                               '</div>'
                                                                                                               '</div>'
-                                                                                                              '</div>'
                                                                                                               '</div>')
-            webview.load_html_string(tmp_page, LOCATION + '/html/')
+            # vuelve a cargar la vista                                                                                                  '</div>')
+            webview.load_html_string(tmp_page, const.LOCATION + '/html/')
             return True
         # Redirecciona a las preferencias del usuario
         elif scheme == 'admin' and path == "getSettings":
-            webview.load_html_string(self.loadPreferences(), LOCATION + '/html/')
+            webview.load_html_string(self.loadPreferences(), const.LOCATION + '/html/')
             return True
         # Vuelve a cargar los respaldos
         elif scheme == 'admin' and path == "getBackups":
-            webview.load_html_string(self.loadRecover(), LOCATION + '/html/')
+            webview.load_html_string(self.loadRecover(), const.LOCATION + '/html/')
             return True
     '''
         Loader's
@@ -308,7 +318,7 @@ class GUI():
                 '<option class="form-scanda" value="dias">Dias</option>'
 
         # vuelve a cargar la vista de settings
-        fd = open(LOCATION + "/gui/settings.html", "r")
+        fd = open(const.LOCATION + "/gui/settings.html", "r")
         tmp_page = fd.read()
         fd.close()
 
@@ -330,7 +340,6 @@ class GUI():
         tmp_page = tmp_page.replace("{path}", str(user['path']))
         tmp_page = tmp_page.replace("{time}", str(user['time']))
         tmp_page = tmp_page.replace("{time_type}", str(options))
-        tmp_page = tmp_page.replace("{status}", "")
         tmp_page = tmp_page.replace("{alert}", "")
 
         return tmp_page
@@ -344,12 +353,12 @@ class GUI():
         }
 
         # vuelve a cargar la vista de settings
-        fd = open(LOCATION + "/gui/index.html", "r")
+        fd = open(const.LOCATION + "/gui/index.html", "r")
         tmp_page = fd.read()
         fd.close()
 
+        tmp_page = tmp_page.replace("{goBakcButton}", '')
         tmp_page = tmp_page.replace("{card}", data['card'])
-        tmp_page = tmp_page.replace("{status}", "")
         tmp_page = tmp_page.replace("{msg}", "")
 
         return tmp_page
@@ -357,36 +366,14 @@ class GUI():
     def loadStyles(self):
         style = "<style>"
         # carga los estilos
-        style_file = open(LOCATION + "/gui/assets/css/base.min.css", "r")
+        style_file = open(const.LOCATION + "/gui/assets/css/base.min.css", "r")
         style = style + "\n\n" + style_file.read()
         style_file.close()
 
-        style_file = open(LOCATION + "/gui/assets/css/project.min.css", "r")
+        style_file = open(const.LOCATION + "/gui/assets/css/project.min.css", "r")
         style = style + "\n\n" + style_file.read()
         style_file.close()
 
         style = style + "\n\n" + "</style>"
 
         return style
-
-    def loadJS(self):
-        code = '<script type="text/javascript">'
-        # carga los JS
-        js_file = open(LOCATION + "/gui/assets/js/base.min.js", "r")
-        code = code + "\n\n" + js_file.read()
-        js_file.close()
-        code = code + "\n\n" + "</script>"
-
-        code = code + "\n\n" + '<script type="text/javascript">'
-        js_file = open(LOCATION + "/gui/assets/js/jquery.min.js", "r")
-        code = code + "\n\n" + js_file.read()
-        js_file.close()
-        code = code + "\n\n" + "</script>"
-
-        code = code + "\n\n" + '<script type="text/javascript">'
-        js_file = open(LOCATION + "/gui/assets/js/project.min.js", "r")
-        code = code + "\n\n" + js_file.read()
-        js_file.close()
-        code = code + "\n\n" + "</script>"
-
-        return code

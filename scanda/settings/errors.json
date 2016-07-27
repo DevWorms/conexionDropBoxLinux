@@ -16,6 +16,6 @@
   "success_download": "Archivo descargado ",
   "success_upload": "Subida exitosa ",
   "process_incorrect": "Nombre de proceso invalido",
-  "error_remove_file": "Error eliminando .zip"
-
+  "error_remove_file": "Error eliminando .zip",
+  "error_file_status": "No se encontro status.json"
 }

@@ -5,18 +5,9 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
     <!-- css -->
-    <link href="https://raw.githubusercontent.com/DevWorms/conexionDropBoxLinux/develop/scanda/gui/assets/css/base.min.css" rel="stylesheet">
-	<link href="https://raw.githubusercontent.com/DevWorms/conexionDropBoxLinux/develop/scanda/gui/assets/css/project.min.css" rel="stylesheet">
+    <link href="https://daemonite.github.io/material/css/base.min.css" rel="stylesheet">
+    <link href="https://daemonite.github.io/material/css/project.min.css" rel="stylesheet">
     <style type="text/css">
-		.card-scanda {
-			background-color: #4fc3f7;
-			color: rgba(0, 0, 0, 0.87);
-		}
-		.card-scanda a,
-		.card-scanda a:focus,
-		.card-scanda a:hover {
-			color: inherit;
-		}
 		.form-scanda {
 			background-color: transparent;
 			background-image: none;
@@ -64,14 +55,7 @@
                         </li>
                         <li>
                             <a class="padding-right-lg waves-attach" ><span
-                                    class="icon icon-lg margin-right">contacts</span>Mi cuenta</a>
-                        </li>
-                        <li>
-                            <a class="padding-right-lg waves-attach" ><span
                                     class="icon icon-lg margin-right">build</span>Configuración</a>
-                        </li>
-                        <li>
-                            <a class="padding-right-lg waves-attach" ><span class="icon icon-lg margin-right">backup</span>Status: {status}</a>
                         </li>
                     </ul>
                 </li>
@@ -150,11 +134,15 @@
                                 <div class="form-group form-group-label">
                                     <div class="row">
                                         <div class="col-md-10 col-md-push-1 form-control">
+                                            <!--Original
                                             <label class="floating-label" for="ui_time">Respaldar cada...</label>
-                                            <input class="form-scanda" id="ui_time" value="{time}">
+                                            <input class="form-scanda" id="ui_time" value="{time}">-
                                             <select class="form-scanda" id="ui_time_type">
                                                 {time_type}
                                             </select>
+                                            -->
+                                            <input type="hidden" class="form-scanda" id="ui_time" value="0">-
+                                            <select style="visibility:hidden" class="form-scanda" id="ui_time_type"></select>
                                         </div>
                                     </div>
                                 </div>
@@ -177,14 +165,6 @@
     </section>
     </div>
 </main>
-<!-- Float Button -->
-<div class="fbtn-container">
-    <div class="fbtn-inner">
-        <a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light" data-toggle="dropdown"><span
-                class="fbtn-text fbtn-text-left">Links</span><span class="fbtn-ori icon">apps</span><span
-                class="fbtn-sub icon">close</span></a>
-    </div>
-</div>
 
 <!-- js -->
 <script>
@@ -206,8 +186,8 @@
 	window.onload = preferences(false);
 
 </script>
-<script src="https://raw.githubusercontent.com/DevWorms/conexionDropBoxLinux/develop/scanda/gui/assets/js/jquery.min.js"></script>
-<script src="https://raw.githubusercontent.com/DevWorms/conexionDropBoxLinux/develop/scanda/gui/assets/js/base.min.js"></script>
-<script src="https://raw.githubusercontent.com/DevWorms/conexionDropBoxLinux/develop/scanda/gui/assets/js/project.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script src="https://daemonite.github.io/material/js/base.min.js"></script>
+<script src="https://daemonite.github.io/material/js/project.min.js"></script>
 </body>
 </html>

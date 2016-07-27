@@ -7,46 +7,43 @@ from decimal import Decimal
 from scanda.Login import Login
 from scanda.SetLog import SetLog
 from scanda.Crons import Cron
+import scanda.Constants as const
 
 class Preferences():
-    CONFIG_FILE = "settings/configuration.json"
-    LOCATION = os.path.dirname(os.path.realpath(__file__))
-
+    # cambia las unidades de almacenamiento de mb a porcentajes
     def returnPercent(self, total, value):
         total = int(total)
         value = int(value)
         porcentaje = Decimal(value * 100)
         return str(round(porcentaje / total))
 
+    '''
+    Se va a utilizar para acomodar el cron, pero para esta version
+    no se utilizara en esta parte, si no en el cron
     def timeValidation(self, time, value, path):
-        if value == "minutos":
-            if time > 59:
-                time = 59
-            elif time < 0:
-                time = 0
-        elif value == "horas":
+        dias = 0
+        meses = 0
+
+        if value == "horas":
             if time > 23:
-                time = 23
-            elif time < 0:
-                time = 0
+                while time > 23:
+                    dias = dias + 1
+                    time = time - 23
         elif value == "dias":
-            if time > 31:
-                time = 31
-            elif time < 1:
-                time = 1
-        else:
-            value = "horas"
-            time = time
+            while time > 31:
+                meses = meses + 1
+                time = time - 31
+
         if self.writePreferences(path, time, value):
             c = Cron()
-            c.sincronizar()
-
+            c.sync()
+    '''
 
     # guarda los datos del usuario recibidos
     def writePreferences(self, path, time, time_type):
         log = SetLog()
         # Carga el archivo configuration.json
-        file = os.path.join(self.LOCATION, self.CONFIG_FILE)
+        file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
         if (os.path.exists(file)):
             # abre el archivo y guarda la variable 'path' del archivo json
@@ -63,6 +60,10 @@ class Preferences():
                     'password': data['password'],
                     'tokenDropbox': data['tokenDropbox'],
                 }, f)
+
+            # Guarda los cambios en el archivo de configuracion y genera el cron
+            c = Cron()
+            c.sync()
             return True
         else:
             log.newLog("load_config_file", "E", "")
@@ -74,7 +75,7 @@ class Preferences():
         # Datos del usuario
         l = Login()
         user = l.returnUserData()  # Url de la api REST para autenticarse
-        url = 'http://201.140.108.22:2017/DBProtector/Account_GET?User=' + user['user'] + '&Password=' + user[
+        url = const.IP_SERVER + '/DBProtector/Account_GET?User=' + user['user'] + '&Password=' + user[
             'password']
         try:
             # Realiza la peticion

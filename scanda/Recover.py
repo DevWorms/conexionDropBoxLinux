@@ -4,21 +4,49 @@
 import os
 from scanda.Login import Login
 from scanda.Upload import Upload
+import scanda.Constants as const
 
 '''
     Funciones llamadas al mostrar los respaldos del usuario
 '''
 
 class Recover():
-    CONFIG_FILE = "settings/configuration.json"
-    LOCATION = os.path.dirname(os.path.realpath(__file__))
-    BACKUPS = []
-
+    # codifica la ruta desde donde se descargara un archivo (no lo descarga)
     def downloadFile(self, args):
         year, month, file = args.split("-")
         month = self.monthsToInt(month)
         return "/"+str(self.user['IdCustomer'])+"/"+year+"/"+month+"/"+file
 
+    # Devuelve una lista de backups por un mes determinado
+    def getBackups(self, year, month):
+        backups = []
+        month = self.monthsToInt(month)
+        files = self.u.getRemoteFilesList("/" + str(self.user['IdCustomer']) + "/"+year+"/"+month+"/")
+        for i in files:
+            path, name = os.path.split(i)
+            backups.append(name)
+        return backups
+
+    # regresa los backups en una tabla html
+    def loadBackups(self, y, m):
+        backups = self.getBackups(y, m)
+        if not backups:
+            cardsBackups = "<h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3>"
+        else:
+            cardsBackups = '<div class="table-responsive">' \
+                           '<table class="table" title="Descargar respaldo">' \
+                           '<tbody>'
+
+            for i in backups:
+                vals = str(i).split(".")
+                name = vals[0]
+                cardsBackups = cardsBackups + '<tr>' \
+                                              '<td>' + str(name) + '</td>' \
+                                              '<td><button class="btn btn-flat btn-brand" id="card_year_' + str(
+                    i) + '" onClick="downloadBackup(true, \'' + y + '-' + m + '-' + str(i) + '\')">Descargar</button></td>'
+        return cardsBackups + "</tbody></table></div>"
+
+    # pasa los meses a digitos
     def monthsToInt(self, month):
         if month == "Enero":
             month = "01"
@@ -45,30 +73,6 @@ class Recover():
         elif month == "Diciembre":
             month = "12"
         return month
-
-    # Devuelve una lista de backups por un mes determinado
-    def getBackups(self, year, month):
-        backups = []
-        month = self.monthsToInt(month)
-        files = self.u.getRemoteFilesList("/" + str(self.user['IdCustomer']) + "/"+year+"/"+month+"/")
-        for i in files:
-            path, name = os.path.split(i)
-            backups.append(name)
-        return backups
-
-    def loadBackups(self, y, m):
-        cardsBackups = '<div class="table-responsive">' \
-                       '<table class="table" title="A basic table">' \
-                       '<tbody>'
-        backups = self.getBackups(y, m)
-        for i in backups:
-            vals = str(i).split(".")
-            name = vals[0]
-            cardsBackups = cardsBackups + '<tr>' \
-                                          '<td>' + str(name) + '</td>' \
-                                          '<td><button class="btn btn-flat btn-brand" id="card_year_' + str(
-                i) + '" onClick="downloadBackup(true, \'' + y + '-' + m + '-' + str(i) + '\')">Descargar</button></td>'
-        return cardsBackups + "</tbody></table></div>"
 
     # Devuelve una lista de meses por un anio determinado
     def getMonths(self, year):
@@ -107,8 +111,8 @@ class Recover():
         cardsMonths = ""
         months = self.getMonths(year)
         for i in months:
-            cardsMonths = cardsMonths + '<div class="col-md-4 col-sm-4">' \
-                                      '<div class="card card-scanda">' \
+            cardsMonths = cardsMonths + '<div class="col-md-4 col-sm-3">' \
+                                      '<div class="card-scanda">' \
                                       '<div class="card-main">' \
                                       '<div class="card-inner">' \
                                       '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
@@ -132,15 +136,15 @@ class Recover():
         cardsYears = ""
         years = self.getYears()
         for i in years:
-            cardsYears = cardsYears + '<div class="col-md-4 col-sm-4">' \
-                                      '<div class="card card-scanda">' \
+            cardsYears = cardsYears + '<div class="col-md-4 col-sm-3">' \
+                                      '<div class="card-scanda">' \
                                       '<div class="card-main">' \
                                       '<div class="card-inner">' \
                                       '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" onClick="recover(true, '+str(i)+')">' + str(i) + '</button>' \
-                                                                                                                                                                      '</div>' \
-                                                                                                                                                                      '</div>' \
-                                                                                                                                                                      '</div>' \
-                                                                                                                                                                      '</div>'
+                                      '</div>' \
+                                      '</div>' \
+                                      '</div>' \
+                                      '</div>'
         return cardsYears
 
     def __init__(self):

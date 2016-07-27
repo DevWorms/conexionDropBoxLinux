@@ -3,23 +3,21 @@
 import json
 import os
 import urllib2
+import scanda.Constants as const
 
 '''
     Autentica al usurio con la API Scanda y guarda su usuario/password en el archivo de configuracion
 '''
 
 class Login():
-    CONFIG_FILE = "settings/configuration.json"
-    LOCATION = os.path.dirname(os.path.realpath(__file__))
-
     # Este metodo devuelve un arreglo con la info almacenad en: configuration.json
     def returnUserData(self):
         #log = SetLog()
         # Carga el archivo configuration.json
-        file = os.path.join(self.LOCATION, self.CONFIG_FILE)
+        file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
         if (os.path.exists(file)):
-            # abre el archivo y guarda la variable 'time' del archivo json
+            # abre el archivo y guarda los datos
             with open(file, 'r') as f:
                 data = json.load(f)
         #else:
@@ -31,7 +29,7 @@ class Login():
         #from scanda.SetLog import SetLog
         #log = SetLog()
         # Carga el archivo configuration.json
-        file = os.path.join(self.LOCATION, self.CONFIG_FILE)
+        file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
         if (os.path.exists(file)):
             # abre el archivo y guarda la variable 'path' del archivo json
@@ -54,11 +52,11 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
-        from scanda.SetLog import SetLog
+        #from scanda.SetLog import SetLog
         #log = SetLog()
 
         # Url de la api REST para autenticarse
-        url = 'http://201.140.108.22:2017/DBProtector/Login_GET?User=' + user + '&Password=' + p_hash
+        url = const.IP_SERVER + '/DBProtector/Login_GET?User=' + user + '&Password=' + p_hash
 
         try:
             # Realiza la peticion
@@ -80,6 +78,7 @@ class Login():
             #log.newLogLogin(user, p_hash)
             return False
 
+    # valida si un usuario esta loguado correctamente
     def isActive(self):
         user = self.returnUserData()
         if not user['user'] or not user['password'] or not user['IdCustomer']:
