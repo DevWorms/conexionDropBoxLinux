@@ -4,12 +4,15 @@ dbprotector_sync
 setup.py
 scanda/BackgroundProcess.py
 scanda/Compress.py
+scanda/Constants.py
 scanda/Crons.py
+scanda/Crypt.py
 scanda/Login.py
 scanda/Preferences.py
 scanda/Recover.py
 scanda/Scanda.py
 scanda/SetLog.py
+scanda/Status.py
 scanda/Ui.py
 scanda/Upload.py
 scanda/WebK.py
@@ -23,5 +26,7 @@ scanda/gui/assets/js/base.min.js
 scanda/gui/assets/js/jquery.min.js
 scanda/gui/assets/js/project.min.js
 scanda/img/icon.png
+scanda/img/sync.png
 scanda/settings/configuration.json
 scanda/settings/errors.json
+scanda/settings/status.json

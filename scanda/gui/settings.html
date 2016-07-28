@@ -21,7 +21,21 @@
 			padding: 8px 0 7px;
 			width:40%;
 		}
-
+        .btn-scanda {
+            background-color: #3C779C;
+            color: rgba(246, 246, 246, 1.87);
+            background-position:50% 50%;
+            background-size:100% 100%;
+            border:0;
+            border-radius:2px;
+            cursor:pointer;
+            display:inline-block;
+            margin-bottom:0;
+            max-width:100%;
+            padding:8px;
+            text-transform:uppercase;
+            user-select:none;
+        }
     </style>
 </head>
 <body class="page-brand">
@@ -43,10 +57,9 @@
                     <ul class="menu-collapse collapse in" id="ui_menu_components">
                         <li>
                             <p class="text-center">
-									<span class="avatar avatar-inline avatar-lg">
-										<img alt="Login"
-                                             src="https://daemonite.github.io/material/images/users/avatar-001.jpg">
-									</span>
+                                <span class="avatar avatar-inline avatar-lg">
+                                    <img alt="Login" src="https://daemonite.github.io/material/images/users/avatar-001.jpg">
+                                </span>
                             </p>
                         </li>
                         <li>
@@ -130,6 +143,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Ruta externa donde se mueven los archivos ya respaldados -->
+                                {userPath}
                                 <!-- Frecuencia de respaldo -->
                                 <div class="form-group form-group-label">
                                     <div class="row">
@@ -141,7 +156,7 @@
                                                 {time_type}
                                             </select>
                                             -->
-                                            <input type="hidden" class="form-scanda" id="ui_time" value="0">-
+                                            <input type="hidden" class="form-scanda" id="ui_time" value="0">
                                             <select style="visibility:hidden" class="form-scanda" id="ui_time_type"></select>
                                         </div>
                                     </div>
@@ -150,7 +165,7 @@
                                     <div class="row">
                                         <div class="col-md-10 col-md-push-1">
                                             <button onclick="preferences(true)"
-                                                    class="btn btn-block btn-brand waves-attach waves-light">Guardar
+                                                    class="btn-scanda btn-block waves-attach waves-light">Guardar
                                             </button>
                                         </div>
                                     </div>
@@ -160,6 +175,7 @@
                     </div>
                 </div>
             </div>
+        </section>
     </div>
     </div>
     </section>

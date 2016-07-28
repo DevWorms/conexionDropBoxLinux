@@ -40,7 +40,7 @@ class Preferences():
     '''
 
     # guarda los datos del usuario recibidos
-    def writePreferences(self, path, time, time_type):
+    def writePreferences(self, path, time, time_type, userPath):
         log = SetLog()
         # Carga el archivo configuration.json
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
@@ -52,6 +52,7 @@ class Preferences():
             # escribe la nueva variable time en el archivo json junto con la variable value
             with open(file, 'w') as f:
                 json.dump({
+                    'userPath': userPath,
                     'path': path,
                     'time': time,
                     'time_type': time_type,
@@ -63,7 +64,7 @@ class Preferences():
 
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
-            c.sync()
+            #c.sync()
             return True
         else:
             log.newLog("load_config_file", "E", "")
@@ -98,3 +99,45 @@ class Preferences():
             log.newLog("login_api_error", "E", "")
         # devuelve todos los datos del usuario
         return user
+
+    '''
+        devuelve la ruta externa configurada por el user
+        si no esta condigurada, devuelve la ruta de respaldos + "respaldados"
+    '''
+    def returnExternalPath(self):
+        log = SetLog()
+        # Carga el archivo configuration.json
+        file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
+        # Si el archivo existe...
+        if (os.path.exists(file)):
+            # abre el archivo y guarda la variable 'path' del archivo json
+            with open(file, 'r') as f:
+                data = json.load(f)
+            if not data['userPath']:
+                return os.path.join(data['path'], "respaldados")
+            else:
+                return data['userPath']
+        else:
+            log.newLog("load_config_file", "E", "")
+            return None
+
+    '''
+        Si la opcion FileTreatmen es == 2 muestra la opcion para configurar la carpeta externa
+        de lo contrario no devuelve nada
+    '''
+    def showExternalPath(self):
+        c = Cron()
+        action = c.getCloudSync()
+        value = ''
+        if action['FileTreatmen'] == 2:
+            value = '<div class="form-group form-group-label">' \
+                   '<div class="row">' \
+                   '<div class="col-md-10 col-md-push-1">' \
+                   '<label class="floating-label" for="ui_path_external">Ruta de respaldos externa</label>' \
+                   '<input class="form-control" id="ui_path_external" type="text" value="'+ self.returnExternalPath +'">' \
+                   '</div>' \
+                   '</div>' \
+                   '</div>'
+        else:
+            value = ''
+        return value

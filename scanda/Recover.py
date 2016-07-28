@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from scanda.Login import Login
 from scanda.Upload import Upload
-import scanda.Constants as const
 
 '''
     Funciones llamadas al mostrar los respaldos del usuario

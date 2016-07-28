@@ -8,14 +8,17 @@
   "process_api": "Error: obtener nombre de proceso con API",
   "cron_error": "Error al crear cron",
   "error_path": "Ruta respaldos incorrecta",
-  "error_size": "Espacio insuficiente",
-  "error_upload": "Error subir archivo",
+  "error_size": "Espacio insuficiente, contacte al administrador",
+  "error_upload": "Error al subir archivo",
   "error_compress": "Error comprimir arhivo",
-  "error_404": "Error archivo inexistente",
+  "error_404": "Error, archivo inexistente",
   "error_ext": "Error extension invalida",
   "success_download": "Archivo descargado ",
   "success_upload": "Subida exitosa ",
   "process_incorrect": "Nombre de proceso invalido",
   "error_remove_file": "Error eliminando .zip",
-  "error_file_status": "No se encontro status.json"
+  "error_file_status": "No se encontro status.json",
+  "error_upload_exist": "Conflicto en subida, ya existe otro proceso",
+  "background_exists": "Error, el proceso de respaldo se encuentra ejecutandos",
+  "error_download": "Error descargando el archivo"
 }

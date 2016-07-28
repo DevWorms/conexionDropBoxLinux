@@ -122,6 +122,7 @@ class Cron():
 				data = json.load(f)
 			with open(file, 'w') as f:
 				json.dump({
+					'userPath': data['userPath'],
 					'path': data['path'],
 					'time': cloud['UploadFrecuency'],
 					'time_type': data['time_type'],
@@ -133,3 +134,31 @@ class Cron():
 			self.sync()
 		else:
 			log.newLog("load_config_file", "E", "")
+
+	def rebootCron(self):
+		# Set Log
+		log = SetLog()
+		# Este comando se utiliza para extraer el usuario que ejecutara el cron
+		linux_user = "echo $USER"
+		# lee el resultado del comando anterior
+		p = os.popen(linux_user, "r")
+		linux_user_value = p.readline()
+
+		# crea el cron
+		tab = CronTab(user=linux_user_value)
+		# elimina cualquier cron previo con el comentario SCANDA_sync
+		tab.remove_all(comment='SCANDA_init')
+		# crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
+		cron_job = tab.new("/usr/bin/dbprotector_scanda", comment="SCANDA_init")
+
+		# configura el cron para que la aplicacion se inicie cada reinicio del sistema
+		cron_job.every_reboot()
+
+		# escribe y guarda el cron
+		try:
+			tab.write()
+			# print tab.render()
+			return True
+		except:
+			log.newLog("cron_error", "E", "")
+			return False

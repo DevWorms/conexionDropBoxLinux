@@ -3,8 +3,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('WebKit', '3.0')
+import thread
 from gi.repository import Gtk
-import os
 from scanda.WebK import WebK
 import scanda.Constants as const
 
@@ -56,6 +56,7 @@ class GUI():
 
         # Extrae los datos del usuario y los reemplaza en la vista
         user = p.returnUserData()
+        # no sera visible en esta version
         if user["time_type"] == "dias":
             options = '<option class="form-scanda" value="dias">Dias</option>' \
                       '<option class="form-scanda" value="horas">Horas</option>'
@@ -73,6 +74,7 @@ class GUI():
             user['space'] = str(user['space']) + " MB"
 
         data = {
+            "userPath": str(p.showExternalPath()),
             "user": user['user'],
             "space": user["space"],
             "space-available": espacioLibre,
@@ -114,8 +116,8 @@ class GUI():
             # extrae path y frecuencia de respaldo de los forms HTML
             route = webFrame.get_dom_document().get_element_by_id("ui_path").get_value()
             time = webFrame.get_dom_document().get_element_by_id("ui_time").get_value()
-            time_type = webFrame.get_dom_document().get_element_by_id("ui_time_type").get_value()
-            if time and route:
+            userPath = webFrame.get_dom_document().get_element_by_id("ui_path_external").get_value()
+            if route:
                 # vuelve a cargar los datos del usuario
                 user = p.returnUserData()
                 if user["time_type"] == "dias":
@@ -141,6 +143,7 @@ class GUI():
                     user['space'] = str(user['space']) + " MB"
 
                 # REemplaza los datos del usuario
+                tmp_page = tmp_page.replace("{userPath}", str(p.showExternalPath()))
                 tmp_page = tmp_page.replace("{user}", str(user['user']))
                 tmp_page = tmp_page.replace("{space}", str(user['space']))
                 tmp_page = tmp_page.replace("{space-available}", espacioLibre)
@@ -156,7 +159,7 @@ class GUI():
                     variable time_type
                 '''
                 #if p.writePreferences(route, time, time_type):
-                if p.writePreferences(route, time, "dias"):
+                if p.writePreferences(route, time, "dias", userPath):
                     # reemplaza alert con un mensaje
                     tmp_page = tmp_page.replace("{alert}", '<div class="tile-wrap">'
                                                            '<div class="tile tile-collapse tile-brand">'
@@ -270,8 +273,8 @@ class GUI():
             tmp_page = fd.read()
             fd.close()
 
-            # Descarga el archivo
-            u.downloadFile(u.getData(), r.downloadFile(backup))
+            # Descarga el archivo en un nuevo thread de forma paralela
+            thread.start_new_thread(u.downloadFile, (u.getData(), r.downloadFile(backup),))
             #print r.downloadFile(backup)
 
             # Recupera anio y mes
@@ -333,6 +336,7 @@ class GUI():
             user['space'] = str(user['space']) + " MB"
 
         # REemplaza los datos del usuario
+        tmp_page = tmp_page.replace("{userPath}", str(p.showExternalPath()))
         tmp_page = tmp_page.replace("{user}", str(user['user']))
         tmp_page = tmp_page.replace("{space}", str(user['space']))
         tmp_page = tmp_page.replace("{space-available}", espacioLibre)

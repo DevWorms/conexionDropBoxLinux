@@ -6,6 +6,7 @@ from scanda.Ui import GUI
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import scanda.Constants as const
+from scanda.Status import Status
 
 class Scanda():
     # Constructor
@@ -23,9 +24,9 @@ class Scanda():
 
     # Cada vez que se da click derecho en el icono despliega un menu popup
     def set_menu(self, icon, button, time):
-        from scanda.Status import Status
         s = Status()
-        status  = s.getDownloadStatus()
+        statusUpload  = s.getUploadStatus()
+        statusDownload = s.getDownloadStatus()
 
         self.menu = Gtk.Menu()
         # Items del menu
@@ -42,12 +43,30 @@ class Scanda():
         settings.connect("activate", self.setActionMenu, 2)
         sync.connect("activate", self.setActionMenu, 3)
 
-        if status['status'] == 1:
-            statusMenu.set_label("Subiendo " + status['file'] + " " + status['chunk'] + "%")
-        elif status['status'] == 2:
-            statusMenu.set_label(status['file'] + " sincronizado")
-        else:
+        # si se encuentra sincronizado
+        if statusUpload['status'] == 0 and statusDownload['status'] == 0:
             statusMenu.set_label("Sincronizado")
+        # si esta subiendo y descargando al mismo tiempo
+        elif statusUpload['status'] != 0 and statusDownload['status'] == 1:
+            if statusUpload['status'] == 1:
+                statusMenu.set_label("Subiendo " + statusUpload['file'] + " " + statusUpload['chunk'] + "% / Desc. " + statusDownload['file'])
+            elif statusUpload['status'] == 2:
+                #self.icon.set_from_file("img/sync.png")
+                statusMenu.set_label("Descargando " + statusDownload['file'])
+            elif statusUpload['status'] == 3:
+                statusMenu.set_label("Cifrando " + statusUpload['file'] + " / Descargando " + statusDownload['file'])
+        # si esta subiendo, pero no descargando
+        else:
+            if statusUpload['status'] != 0:
+                if statusUpload['status'] == 1:
+                    statusMenu.set_label("Subiendo " + statusUpload['file'] + " " + statusUpload['chunk'] + "%")
+                elif statusUpload['status'] == 2:
+                    #self.icon.set_from_file("img/sync.png")
+                    statusMenu.set_label(statusUpload['file'] + " sincronizado")
+                elif statusUpload['status'] == 3:
+                    statusMenu.set_label("Cifrando " + statusUpload['file'] + " para subir")
+            if statusDownload['status'] == 1:
+                statusMenu.set_label("Descargando " + statusDownload['file'])
 
         # Agrega los items al menu
         self.menu.append(recover)
@@ -72,12 +91,6 @@ class Scanda():
                 get.preferences()
         elif action == 3:
             os.system('/usr/bin/dbprotector_sync')
-
-    # se utilizara para mostrar que se esta realizando una accion Subida / Descarga
-    def setActionActive(self):
-        download = Gtk.MenuItem()
-        download.set_label('Recuperar respaldo')
-        self.menu.append(download)
 
     # Esta funcion sera la que coloque el icono en el panel
     def set_icon(self):

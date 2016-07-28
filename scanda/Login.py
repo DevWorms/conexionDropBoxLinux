@@ -38,6 +38,7 @@ class Login():
             # escribe la nueva variable time en el archivo json junto con la variable value
             with open(file, 'w') as f:
                 json.dump({
+                    'userPath': data['userPath'],
                     'path': data['path'],
                     'time': data['time'],
                     'time_type': data['time_type'],
@@ -52,6 +53,10 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
+        # crea un cron para iniciar la app cada reinicio
+        from scanda.Crons import Cron
+        c = Cron()
+        c.rebootCron()
         #from scanda.SetLog import SetLog
         #log = SetLog()
 

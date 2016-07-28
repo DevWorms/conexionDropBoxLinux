@@ -6,11 +6,13 @@ import datetime
 import json
 import os
 import os.path
+import re
 import time
 import urllib2
 
 import dropbox
 from dropbox.client import DropboxClient
+from stat import S_ISREG, ST_CTIME, ST_MODE
 
 from scanda.BackgroundProcess import BackgroundProcess
 from scanda.Login import Login
@@ -19,24 +21,22 @@ from scanda.SetLog import SetLog
 from scanda.Compress import Compress
 from scanda.Crons import Cron
 from scanda.Crypt import Crypt
+from scanda.Status import Status
 import scanda.Constants as const
 
 '''
     Metodos usados para trabajar con la API de Dropbox
-    getData: Devuelve los datos del usuario:
-        {'freeSpace': 624, u'tokenDropbox': u'', 'space': 1024, u'IdCustomer': 1, 'ext': [u'BAK', u'ZIP'], u'user': u'Jguerrero', u'time': u'20', u'path': u'/home/backups', u'password': u'Jguerrero', 'spaceUsed': 400, u'time_type': u'dias'}
-    getLocalFilesList: Lista de archivos en la carpeta local
-    filtradoPorExtension: Un archivo tiene extension valida para ser subido
-    uploadFile: Sube archivo a Dropbox
         Estructura de carpetas en Dropbox
             /Aplicaciones/DBProtector/user-id/año/mes/archivo
         Estructura de carpetas en Aplicacion Dropbox
             /user-id/año/mes/archivo
             la Api trabaja a nivel Root de la aplicacion, ej: /1/2016/07
         Validaciones:
+            -valida que no exista otra subida en curso
             -Archivo existe?
             -El tamaño del archivo debe ser menor al espacio disponible (proporcionado por la API de SCANDA)
             -El archivo debe tener una extension valida (proporcionado por la API de SCANDA)
+            -Debe seguir un formato de nombre valido ej. LOMS9208164C520160725150501.bak LOMS920816---20160725150501.bak
             -Si el archivo es mayor que CHUNK_SIZE (5MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
         - Return
             - 1 = Archivo inexistente
@@ -44,15 +44,6 @@ import scanda.Constants as const
             - 3 = Extension invalida
             - None = El archivo no se subio
             - res = JSON array con los detalles del archivo subido
-    rutaDestino: genera la ruta donde se subira el archivo dentro de Dropbox formato: /user-id/año/mes/
-    stopwatch: Unicamente devuelve el tiempo que tardo en realizarse una tarea
-    getRemoteFilesList: Devuelve una lista de archivos/carpetas en una ruta especifica (no recursivo)
-    updateSpace: Actualiza el espacio disponible en la API SCANDA restando el espacio usado
-    downloadFile: Descarga un archivo en Dropbox, se le pasa una ruta ej: /1/2016/07/backup.bak
-        (la ruta donde el archivo se descargara en la ruta configurada por el usuario)
-
-    app = Upload()
-    app.sync()
 '''
 
 class Upload():
@@ -105,15 +96,34 @@ class Upload():
         log = SetLog()
         try:
             # lista de archivos completa
-            ar = [f for f in os.listdir(ruta) if os.path.isfile(os.path.join(ruta, f))]
-            ar = [f for f in ar if self.filtradoPorExtension(f, filtro)]
+            ar = [file for file in os.listdir(ruta) if os.path.isfile(os.path.join(ruta, file))]
+            # valida los archivos por extension permitida
+            ar = [file for file in ar if self.filtradoPorExtension(file, filtro)]
+            ar = [file for file in ar if self.checkNameSintax(file)]
             for archivo in ar:
                 files.append(archivo)
         except:
             log.newLog("error_path", "E", "")
             files = None
         return files
-    # filtro = array de extensiones
+
+    # Valida que no haya otra subida en progreso, usando Status
+    def checkUpload(self):
+        s = Status()
+        status = s.getUploadStatus()
+        if status['status'] == 0:
+            return True
+        else:
+            return False
+
+    # valida si el formato del nombre del archivo es valido
+    def checkNameSintax(self, file):
+        if not re.match(r"([A-Zz-z]{4}\d{6})(---|\w{3})?(\d{14}).(\w{3})", file):
+            return False
+        else:
+            return True
+
+    # filtra un archivo por extension filtro = array de extensiones
     def filtradoPorExtension(self, archivo, filtro):
         if filtro is None:
             return True
@@ -125,7 +135,6 @@ class Upload():
 
     # Sube un archivo, solo recibe el nombre del archivo
     def uploadFile(self, file):
-        from scanda.Status import Status
         log = SetLog()
         status = Status()
         # Extrae los datos del usuario
@@ -161,9 +170,9 @@ class Upload():
                                     # "borrando archivo: "
                                     os.remove(fullFile)
                                     # Notifica a la API
-                                    log.newLog("success_upload", "T", "")
+                                    log.newLog("success_upload", "T", file)
                                     # Muestra al usuario, que se subio el archivo
-                                    status.setDownloadStatus(file, str(f.tell()), str(size_bytes), 2)
+                                    status.setUploadStatus(file, str(f.tell()), str(size_bytes), 2)
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
                                     return res
@@ -189,7 +198,7 @@ class Upload():
                                         # tamano subido y id de la sesion de subida
                                         if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
                                             # Muestra al usuario que se esta subiendo
-                                            status.setDownloadStatus(file, f.tell(), size_bytes, 2)
+                                            status.setUploadStatus(file, f.tell(), size_bytes, 2)
                                             res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
                                             self.updateSpace(user, size)
                                             # "borrando archivo: "
@@ -198,7 +207,7 @@ class Upload():
                                             log.newLog("success_upload", "T", "")
                                         else:
                                             # Muestra al usuario que se esta subiendo
-                                            status.setDownloadStatus(file, f.tell(), size_bytes, 1)
+                                            status.setUploadStatus(file, f.tell(), size_bytes, 1)
                                             dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
                                             cursor.offset = f.tell()
                                 except dropbox.exceptions.ApiError as err:
@@ -207,16 +216,17 @@ class Upload():
                                     log.newLog("error_upload", "T", "")
                                     return None
                 else:
-                    log.newLog("error_ext", "T", "Upload.uploadFile")
-                    return 3
+                    # extension invalida
+                    log.newLog("error_ext", "T", ext)
+                    return None
             else:
-                log.newLog("error_size", "T", "Upload.uploadFile")
+                log.newLog("error_size", "T", "")
                 # Espacio insuficiente
-                return 2
+                return None
         else:
-            log.newLog("error_404", "T", "Upload.uploadFile")
             # Archivo invalido
-            return 1
+            log.newLog("error_404", "T", file)
+            return None
 
     # Devuelve la ruta donde se almacenara el archivo en Dropbox
     def pathToUpload(self, user_id):
@@ -293,15 +303,21 @@ class Upload():
         with self.stopwatch('download'):
             try:
                 out = open(localFile, 'wb')
-                with cliente.get_file(file) as f:
-                    out.write(f.read())
-                zip.uncompress(localFile)
-                os.remove(localFile)
-                log.newLog("success_download", "T", file)
-                return True
+                with self.stopwatch("download"):
+                    with cliente.get_file(file) as f:
+                        out.write(f.read())
             except dropbox.exceptions.HttpError as err:
-                log.newLog()
+                log.newLog("error_download", "T", file)
                 return False
+        out.close()
+
+        if os.path.exists(localFile):
+            zip.uncompress(localFile)
+            log.newLog("success_download", "T", file)
+            return True
+        else:
+            log.newLog("error_download", "T", file)
+            return False
 
     '''
         Que se hace con el archivo original, despues de respaldarlo?
@@ -311,52 +327,88 @@ class Upload():
         c = Cron()
         user = self.getData()
         action = c.getCloudSync()
-        # si la accion es 1, mueve el archivo a la carpeta "uploaded"
+        # si la accion es 1, mueve el archivo a la carpeta "respaldados"
         if action['FileTreatmen'] == 1:
-            dest = os.path.join(user['path'], "uploaded")
+            dest = os.path.join(user['path'], "respaldados")
             # si la carpeta no existe, la crea
             if not os.path.exists(dest):
                 os.makedirs(dest)
             # mueve el; archivo
             os.rename(os.path.join(user['path'], file), os.path.join(dest, file))
+        # se mueve el archivo a la carpeta configurada por el user, si no existe, se mueve a respaldados
         elif action['FileTreatmen'] == 2:
-            dest = "/home/baclups"
-            os.rename(os.path.join(user['path'], file), os.path.join(dest, file))
+            # Elimina los backups viejos para que solo quede la cantidad permitida
+            self.prepareExternalPath(action)
+            p = Preferences()
+            # una vez que el espacio tiene la cantidad de respaldos adecuada, mueve el archivo
+            os.rename(os.path.join(user['path'], file), os.path.join(p.returnExternalPath(), file))
         # si la accion es 3, elimina el archivo
         elif action['FileTreatmen'] == 3:
             os.remove(file)
 
-
-    def sync(self):
-        background = BackgroundProcess()
-        from scanda.SetLog import SetLog
+    '''
+        si el numero de respaldos en la carpeta externa es mayor que FileHistoricalNumber
+        borra el mas antiguo
+        recibe como parametro una instancia de Cron().getCloudSync()
+    '''
+    def prepareExternalPath(self, args):
+        p = Preferences()
         log = SetLog()
-        # Usado para comprimir el archivo
-        zip = Compress()
-        # Extrae la info del usuario
-        user = self.getData()
-        # Lista de archivos validos para ser subidos
-        files = self.getLocalFilesList(user["path"], user["ext"])
-        for file in files:
-            if not background.isRunning():
-                name, ext = file.split(".")
-                file = os.path.join(user["path"], file)
-                # Comprime el archivo
-                if zip.compress(file):
-                    # Datos del archivo subido
-                    data = self.uploadFile(name + ".zip")
-                    # que se hace con el archivo?
-                    self.actionAfterUpload(file)
-                else:
-                    if os.path.isfile(os.path.join(user['path'], file)):
-                        os.remove(os.path.join(user['path'], file))
-                    log.newLog("error_compress", "E", "")
-        '''
-            Una vez que se han terminado las subidas, se sincroniza con la api
-            para actualizar la frecuencia de respaldo y generar un nuevo cron
-        '''
-        c = Cron()
-        c.cloudSync()
+        path = p.returnExternalPath()
+        try:
+            while len(os.listdir(path)) >= args['FileHistoricalNumber']:
+                # lista de archivos completa
+                files = (os.path.join(path, file) for file in os.listdir(path))
+                files = ((os.stat(path), path) for path in files)
+                # fecha de modificacion
+                files = ((stat[ST_CTIME], path)
+                           for stat, path in files if S_ISREG(stat[ST_MODE]))
+                # ordena de mas viejo al mas nuevo
+                files = sorted(files)
+                os.remove(files[0][1])
 
-app =Upload()
-app.sync()
+        except:
+            log.newLog("error_path", "E", "")
+
+    '''
+        Sincroniza los archivos en la nube
+    '''
+    def sync(self):
+        log = SetLog()
+        if self.checkUpload():
+            status = Status()
+            background = BackgroundProcess()
+            # Usado para comprimir el archivo
+            zip = Compress()
+            # Extrae la info del usuario
+            user = self.getData()
+            # Lista de archivos validos para ser subidos
+            files = self.getLocalFilesList(user["path"], user["ext"])
+            for file in files:
+                if not background.isRunning():
+                    name, ext = file.split(".")
+                    file = os.path.join(user["path"], file)
+                    # Comprime el archivo
+                    # actualiza el estado de la aplicacion a sincronizado
+                    status.setUploadStatus(file, 1, 1, 3)
+                    if zip.compress(file):
+                        # Datos del archivo subido
+                        data = self.uploadFile(name + ".zip")
+                        # que se hace con el archivo?
+                        self.actionAfterUpload(file)
+                        # actualiza el estado de la aplicacion a sincronizado
+                        status.setUploadStatus(file, 1, 1, 0)
+                    else:
+                        if os.path.isfile(os.path.join(user['path'], file)):
+                            os.remove(os.path.join(user['path'], file))
+                        log.newLog("error_compress", "T", "")
+                else:
+                    log.newLog("background_exists", "T", "")
+            '''
+                Una vez que se han terminado las subidas, se sincroniza con la api
+                para actualizar la frecuencia de respaldo y generar un nuevo cron
+            '''
+            c = Cron()
+            c.cloudSync()
+        else:
+            log.newLog("error_upload_exist", "T", "")

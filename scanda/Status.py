@@ -10,10 +10,9 @@ import scanda.Constants as const
 
 class Status():
     # obtiene el status de la descarga
-    def getDownloadStatus(self):
+    def getUploadStatus(self):
         # logs
         log = SetLog()
-        data = []
 
         file = os.path.join(const.LOCATION, const.STATUS_FILE)
         # Si el archivo existe...
@@ -34,7 +33,7 @@ class Status():
         return upload
 
     # carga el status de la subida (se usa cada que se inicia un chunk)
-    def setDownloadStatus(self, fileUploaded, chunk, total, status):
+    def setUploadStatus(self, fileUploaded, chunk, total, status):
         # logs
         log = SetLog()
 
@@ -60,38 +59,44 @@ class Status():
         else:
             log.newLog("error_file_status", "E", "")
 
-        # cargar el status de la subida en la API SCANDA
+        '''
+            0 = Subida terminada
+            1 = Iniciando subida
+            2 = Subiendo
+            3 = Comprimiendo
+            Si es diferente de 3 envia un log a la API
+        '''
+        if status != 3:
+            # extrae la infor del user
+            l = Login()
+            user = l.returnUserData()
+            # extrae la fecha actual formateada
+            date = strftime("%Y%m%d%H%M%S", gmtime())
 
-        # extrae la infor del user
-        l = Login()
-        user = l.returnUserData()
-        # extrae la fecha actual formateada
-        date = strftime("%Y%m%d%H%M%S", gmtime())
-
-        # valida el status de la subida
-        if status == 1: # 1 para carga iniciada
-            #i el chunk es de 5mb, entonces es el primero en subirse
-            if chunk == 5242880: # tamano del chunk de 5MB
+            # valida el status de la subida
+            # 1 para carga iniciada
+            if status == 1:
+                #i el chunk es de 5mb, entonces es el primero en subirse
+                if chunk == const.CHUNK_SIZE: # tamano del chunk de 5MB
+                    # Url de la api REST para la subida de archivos
+                    url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
+                          user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(chunk) + '&TotalChunk=' + \
+                          str(total) + '&Status=EnProgreso&FileName=' + fileUploaded
+                # si el es diferente de 5 mb, se esta actualizando
+                else:
+                    # Url de la api REST para la subida de archivos
+                    url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
+                          user['password'] + '&ActualChunk='+str(chunk)+'&Status=EnProgreso&FileName=' + fileUploaded
+            elif status == 2:
                 # Url de la api REST para la subida de archivos
-                url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
-                      user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(chunk) + '&TotalChunk=' + \
-                      str(total) + '&Status=EnProgreso&FileName=' + fileUploaded
-            # si el es diferente de 5 mb, se esta actualizando
-            else:
-                # Url de la api REST para la subida de archivos
-                url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
-                      user['password'] + '&ActualChunk='+str(chunk)+'&Status=EnProgreso&FileName=' + fileUploaded
-        elif status == 2:
-            # Url de la api REST para la subida de archivos
-            url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=Jguerrero&Password=Jguerrero&FileName=XXXXX000000.ZIP'
+                url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + user['password'] + '&FileName=' + fileUploaded
 
-        try:
-            # Realiza la peticion
-            req = urllib2.Request(url)
-            response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
-            # log.newLog("http_error", "E", e.fp.read())
-            print e
+            try:
+                # Realiza la peticion
+                req = urllib2.Request(url)
+                response = urllib2.urlopen(req)
+            except urllib2.HTTPError, e:
+                log.newLog("http_error", "E", e.fp.read())
 
     # cambia las unidades a porcentajes
     def returnPercent(self, total, value):
@@ -99,3 +104,43 @@ class Status():
         value = int(value)
         porcentaje = Decimal(value * 100)
         return str(round(porcentaje / total))
+
+    def getDownloadStatus(self):
+        # logs
+        log = SetLog()
+
+        file = os.path.join(const.LOCATION, const.STATUS_FILE)
+        # Si el archivo existe...
+        if (os.path.exists(file)):
+            # abre el archivo y lee los datos
+            with open(file, 'r') as f:
+                data = json.load(f)
+            download = data['download']
+        else:
+            log.newLog("error_file_status", "E", "")
+        return download
+
+    def setDownloadstatus(self, fileDownload, path, status):
+        # logs
+        log = SetLog()
+
+        # Carga el status de la subida a nivel local
+        file = os.path.join(const.LOCATION, const.STATUS_FILE)
+        # Si el archivo existe...
+        if (os.path.exists(file)):
+            # guarda los datos anteriores
+            with open(file, 'r') as f:
+                data = json.load(f)
+            # abre el archivo y escribe los datos
+            with open(file, 'w') as f:
+                json.dump({
+                    'download': {
+                        'file': fileDownload,
+                        'path': path,
+                        'status': status
+                    },
+                    'upload': data['upload']
+                }, f)
+
+        else:
+            log.newLog("error_file_status", "E", "")

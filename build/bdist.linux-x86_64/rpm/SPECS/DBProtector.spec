@@ -1,6 +1,6 @@
 %define name DBProtector
-%define version 0.1.1
-%define unmangled_version 0.1.1
+%define version 1.0
+%define unmangled_version 1.0
 %define release 1
 
 Summary: DBProtector allow Automatically backup databases
@@ -27,20 +27,24 @@ DBProtector allows you create automantically backups and place them in the cloud
 python setup.py build
 
 %install
-pip install --upgrade pip
-pip install python-crontab pyminizip dropbox
-
 python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+pip install --upgrade pip
+pip install python-crontab pyminizip dropbox
+
+python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+
 %post
 #! /bin/bash
 sudo chmod -R 777 /usr/lib/python2.7/site-packages/scanda/settings/
-sudo ln -s /usr/bin/dbprotector_scanda /etc/init.d/
-sudo ln -s /etc/init.d/dbprotector_scanda /etc/rc.d/
+#sudo ln -s /usr/bin/dbprotector_scanda /etc/init.d/
+#sudo ln -s /etc/init.d/dbprotector_scanda /etc/rc.d/
 #dbprotector_scanda
+
 
 
 %postun

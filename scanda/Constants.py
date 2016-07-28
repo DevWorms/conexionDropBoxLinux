@@ -7,7 +7,7 @@ CONFIGURATION_FILE = "settings/configuration.json"
 # archivo de errores
 ERRORS_FILE = "settings/errors.json"
 # version de la aplicacion
-VERSION = '0.1'
+VERSION = '1.0'
 # ubicacion de la aplicacion
 LOCATION = os.path.dirname(os.path.realpath(__file__))
 # icono de la aplicacion
