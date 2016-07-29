@@ -1,10 +1,4 @@
-#! /bin/bash
-sudo chmod -R 777 /usr/lib/python2.7/site-packages/scanda/settings/
-#sudo ln -s /usr/bin/dbprotector_scanda /etc/init.d/
-#sudo ln -s /etc/init.d/dbprotector_scanda /etc/rc.d/
-#dbprotector_scanda
-# Varia de acuerdo a la version de GNOME y la distribucion linux
-echo '#!/usr/bin/env xdg-open
+#!/usr/bin/env xdg-open
 [Desktop Entry]
 Version=1.0
 # Only KDE 4 seems to use GenericName, so we reuse the KDE strings.
@@ -21,4 +15,4 @@ Categories=Database;Development;SAP
 X-Ayatana-Desktop-Shortcuts=NewWindow
 [NewWindow Shortcut Group]
 Name=New Window
-Exec="/usr/bin/dbprotector_scanda -n"' >> /usr/share/applications/sublime-text.desktop
+Exec="/usr/bin/dbprotector_scanda -n"

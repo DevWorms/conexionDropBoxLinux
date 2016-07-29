@@ -3,10 +3,10 @@ import scanda.Constants as const
 
 '''
     Empaqueta en RPM:
-    python setup.py bdist_rpm --requires 'gcc python3-devel python-pip python-setuptools libwebkitgtk3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
+    python setup.py bdist_rpm --requires 'gcc python-devel python-pip python-setuptools libwebkitgtk3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''
 
-files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html"]
+files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
 
 setup (
     name = 'DBProtector',

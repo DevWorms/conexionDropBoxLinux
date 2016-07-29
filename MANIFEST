@@ -25,8 +25,10 @@ scanda/gui/assets/css/project.min.css
 scanda/gui/assets/js/base.min.js
 scanda/gui/assets/js/jquery.min.js
 scanda/gui/assets/js/project.min.js
+scanda/img/DB_Protector_16X16-01.png
+scanda/img/DB_Protector_32X32.png
+scanda/img/DB_Protector_64X64.png
 scanda/img/icon.png
-scanda/img/sync.png
 scanda/settings/configuration.json
 scanda/settings/errors.json
 scanda/settings/status.json

@@ -8,7 +8,7 @@ import scanda.Constants as const
 
 class WebK(Gtk.Window):
     def __init__(self, html="", tpl={}):
-        Gtk.Window.__init__(self, title='DBProtector')
+        Gtk.Window.__init__(self, title='DB Protector')
         self.view = WebKit.WebView()
         settings = self.view.get_settings()
         settings.set_property('enable-default-context-menu', True)
@@ -16,6 +16,7 @@ class WebK(Gtk.Window):
         settings.set_property("enable-plugins", True)
         settings.set_property("enable-scripts", True)
         settings.set_property("enable-universal-access-from-file-uris", True)
+        settings.set_property("enable-developer-extras", True)
 
         self.view.set_settings(settings)
         self.set_resizable(False)

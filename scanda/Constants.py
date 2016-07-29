@@ -11,7 +11,7 @@ VERSION = '1.0'
 # ubicacion de la aplicacion
 LOCATION = os.path.dirname(os.path.realpath(__file__))
 # icono de la aplicacion
-ICONO = "img/icon.png"
+ICONO = "img/DB_Protector_16X16-01.png"
 # archivo de status, usado en la carga / descarga de archivos
 STATUS_FILE = "settings/status.json"
 # tamano de las subidas maximo 150mb, recomendado 5
