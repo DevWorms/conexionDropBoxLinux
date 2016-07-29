@@ -55,7 +55,7 @@ class Upload():
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(
-                '*]BC.f3W&\x04\x10\n\x13\x004&!a51&e4&!a55"w\x16P)Z\x03:"d\x16""s=C\x13]\x1eV\x11X=8&\x034)\x14\x04=1:x \x0e\x13\x06\x17F\x13f81>\x04\x14F\x13]GP\x13l\x17$$GOY'.decode('utf-8')
+                '*]BC.f3W&\x04\x10\n\x13\x004&!a51&e4&!a5&!t8\x12#N\x1b\x05.J<\x0e\x12\x07*A&](\x16>c!!\x15x\x1a\x15"Z%\x1a"\\\x15W)\x05\x170\x15\x00\x020>b1F%h8#?q\x1b\x07"aOY'.decode('utf-8')
             )
         )
     )
