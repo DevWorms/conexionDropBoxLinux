@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 import gi
 gi.require_version('Gtk', '3.0')
-gi.require_version('WebKit', '3.0')
+# only in opensuse comment this line
+#gi.require_version('WebKit', '3.0')
 import thread
 from gi.repository import Gtk
 from scanda.WebK import WebK
