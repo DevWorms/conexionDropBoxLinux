@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Grupo SCANDA <author@mail.com>
-Requires: gcc python-devel python-pip python-setuptools libwebkitgtk3-devel
+Requires: gcc python-devel python-pip python-setuptools python-webkitgtk-devel
 Url: scanda.com.mx
 
 %description
