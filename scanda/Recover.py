@@ -110,17 +110,20 @@ class Recover():
     def loadMonths(self, year):
         cardsMonths = ""
         months = self.getMonths(year)
-        for i in months:
-            cardsMonths = cardsMonths + '<div class="col-md-4 col-sm-3">' \
-                                      '<div class="card-scanda">' \
-                                      '<div class="card-main">' \
-                                      '<div class="card-inner">' \
-                                      '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
-                i) + '" onClick="recoverMonth(true, \''+year+'-' + str(i) + '\')">' + str(i) + '</button>' \
-                                                                             '</div>' \
-                                                                             '</div>' \
-                                                                             '</div>' \
-                                                                             '</div>'
+        if not months:
+            cardsMonths = "<h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3>"
+        else:
+            for i in months:
+                cardsMonths = cardsMonths + '<div class="col-md-4 col-sm-3">' \
+                                          '<div class="card-scanda">' \
+                                          '<div class="card-main">' \
+                                          '<div class="card-inner">' \
+                                          '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
+                    i) + '" onClick="recoverMonth(true, \''+year+'-' + str(i) + '\')">' + str(i) + '</button>' \
+                                                                                 '</div>' \
+                                                                                 '</div>' \
+                                                                                 '</div>' \
+                                                                                 '</div>'
         return cardsMonths
 
     # Devuelve una lista de anios por usuario
@@ -135,16 +138,19 @@ class Recover():
     def loadYears(self):
         cardsYears = ""
         years = self.getYears()
-        for i in years:
-            cardsYears = cardsYears + '<div class="col-md-4 col-sm-3">' \
-                                      '<div class="card-scanda">' \
-                                      '<div class="card-main">' \
-                                      '<div class="card-inner">' \
-                                      '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" onClick="recover(true, '+str(i)+')">' + str(i) + '</button>' \
-                                      '</div>' \
-                                      '</div>' \
-                                      '</div>' \
-                                      '</div>'
+        if not years:
+            cardsYears = "<h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3>"
+        else:
+            for i in years:
+                cardsYears = cardsYears + '<div class="col-md-4 col-sm-3">' \
+                                          '<div class="card-scanda">' \
+                                          '<div class="card-main">' \
+                                          '<div class="card-inner">' \
+                                          '<button class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" onClick="recover(true, '+str(i)+')">' + str(i) + '</button>' \
+                                          '</div>' \
+                                          '</div>' \
+                                          '</div>' \
+                                          '</div>'
         return cardsYears
 
     def __init__(self):

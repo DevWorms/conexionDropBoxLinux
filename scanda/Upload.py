@@ -250,12 +250,18 @@ class Upload():
 
     # Devuelve la lista de archivos por una ruta
     def getRemoteFilesList(self, ruta):
+        self.creaFolder(ruta)
         files = []
         cliente = DropboxClient(self.TOKEN)
         respuesta = cliente.metadata(ruta)
         for file in respuesta["contents"]:
             files.append(file["path"])
         return files
+
+    def creaFolder(self, path):
+        dbx = dropbox.Dropbox(self.TOKEN)
+        res = dbx.files_upload("", os.path.join(path, "init"))
+        dbx.files_delete(os.path.join(path, "init"))
 
     # devuelve la lista completa de respaldos de un usario
     def getAllRemoteFilesList(self, user_id):

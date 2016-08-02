@@ -3,7 +3,7 @@ import scanda.Constants as const
 
 '''
     Empaqueta en RPM:
-    python setup.py bdist_rpm --requires 'gcc python-devel python-pip python-setuptools python-webkitgtk-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
+    python setup.py bdist_rpm --requires 'gnome-js-common gcc python-devel python-pip python-setuptools python-webkitgtk-devel python-gobject2 webkit2gtk3-devel libwebkitgtk-3_0-0-32bit libwebkitgtk-3_0-0 python3-gi' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''
 
 files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
@@ -33,5 +33,5 @@ setup (
     packages = ['scanda'],
     scripts = ["dbprotector_scanda", "dbprotector_sync"],
     package_data = {'scanda' : files },
-    long_description = """DBProtector allows you create automantically backups and place them in the cloud"""
+    long_description = """DBProtector allows you create automantically backups and place them in your cloud"""
 )

@@ -30,6 +30,13 @@ class Login():
         #log = SetLog()
         # Carga el archivo configuration.json
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
+	uData = self.returnUserData()
+	if not uData['user'] or not uData['password']:
+	    # crea un cron para iniciar la app cada reinicio
+            from scanda.Crons import Cron
+            c = Cron()
+            c.rebootCron()
+
         # Si el archivo existe...
         if (os.path.exists(file)):
             # abre el archivo y guarda la variable 'path' del archivo json
@@ -53,10 +60,6 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
-        # crea un cron para iniciar la app cada reinicio
-        from scanda.Crons import Cron
-        c = Cron()
-        c.rebootCron()
         #from scanda.SetLog import SetLog
         #log = SetLog()
 

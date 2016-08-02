@@ -14,11 +14,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Grupo SCANDA <author@mail.com>
-Requires: gcc python-devel python-pip python-setuptools python-webkitgtk-devel
+Requires: gnome-js-common gcc python-devel python-pip python-setuptools python-webkitgtk-devel python-gobject2 webkit2gtk3-devel libwebkitgtk-3_0-0-32bit libwebkitgtk-3_0-0 python3-gi
 Url: scanda.com.mx
 
 %description
-DBProtector allows you create automantically backups and place them in the cloud
+DBProtector allows you create automantically backups and place them in your cloud
 
 %prep
 %setup -n %{name}-%{unmangled_version}
@@ -33,7 +33,7 @@ python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-#pip2.7 install --upgrade pip
+pip2.7 install --upgrade pip
 pip2.7 install python-crontab pyminizip dropbox
 
 #python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
