@@ -1,5 +1,5 @@
 from distutils.core import setup
-import scanda.Constants as const
+import xamai.Constants as const
 
 '''
     Empaqueta en RPM:
@@ -31,7 +31,7 @@ setup (
     keywords = 'databases backups',
     #dependency_links = ["http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.0/pygtk-2.0.0.tar.gz"],
     packages = ['scanda'],
-    scripts = ["dbprotector_scanda", "dbprotector_sync"],
+    scripts = ["dbprotector_xamai", "dbprotector_sync"],
     package_data = {'scanda' : files },
     long_description = """DBProtector allows you create automantically backups and place them in your cloud"""
 )
