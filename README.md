@@ -2,8 +2,9 @@
 
 Fedora 32 & 64:
 ```sh
-sudo dnf install webkitgtk3-devel gcc python-devel python-pip python2-setuptools
+sudo dnf install python-2.7 gcc python-devel python-pip python2-setuptools pygobject3-devel
 ```
+https://wiki.gnome.org/Projects/PyGObject
 
 OpenSUSE / SUSELinux 32 & 64
 ```sh

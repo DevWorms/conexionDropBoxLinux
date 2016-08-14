@@ -3,7 +3,7 @@
 %define unmangled_version 1.0
 %define release 1
 
-Summary: DBProtector allow Automatically backup databases
+Summary: DB Protector
 Name: %{name}
 Version: %{version}
 Release: %{release}
@@ -14,11 +14,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Grupo SCANDA <author@mail.com>
-Requires: gnome-js-common gcc python-devel python-pip python-setuptools python-webkitgtk-devel python-gobject2 webkit2gtk3-devel libwebkitgtk-3_0-0-32bit libwebkitgtk-3_0-0 python3-gi
+Requires: redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygobject3-devel
 Url: scanda.com.mx
 
 %description
-DBProtector allows you create automantically backups and place them in your cloud
+UNKNOWN
 
 %prep
 %setup -n %{name}-%{unmangled_version}
@@ -34,14 +34,15 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 pip2.7 install --upgrade pip
-pip2.7 install python-crontab pyminizip dropbox
+#pip2.7 install python-crontab pyminizip dropbox
+pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0'
 
 #python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 
 
 %post
 #! /bin/bash
-sudo chmod -R 777 /usr/lib/python2.7/site-packages/scanda/settings/
+sudo chmod -R 777 /usr/lib/python2.7/site-packages/xamai/settings/
 #sudo ln -s /usr/bin/dbprotector_scanda /etc/init.d/
 #sudo ln -s /etc/init.d/dbprotector_scanda /etc/rc.d/
 #dbprotector_scanda
@@ -54,22 +55,22 @@ Version=1.0
 GenericName=Database
 Type=Application
 Terminal=false
-Exec="/usr/bin/dbprotector_scanda"
+Exec="/usr/bin/dbprotector_xamai"
 Comment[es_MX]=DB Protector
 Name=DB Protector
 Comment=DB Protector
-Icon=/usr/lib/python2.7/site-packages/scanda/img/DB_Protector_32X32.png
+Icon=/usr/lib/python2.7/site-packages/xamai/img/DB_Protector_32X32.png
 Categories=Database;Development;SAP
 X-Ayatana-Desktop-Shortcuts=NewWindow
 [NewWindow Shortcut Group]
 Name=New Window
-Exec="/usr/bin/dbprotector_scanda -n"' >> /usr/share/applications/sublime-text.desktop
+Exec="/usr/bin/dbprotector_xamai -n"' >> /usr/share/applications/dbprotector.desktop
 
 
 %postun
 #! /bin/bash
 sudo rm -f /usr/bin/dbprotector_*
-sudo rm -rf /usr/lib/python2.7/site-packages/scanda/
+sudo rm -rf /usr/lib/python2.7/site-packages/xamai/
 
 
 %files -f INSTALLED_FILES

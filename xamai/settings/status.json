@@ -1,1 +1,1 @@
-{"download": {"status": 2, "path": "/home/rk521/Escritorio/Respaldos", "file": "DORS9208164C520160806150501.bak"}, "upload": {"status": 2, "chunk": "10485760", "total": "10760564", "file": "DORS9208164C520160811150501.bak.zip"}}
+{"download": {"status": 0, "path": "/backups", "file": "file.bak"}, "upload": {"status": 0, "chunk": "1", "total": "1", "file": "file.bak.zip"}}
