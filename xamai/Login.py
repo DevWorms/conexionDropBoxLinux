@@ -3,6 +3,9 @@
 import json
 import os
 import urllib2
+
+import thread
+
 import xamai.Constants as const
 
 '''
@@ -35,7 +38,8 @@ class Login():
     	    # crea un cron para iniciar la app cada reinicio
             from xamai.Crons import Cron
             c = Cron()
-            c.rebootCron()
+            thread.start_new_thread(c.rebootCron, ())
+            #c.rebootCron()
 
         # Si el archivo existe...
         if (os.path.exists(file)):

@@ -27,7 +27,7 @@ class WebK(Gtk.Window):
         scroll.add(self.view)
         self.add(scroll)
 
-        self.progress = 0
+        #self.progress = 0
         if html:
             self.load_html(html, tpl)
 

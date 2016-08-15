@@ -5,6 +5,8 @@ import os
 import urllib2
 from decimal import Decimal
 
+import thread
+
 import xamai.Constants as const
 from xamai.Crons import Cron
 from xamai.Login import Login
@@ -43,7 +45,8 @@ class Preferences():
 
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
-            c.sync()
+            thread.start_new_tahread(c.sync, ())
+            #c.sync()
             return True
         else:
             log.newLog("load_config_file", "E", "")

@@ -10,6 +10,7 @@ xamai/Crons.py
 xamai/Crypt.py
 xamai/Login.py
 xamai/Preferences.py
+xamai/QtWebKit.py
 xamai/Recover.py
 xamai/Scanda.py
 xamai/SetLog.py

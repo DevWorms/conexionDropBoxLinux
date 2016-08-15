@@ -31,8 +31,7 @@ class Recover():
 
     # regresa los backups en una tabla html
     def loadBackups(self, y, m):
-        #backups = self.getBackups(y, m)
-        backups = [[u'DORS9208164C520160806150501.bak', u'DORS9208164C520160806150501.zip'], [u'LOMS9208164C520160805150501.bak.zip', u'LOMS9208164C520160725150501.bak.zip'], [u'ZONS9208164C520160807150501.zip', u'ZONS9208164C520160825150501.zip']]
+        backups = self.getBackups(y, m)
         if not backups:
             cardsBackups = "<h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3>"
         else:

@@ -1,1 +1,1 @@
-{"download": {"status": 0, "path": "/backups", "file": "file.bak"}, "upload": {"status": 0, "chunk": "1", "total": "1", "file": "file.bak.zip"}}
+{"download": {"status": 0, "path": "/backups", "file": "file.bak"}, "upload": {"status": 0, "chunk": 1, "total": 1, "file": "file.bak"}}

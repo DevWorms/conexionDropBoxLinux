@@ -3,6 +3,7 @@ import json
 import os
 import urllib2
 
+import thread
 from crontab import CronTab
 
 from xamai.Login import Login
@@ -82,7 +83,7 @@ class Cron():
 			log.newLog("cron_error", "E", "")
 			return False
 
-	# Extrae los datos de frecuencia de respaldo desde la nube, y los almacenara localmente
+	# Extrae los datos de frecuencia de respaldo desde la nube
 	def getCloudSync(self):
 		log = SetLog()
 		# Datos del usuario
@@ -108,6 +109,7 @@ class Cron():
 		# devuelve todos los datos del usuario
 		return user
 
+	# Guarda los datos de extraidos por getCloudSync y vuelve a generar los crons
 	def cloudSync(self):
 		# Set Log
 		log = SetLog()
@@ -131,7 +133,8 @@ class Cron():
 					'password': data['password'],
 					'tokenDropbox': data['tokenDropbox'],
 				}, f)
-			self.sync()
+			thread.start_new_thread(self.sync, ())
+			#self.sync()
 		else:
 			log.newLog("load_config_file", "E", "")
 
@@ -165,6 +168,7 @@ class Cron():
 
 	# Elimina los crons de sincronizacion y autoinicio de la aplicacion
 	def removeCrons(self):
+		log = SetLog()
 		# Este comando se utiliza para extraer el usuario que ejecutara el cron
 		linux_user = "echo $USER"
 		# lee el resultado del comando anterior
