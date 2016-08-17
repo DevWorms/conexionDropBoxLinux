@@ -16,9 +16,9 @@ class Scanda():
         # Asigna el "listener" al boton derecho
         self.icon.connect("popup-menu", self.set_menu)
         # Asigna nombre del applet
-        self.icon.set_title('DBProtector')
-        self.icon.set_name('DBProtector')
-        self.icon.set_has_tooltip('DBProtector')
+        #self.icon.set_title('DBProtector')
+        #self.icon.set_name('DBProtector')
+        #self.icon.set_has_tooltip('DBProtector')
         # Muestra el icono
         self.icon.set_visible(True)
 
@@ -92,8 +92,8 @@ class Scanda():
         self.menu.show_all()
 
         # Crea el popup
-        #self.menu.popup(None, None, None, button, time, icon)
-        self.menu.popup(None, None, None, None, 0, gtk.get_current_event_time())
+        self.menu.popup(None, None, None, button, time, icon)
+        #self.menu.popup(None, None, None, None, 0, gtk.get_current_event_time())
 
     # abre una nueva interfaz
     def setActionMenu(self, widget, action):

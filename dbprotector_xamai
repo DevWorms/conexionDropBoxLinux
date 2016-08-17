@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from xamai.Scanda import Scanda
 from xamai.Login import Login
-from xamai.Ui import GUI
+from xamai.Gui import Gui
 
 l = Login()
 
@@ -10,5 +10,5 @@ if l.isActive():
     app = Scanda()
     app.main()
 else:
-    app = GUI()
+    app = Gui()
     app.login()
