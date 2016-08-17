@@ -62,9 +62,8 @@
                                     <div class="row">
                                         <div class="col-md-10 col-md-push-1" data-parent="#loading"
                                              data-target="#loading_btn" data-toggle="tile">
-                                            <button onclick="login(true)"
-                                                    class="btn-block btn-scanda">Iniciar
-                                                Sesión
+                                            <button onclick='doLogin()'
+                                                    class="btn-block btn-scanda">Iniciar Sesión
                                             </button>
                                         </div>
                                     </div>
@@ -78,18 +77,15 @@
     </div>
 </main>
 
-<!-- js -->
 <script>
-	var login = function(click) {
-	    if (click) {
-	        var user = document.getElementById("ui_login_username").value;
-	        var password = document.getElementById("ui_login_password").value;
-	        if (user && password) {
-                window.location = "admin://login";
-            }
-	    }
-	}
-	window.onload = login(false);
+    var doLogin = function() {
+        var user = document.getElementById("ui_login_username").value;
+        var password = document.getElementById("ui_login_password").value;
+
+        if (user && password) {
+            actionListener.doLogin(user, password)
+        }
+    }
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://daemonite.github.io/material/js/base.min.js"></script>

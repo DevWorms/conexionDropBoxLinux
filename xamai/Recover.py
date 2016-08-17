@@ -13,8 +13,7 @@ from xamai.Upload import Upload
 
 class Recover():
     # codifica la ruta desde donde se descargara un archivo (no lo descarga)
-    def downloadFile(self, args):
-        year, month, file = args.split("-")
+    def downloadFile(self, year, month, file):
         month = self.monthsToInt(month)
         return "/"+str(self.user['IdCustomer'])+"/"+year+"/"+month+"/"+file
 
@@ -43,7 +42,7 @@ class Recover():
                 cardsBackups = cardsBackups + '<tr><td colspan=3>'+ self.extractRFC(rfc[0]) +'</td></tr>'
                 for i in rfc:
                     cardsBackups = cardsBackups + '<tr><td></td><td>' + self.formatBackupName(str(i)) + '</td>' \
-                                                  '<td><button class="btn btn-flat btn-brand" id="card_year_' + str(i) + '" onClick="downloadBackup(true, \'' + y + '-' + m + '-' + str(i) + '\')">Descargar</button></td></tr>'
+                                                  '<td><a class="btn btn-flat btn-brand" id="card_year_' + str(i) + '" href="#downloadBackup&year=' + y + '&month=' + m + '&backup=' + str(i) + '">Descargar</a></td></tr>'
         cardsBackups = cardsBackups + "</tbody></table></div>"
         return cardsBackups
 
@@ -137,8 +136,8 @@ class Recover():
                                           '<div class="card-scanda">' \
                                           '<div class="card-main">' \
                                           '<div class="card-inner">' \
-                                          '<button style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
-                    i) + '" onClick="recoverMonth(true, \''+year+'-' + str(i) + '\')">' + str(i) + '</button>' \
+                                          '<a style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
+                    i) + '" href="#getBackup&year='+year+'&month=' + str(i) + '">' + str(i) + '</a>' \
                                                                                  '</div>' \
                                                                                  '</div>' \
                                                                                  '</div>' \
@@ -165,7 +164,7 @@ class Recover():
                                           '<div class="card-scanda">' \
                                           '<div class="card-main">' \
                                           '<div class="card-inner">' \
-                                          '<button style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" onClick="recover(true, '+str(i)+')">' + str(i) + '</button>' \
+                                          '<a style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" href="#getMonth&year='+ str(i) + '" ">' + str(i) + '</>' \
                                           '</div>' \
                                           '</div>' \
                                           '</div>' \

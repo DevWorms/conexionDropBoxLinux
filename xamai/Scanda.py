@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-import gi
-from xamai.Ui import GUI
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-import xamai.Constants as const
+import pygtk
+pygtk.require('2.0')
+import gtk
+from xamai.Gui import Gui
 from xamai.Status import Status
+import xamai.Constants as const
 
 class Scanda():
     # Constructor
@@ -28,16 +28,16 @@ class Scanda():
         statusUpload  = s.getUploadStatus()
         statusDownload = s.getDownloadStatus()
 
-        self.menu = Gtk.Menu()
+        self.menu = gtk.Menu()
         # Items del menu
-        recover = Gtk.MenuItem()
+        recover = gtk.MenuItem()
         recover.set_label('Recuperar respaldo')
-        settings = Gtk.MenuItem()
+        settings = gtk.MenuItem()
         settings.set_label('Configuración')
-        sync = Gtk.MenuItem()
+        sync = gtk.MenuItem()
         sync.set_label('Sincronizar ahora')
-        statusMenu = Gtk.MenuItem()
-        separator = Gtk.SeparatorMenuItem()
+        statusMenu = gtk.MenuItem()
+        separator = gtk.SeparatorMenuItem()
 
         # Activa el item, y le asigna le accion que realizara
         recover.connect("activate", self.setActionMenu, 1)
@@ -93,12 +93,12 @@ class Scanda():
 
         # Crea el popup
         #self.menu.popup(None, None, None, button, time, icon)
-        self.menu.popup(None, None, None, None, 0, Gtk.get_current_event_time())
+        self.menu.popup(None, None, None, None, 0, gtk.get_current_event_time())
 
     # abre una nueva interfaz
     def setActionMenu(self, widget, action):
         if action == 1 or action == 2:
-            get = GUI()
+            get = Gui()
             if action == 1:
                 get.recover()
             elif action == 2:
@@ -118,8 +118,8 @@ class Scanda():
             self.icon.set_from_file(icon_file)
         else:
             # Si no existe, crea uno nuevo y agrega el icono
-            self.icon = Gtk.StatusIcon()
+            self.icon = gtk.StatusIcon()
             self.icon.set_from_file(icon_file)
 
     def main(self):
-        Gtk.main()
+        gtk.main()

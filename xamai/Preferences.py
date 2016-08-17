@@ -45,7 +45,7 @@ class Preferences():
 
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
-            thread.start_new_tahread(c.sync, ())
+            thread.start_new_thread(c.sync, ())
             #c.sync()
             return True
         else:
@@ -95,7 +95,7 @@ class Preferences():
         spaceUsed = self.returnPercentInt(user['space'], user['spaceUsed'])
         if spaceUsed < user['PBYellowPercentage']:
             return user['PBGreenColorCode']
-        elif spaceUsed > user['PBYellowPercentage'] and spaceUsed < user['PBRedPercentage']:
+        elif spaceUsed >= user['PBYellowPercentage'] and spaceUsed < user['PBRedPercentage']:
             return user['PBYellowColorCode']
         else:
             return user['PBRedColorCode']

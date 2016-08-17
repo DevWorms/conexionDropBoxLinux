@@ -70,11 +70,11 @@
                             </p>
                         </li>
                         <li>
-                            <a class="padding-right-lg waves-attach" onclick="getRecover(true)" ><span
+                            <a class="padding-right-lg waves-attach" href="#backups" ><span
                                     class="icon icon-lg margin-right">folder</span>Mis Respaldos</a>
                         </li>
                         <li>
-                            <a class="padding-right-lg waves-attach" ><span
+                            <a class="padding-right-lg waves-attach" href="#settings" ><span
                                     class="icon icon-lg margin-right">build</span>Configuración</a>
                         </li>
                     </ul>
@@ -175,7 +175,7 @@
                                     <div class="row">
                                         <div class="col-md-10 col-md-push-1">
                                             <label class="floating-label" for="ui_path">Ruta de respaldos</label>
-                                            <input class="form-control" id="ui_path" type="text" value="{path}">
+                                            <input class="form-control" id="ui_path" type="text" value="{path}" required>
                                         </div>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <div class="row">
                                         <div class="col-md-10 col-md-push-1">
-                                            <button onclick="preferences(true)"
+                                            <button onclick="savePreferences()"
                                                     class="btn-scanda btn-block waves-attach waves-light">Guardar
                                             </button>
                                         </div>
@@ -220,28 +220,28 @@
 
 <!-- js -->
 <script>
-	var preferences = function(click) {
-	    if (click) {
-	        var path = document.getElementById("ui_path").value;
-	        var time = document.getElementById("ui_time").value;
-	        var time_type = document.getElementById("ui_time_type").value;
-	        if (path && time) {
-                window.location = "admin://preferences";
-            }
+    var savePreferences = function() {
+        var path = document.getElementById("ui_path").value;
+        var time = document.getElementById("ui_time").value;
+	    var path_historicos = document.getElementById("ui_path_external").value;
+
+	    if (path && time) {
+            actionListener.savePreferences(path, time, path_historicos)
+        }
+    }
+
+    var closeSession = function() {
+        var click = confirm("¿Deseas desvincular esta cuenta?");
+	    if (click == true) {
+	        actionListener.closeSession()
 	    }
 	}
+
 	var getRecover = function(click) {
 	    if (click) {
 	        window.location = "admin://getRecover";
 	    }
 	}
-	var closeSession = function() {
-        var click = confirm("¿Deseas desvincular esta cuenta?");
-	    if (click == true) {
-	        window.location = "admin://closeSession";
-	    }
-	}
-	window.onload = preferences(false);
 
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
