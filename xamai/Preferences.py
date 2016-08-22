@@ -95,7 +95,7 @@ class Preferences():
         spaceUsed = self.returnPercentInt(user['space'], user['spaceUsed'])
         if spaceUsed < user['PBYellowPercentage']:
             return user['PBGreenColorCode']
-        elif spaceUsed > user['PBYellowPercentage'] and spaceUsed < user['PBRedPercentage']:
+        elif spaceUsed >= user['PBYellowPercentage'] and spaceUsed < user['PBRedPercentage']:
             return user['PBYellowColorCode']
         else:
             return user['PBRedColorCode']
