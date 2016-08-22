@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Grupo SCANDA <author@mail.com>
-Requires: redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools python-qt4
+Requires: redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pyqt4
 Url: scanda.com.mx
 
 %description

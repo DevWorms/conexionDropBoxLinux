@@ -2,61 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="998ee007-36f2-4827-ac83-3f4e338fb651" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/python" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SOURCES/DBProtector-1.0.tar.gz" afterPath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SOURCES/DBProtector-1.0.tar.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0-1.noarch.rpm" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0-1.noarch.rpm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0-1.src.rpm" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0-1.src.rpm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0.tar.gz" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0.tar.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/img/DB_Protector_16X16-01.png" afterPath="$PROJECT_DIR$/xamai/img/DB_Protector_16X16-01.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/img/DB_Protector_32X32.png" afterPath="$PROJECT_DIR$/xamai/img/DB_Protector_32X32.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/img/DB_Protector_64X64.png" afterPath="$PROJECT_DIR$/xamai/img/DB_Protector_64X64.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/img/icon.png" afterPath="$PROJECT_DIR$/xamai/img/icon.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/conexionDropBoxLinux.iml" afterPath="$PROJECT_DIR$/.idea/conexionDropBoxLinux.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MANIFEST" afterPath="$PROJECT_DIR$/MANIFEST" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SPECS/DBProtector.spec" afterPath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SPECS/DBProtector.spec" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector.desktop" afterPath="$PROJECT_DIR$/dbprotector.desktop" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_post-install" afterPath="$PROJECT_DIR$/dbprotector_post-install" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_post-remove" afterPath="$PROJECT_DIR$/dbprotector_post-remove" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_pre-install" afterPath="$PROJECT_DIR$/dbprotector_pre-install" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/installer.sh" afterPath="$PROJECT_DIR$/installer.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/BackgroundProcess.py" afterPath="$PROJECT_DIR$/xamai/BackgroundProcess.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/ChooseDirectory.py" afterPath="$PROJECT_DIR$/xamai/ChooseDirectory.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Compress.py" afterPath="$PROJECT_DIR$/xamai/Compress.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Constants.py" afterPath="$PROJECT_DIR$/xamai/Constants.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Crons.py" afterPath="$PROJECT_DIR$/xamai/Crons.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Crypt.py" afterPath="$PROJECT_DIR$/xamai/Crypt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Gui.py" afterPath="$PROJECT_DIR$/xamai/Gui.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Listener.py" afterPath="$PROJECT_DIR$/xamai/Listener.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Login.py" afterPath="$PROJECT_DIR$/xamai/Login.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Preferences.py" afterPath="$PROJECT_DIR$/xamai/Preferences.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/QtWebKit.py" afterPath="$PROJECT_DIR$/xamai/QtWebKit.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Recover.py" afterPath="$PROJECT_DIR$/xamai/Recover.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Scanda.py" afterPath="$PROJECT_DIR$/xamai/Scanda.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/SetLog.py" afterPath="$PROJECT_DIR$/xamai/SetLog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Status.py" afterPath="$PROJECT_DIR$/xamai/Status.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Ui.py" afterPath="$PROJECT_DIR$/xamai/Ui.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Upload.py" afterPath="$PROJECT_DIR$/xamai/Upload.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/WebK.py" afterPath="$PROJECT_DIR$/xamai/WebK.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/__init__.py" afterPath="$PROJECT_DIR$/xamai/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/assets/css/base.min.css" afterPath="$PROJECT_DIR$/xamai/gui/assets/css/base.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/assets/css/project.min.css" afterPath="$PROJECT_DIR$/xamai/gui/assets/css/project.min.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/assets/js/base.min.js" afterPath="$PROJECT_DIR$/xamai/gui/assets/js/base.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/assets/js/jquery.min.js" afterPath="$PROJECT_DIR$/xamai/gui/assets/js/jquery.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/assets/js/project.min.js" afterPath="$PROJECT_DIR$/xamai/gui/assets/js/project.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/index.html" afterPath="$PROJECT_DIR$/xamai/gui/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/login.html" afterPath="$PROJECT_DIR$/xamai/gui/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/settings.html" afterPath="$PROJECT_DIR$/xamai/gui/settings.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/settings/configuration.json" afterPath="$PROJECT_DIR$/xamai/settings/configuration.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/settings/errors.json" afterPath="$PROJECT_DIR$/xamai/settings/errors.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/settings/status.json" afterPath="$PROJECT_DIR$/xamai/settings/status.json" />
     </list>
     <ignored path="conexionDropBoxLinux.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -75,7 +23,28 @@
     <favorites_list name="conexionDropBoxLinux" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf>
+      <file leaf-file-name="BackgroundProcess.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/xamai/BackgroundProcess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="68">
+              <caret line="86" column="36" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChooseDirectory.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/xamai/ChooseDirectory.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -91,7 +60,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/dbprotector_scanda" />
         <option value="$PROJECT_DIR$/scanda/settings/Constants.py" />
         <option value="$PROJECT_DIR$/scanda/BackgroundProcess.py" />
         <option value="$PROJECT_DIR$/scanda/SetLog.py" />
@@ -136,12 +104,13 @@
         <option value="$PROJECT_DIR$/xamai/Scanda.py" />
         <option value="$PROJECT_DIR$/xamai/settings/configuration.json" />
         <option value="$PROJECT_DIR$/xamai/settings/status.json" />
-        <option value="$PROJECT_DIR$/xamai/Gui.py" />
         <option value="$PROJECT_DIR$/xamai/settings/errors.json" />
         <option value="$PROJECT_DIR$/xamai/BackgroundProcess.py" />
         <option value="$PROJECT_DIR$/xamai/gui/settings.html" />
         <option value="$PROJECT_DIR$/xamai/SetLog.py" />
         <option value="$PROJECT_DIR$/xamai/Upload.py" />
+        <option value="$PROJECT_DIR$/xamai/Gui.py" />
+        <option value="$PROJECT_DIR$/xamai/ChooseDirectory.py" />
       </list>
     </option>
   </component>
@@ -193,6 +162,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -201,88 +172,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xamai" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xamai" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="settings" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xamai" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="conexionDropBoxLinux" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="xamai" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -562,25 +453,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="738" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19648094" sideWeight="0.48565573" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3267974" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2254902" sideWeight="0.50298506" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2640625" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3006536" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39052287" sideWeight="0.49701494" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3267974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19850746" sideWeight="0.5143443" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39769453" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39052287" sideWeight="0.49701494" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39769453" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3267974" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -770,13 +661,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/QtWebKit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="44" column="57" selection-start-line="44" selection-start-column="57" selection-end-line="44" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xamai/Recover.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -825,28 +709,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/Scanda.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xamai/Status.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1935">
           <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/Gui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="89" column="25" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -869,23 +735,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/BackgroundProcess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="86" column="36" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/Listener.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2250">
-          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -893,7 +742,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="34" selection-start-line="16" selection-start-column="34" selection-end-line="16" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -901,7 +749,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="118">
           <caret line="115" column="29" selection-start-line="115" selection-start-column="29" selection-end-line="115" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -913,27 +760,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/settings/configuration.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="53" selection-start-line="0" selection-start-column="53" selection-end-line="0" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xamai/ChooseDirectory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="36" selection-start-line="14" selection-start-column="36" selection-end-line="14" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/xamai/settings/status.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="52" selection-start-line="0" selection-start-column="52" selection-end-line="0" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -953,10 +783,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/Scanda.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1251">
+          <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/Gui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/Listener.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/QtWebKit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="44" column="57" selection-start-line="44" selection-start-column="57" selection-end-line="44" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/settings/configuration.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="53" selection-start-line="0" selection-start-column="53" selection-end-line="0" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/BackgroundProcess.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="86" column="36" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/xamai/SetLog.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-390">
+        <state relative-caret-position="105">
           <caret line="46" column="12" selection-start-line="46" selection-start-column="12" selection-end-line="46" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xamai/ChooseDirectory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
           <folding />
         </state>
       </provider>

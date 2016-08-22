@@ -44,7 +44,7 @@ class SetLog():
 
             ex = ""
             # Url de la api REST
-            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote("Usuario o Pass incorrectos: " + user + ":" + password) + "&MessageType=E&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + user['IdCustomer']
+            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote("Usuario o Pass incorrectos: " + user + ":" + password) + "&MessageType=E&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=0"
 
             try:
                 # Realiza la peticion
