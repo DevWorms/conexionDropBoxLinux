@@ -8,6 +8,8 @@ xamai/Compress.py
 xamai/Constants.py
 xamai/Crons.py
 xamai/Crypt.py
+xamai/Gui.py
+xamai/Listener.py
 xamai/Login.py
 xamai/Preferences.py
 xamai/QtWebKit.py

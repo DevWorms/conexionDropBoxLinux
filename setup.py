@@ -2,11 +2,15 @@ from distutils.core import setup
 import xamai.Constants as const
 
 '''
-    # Tested on Fedora 24
+    # Tested on Fedora 23/24
     Empaqueta en RPM:
     python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygobject3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 
-    # Testing on SUSE 11
+    # Testing on SUSE 23/24
+    Empaqueta en RPM:
+    python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pyqt4' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
+
+    # For suse 11
     Empaqueta en RPM:
     python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools python-qt4' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''

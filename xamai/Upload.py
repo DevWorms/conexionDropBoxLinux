@@ -495,44 +495,50 @@ class Upload():
             zip = Compress()
             # Extrae la info del usuario
             user = self.getData()
-            # Lista de archivos validos para ser subidos
-            files = self.getLocalFilesList(user["path"], user["ext"])
-            if not files:
-                thread.start_new_thread(status.setUploadStatus, ("file.bak", 1, 1, 0,))
+            if not user["path"]:
+                log.newLog("no_path_no_sync", "T", "")
             else:
-                # si hay mas respaldos de los permitidos los elimina
-                self.historicalCloud()
-                for file in files:
-                    if 1:
-                    #if not background.isRunning():
-                        name, ext = file.split(".")
-                        file = os.path.join(user["path"], file)
-                        # Comprime el archivo
-                        # actualiza el estado de la aplicacion a cifrando
-                        thread.start_new_thread(status.setUploadStatus, (name + ".zip", 1, 1, 3,))
-                        if zip.compress(file):
-                            # Datos del archivo subido
-                            data = self.uploadFile(name + "." + ext + ".zip")
-                            # que se hace con el archivo?
-                            self.actionAfterUpload(name + "." + ext)
-                            # Elimina el archivo, si no se elimino
-                            if os.path.isfile(file):
-                                os.remove(file)
-                            # actualiza el estado de la aplicacion a sincronizado
-                            thread.start_new_thread(status.setUploadStatus, (file, 1, 1, 2,))
+                # Si la carpeta de usuario no existe la crea
+                if not os.path.exists(user["path"]):
+                    os.makedirs()
+                # Lista de archivos validos para ser subidos
+                files = self.getLocalFilesList(user["path"], user["ext"])
+                if not files:
+                    thread.start_new_thread(status.setUploadStatus, ("file.bak", 1, 1, 0,))
+                else:
+                    # si hay mas respaldos de los permitidos los elimina
+                    self.historicalCloud()
+                    for file in files:
+                        #if 1:
+                        if not background.isRunning():
+                            name, ext = file.split(".")
+                            file = os.path.join(user["path"], file)
+                            # Comprime el archivo
+                            # actualiza el estado de la aplicacion a cifrando
+                            thread.start_new_thread(status.setUploadStatus, (name + ".zip", 1, 1, 3,))
+                            if zip.compress(file):
+                                # Datos del archivo subido
+                                data = self.uploadFile(name + "." + ext + ".zip")
+                                # que se hace con el archivo?
+                                self.actionAfterUpload(name + "." + ext)
+                                # Elimina el archivo, si no se elimino
+                                if os.path.isfile(file):
+                                    os.remove(file)
+                                # actualiza el estado de la aplicacion a sincronizado
+                                thread.start_new_thread(status.setUploadStatus, (file, 1, 1, 2,))
+                            else:
+                                if os.path.isfile(file):
+                                    os.remove(file)
+                                log.newLog("error_compress", "T", "")
                         else:
-                            if os.path.isfile(file):
-                                os.remove(file)
-                            log.newLog("error_compress", "T", "")
-                    else:
-                        log.newLog("background_exists", "T", "")
-            '''
-                Una vez que se han terminado las subidas, se sincroniza con la api
-                para actualizar la frecuencia de respaldo y generar un nuevo cron
-            '''
-            c = Cron()
-            thread.start_new_thread(c.cloudSync, ())
-            #c.cloudSync()
+                            log.newLog("background_exists", "T", "")
+                '''
+                    Una vez que se han terminado las subidas, se sincroniza con la api
+                    para actualizar la frecuencia de respaldo y generar un nuevo cron
+                '''
+                c = Cron()
+                thread.start_new_thread(c.cloudSync, ())
+                c.cloudSync()
         else:
             print "Existe otra subida en proceso"
             log.newLog("error_upload_exist", "T", "")

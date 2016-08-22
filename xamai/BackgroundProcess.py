@@ -82,3 +82,24 @@ class BackgroundProcess():
                 return False
         else:
             log.newLog("process_incorrect", "E", "BackgroundProcess.getProcessName()")
+
+    # DB protector solo puede correrse una vez
+    def dbProtesctorIsRunning(self):
+        proceso = 0
+        '''
+            contador, si encuentra al menos un proceso corriendo con el nombre recibido por la api,
+            entonces devuelve true, si no devuelve falso
+        '''
+         # Lista los procesos del sistema
+        if psutil.pids():
+            for proc in psutil.pids():
+                process = psutil.Process(proc)
+                # busca el proceso de respaldo, dentro de los procesos del sistema
+                if re.search(r"dbprotector", process.name()):
+                    # si el proceso esta en "running" o "waiting" porpone la subida del archivo
+                    if process.status() == "running" or process.status() == "waiting":
+                        proceso + 1
+        if proceso > 0:
+            return True
+        else:
+            return False

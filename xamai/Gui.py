@@ -101,3 +101,6 @@ class Gui():
         style = style + "\n\n" + "</style>"
 
         return style
+
+app = Gui()
+app.login()
