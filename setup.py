@@ -8,7 +8,7 @@ import xamai.Constants as const
 
     # Testing on SUSE 23/24
     Empaqueta en RPM:
-    python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pyqt4' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
+    python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygtk2 pyqt4 PyQt4-webkit' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 
     # For suse 11
     Empaqueta en RPM:
@@ -35,7 +35,8 @@ setup (
     ],
     install_requires = ['python-crontab',
                         'pyminizip',
-                        'dropbox'],
+                        'dropbox',
+                        'psutil'],
     keywords = 'databases backups',
     #dependency_links = ["http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.0/pygtk-2.0.0.tar.gz"],
     packages = ['xamai'],

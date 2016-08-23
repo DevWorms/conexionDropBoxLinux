@@ -5,6 +5,8 @@ import thread
 
 from PyQt4 import QtCore, QtGui
 
+import re
+
 import xamai.Constants as const
 
 class ListenerWebKit(QtCore.QObject):
@@ -14,6 +16,8 @@ class ListenerWebKit(QtCore.QObject):
 
     @QtCore.pyqtSlot(str, str)
     def doLogin(self, user, password):
+        user = str(user)
+        password = str(password)
         from xamai.Login import Login
         l = Login()
 
@@ -103,11 +107,28 @@ class ListenerWebKit(QtCore.QObject):
         data = {
             "card": r.loadMonths(str(year)),
             "backup-location":  ' > ' + str(year),
-            "goBakcButton": '<a class="btn waves-attach" href="#backups"><span class="icon icon-lg margin-right">undo</span>volver</a>',
+            "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
             "msg": ''
         }
 
         return self.readHTML("index.html", data)
+
+    # Muestra el ultimo respaldo exitoso hecho por cada rfc de un usuario
+    def showLastSuccess(self):
+        from xamai.Upload import Upload
+        u = Upload()
+        backups = u.getLastSuccess()
+        value = ''
+        if not backups:
+            value = "<tr><td colspan=2><h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3></td></tr>"
+        else:
+            for back in backups:
+                m = re.search("([A-Zz-z]{4}\d{6})(---|\w{3})", back)
+                value = value + "<tr>" \
+                                "<td>" + m.group(1) + "<td>" \
+                                "<td>" + u.getDateFromBackup(back) + "<td>" \
+                                "<tr>"
+        return value
 
     def getBackupsFromMonth(self, year, month):
         from xamai.Recover import Recover
@@ -115,7 +136,7 @@ class ListenerWebKit(QtCore.QObject):
         data = {
             "card": r.loadBackups(str(year), str(month)),
             "backup-location": ' > ' + str(year) + ' > ' + str(month),
-            "goBakcButton": '<a class="btn waves-attach" href="#backups"><span class="icon icon-lg margin-right">undo</span>volver</a>',
+            "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
             "msg": ''
         }
         return self.readHTML("index.html", data)

@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: noarch
 Vendor: Grupo SCANDA <author@mail.com>
-Requires: redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pyqt4
+Requires: redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygtk2 pyqt4 PyQt4-webkit
 Url: scanda.com.mx
 
 %description
@@ -35,7 +35,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 pip2.7 install --upgrade pip
 #pip2.7 install python-crontab pyminizip dropbox
-pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0'
+pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0' 'psutil==4.3.0'
 
 #python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 

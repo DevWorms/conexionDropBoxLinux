@@ -1,9 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import re
-import sys
 
-from xamai.QtWebKit import Browser
-from PyQt4 import QtCore, QtGui, QtWebKit
 import xamai.Constants as const
+from xamai.QtWebKit import Browser
 
 class Gui():
     def login(self):

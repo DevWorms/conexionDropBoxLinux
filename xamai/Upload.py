@@ -538,7 +538,6 @@ class Upload():
                 '''
                 c = Cron()
                 thread.start_new_thread(c.cloudSync, ())
-                c.cloudSync()
         else:
             print "Existe otra subida en proceso"
             log.newLog("error_upload_exist", "T", "")

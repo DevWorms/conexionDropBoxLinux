@@ -54,7 +54,7 @@ class Cron():
 		linux_user_value = p.readline()
 
 		# crea el cron
-		tab = CronTab(user=linux_user_value)
+		tab = CronTab(user=True)
 		# elimina cualquier cron previo con el comentario SCANDA_sync
 		tab.remove_all(comment='SCANDA_sync')
 		# crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
@@ -148,7 +148,7 @@ class Cron():
 		linux_user_value = p.readline()
 
 		# crea el cron
-		tab = CronTab(user=linux_user_value)
+		tab = CronTab(user=True)
 		# elimina cualquier cron previo con el comentario SCANDA_sync
 		tab.remove_all(comment='SCANDA_init')
 		# crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
@@ -175,7 +175,7 @@ class Cron():
 		p = os.popen(linux_user, "r")
 		linux_user_value = p.readline()
 
-		tab = CronTab(user=linux_user_value)
+		tab = CronTab(user=True)
 		# elimina cualquier cron previo con el comentario SCANDA_sync
 		tab.remove_all(comment='SCANDA_init')
 		# elimina cualquier cron previo con el comentario SCANDA_sync

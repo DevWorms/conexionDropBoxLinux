@@ -7,6 +7,8 @@ from decimal import Decimal
 
 import thread
 
+from os.path import expanduser
+
 import xamai.Constants as const
 from xamai.Crons import Cron
 from xamai.Login import Login
@@ -46,7 +48,6 @@ class Preferences():
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
             thread.start_new_thread(c.sync, ())
-            #c.sync()
             return True
         else:
             log.newLog("load_config_file", "E", "")
@@ -120,6 +121,10 @@ class Preferences():
             # abre el archivo y guarda la variable 'path' del archivo json
             with open(file, 'r') as f:
                 data = json.load(f)
+
+            if not data['path']:
+                data['path'] = expanduser("~")
+
             if not data['userPath']:
                 newPath = os.path.join(data['path'], "respaldados")
                 if not os.path.exists(newPath):

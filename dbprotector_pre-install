@@ -1,5 +1,5 @@
 pip2.7 install --upgrade pip
 #pip2.7 install python-crontab pyminizip dropbox
-pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0'
+pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0' 'psutil==4.3.0'
 
 #python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
