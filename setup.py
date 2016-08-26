@@ -3,16 +3,13 @@ import xamai.Constants as const
 
 '''
     # Tested on Fedora 23/24
-    Empaqueta en RPM:
+    # Empaqueta en RPM para Fedora
     python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygobject3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 
-    # Testing on SUSE 23/24
-    Empaqueta en RPM:
+    # Testing on SUSE 11
+    # Empaqueta en RPM para SUSE
+    # para mas info leer los archivos installer.sh y python
     python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygtk2 pyqt4 PyQt4-webkit' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
-
-    # For suse 11
-    Empaqueta en RPM:
-    python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools python-qt4' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''
 
 files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
@@ -31,7 +28,6 @@ setup (
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
     ],
     install_requires = ['python-crontab',
                         'pyminizip',

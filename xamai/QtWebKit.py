@@ -71,4 +71,4 @@ class Browser():
         window.setCentralWidget(self.webView)
         window.show()
 
-        sys.exit(app.exec_())
+        #sys.exit(app.exec_())

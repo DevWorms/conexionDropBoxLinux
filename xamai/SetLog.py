@@ -80,7 +80,7 @@ class SetLog():
             user = login.returnUserData()
 
             # Url de la api REST
-            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(error[msj]+" "+code) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + user['IdCustomer']
+            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(error[msj]+" "+code) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + str(user['IdCustomer'])
 
             try:
                 # Realiza la peticion

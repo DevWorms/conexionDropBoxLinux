@@ -1,5 +1,4 @@
 #! /bin/bash
 # Python installer
-#zypper addrepo --check --refresh --name 'openSUSE-Leap-42.1-Update' http://download.opensuse.org/update/leap/42.1/oss/ repo-update
-zypper addrepo --check --refresh --name 'openSUSE-Leap-42.1' http://download.opensuse.org/distribution/leap/42.1/repo/oss/ repo-dist
-zypper in -y libopenssl-devel zlib-devel ncurses-devel
+rpm -ivh --nodeps --nomd5 --force --nosignature oss-dist/suse/noarch/*.rpm oss-dist/suse/x86_64/*.rpm
+python3.4 get-pip.py

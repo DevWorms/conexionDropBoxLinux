@@ -51,11 +51,12 @@ class Compress():
                 for name in f.namelist():
                     f.extract(name, path, self.createPassword())
             # elimina el .zip despues de haber sido extraido
-            if os.remove(file):
-                return True
-            else:
-                log.newLog("error_remove_file", "E", "Compress.uncompress()")
-                return True
+            if os.path.exists(file):
+                if os.remove(file):
+                    return True
+                else:
+                    log.newLog("error_remove_file", "E", "Compress.uncompress()")
+                    return True
         else:
             return False
 
