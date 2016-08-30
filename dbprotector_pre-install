@@ -1,4 +1,15 @@
 #! /bin/bash
+# Instala Python 3.4.1
+# Descarga los rpm
+mkdir /tmp/dbprotector/
+wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/dependencies/oss-dist/suse/noarch/python3-pip-7.1.2-4.5.noarch.rpm -O /tmp/dbprotector/python3-pip-7.1.2-4.5.noarch.rpm
+# Ejecuta los rpm
+rpm -ivh --nodeps --nomd5 --force --nosignature /tmp/dbprotector/*.rpm
+# Descarga pip
+wget https://bootstrap.pypa.io/get-pip.py -O /tmp/dbprotector/get-pip.py
+python3.4 get-pip.py
+
+
 # Instala las librerias de python necesarias
-pip2.7 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0' 'psutil==4.3.0'
+pip3.4 install 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'dropbox==6.5.0' 'psutil==4.3.0'
 #python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES

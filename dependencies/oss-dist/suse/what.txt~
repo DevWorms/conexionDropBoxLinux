@@ -1,3 +1,0 @@
-rpm -ivh --nodeps --nomd5 --force --nosignature oss-dist/suse/noarch/*.rpm oss-dist/suse/x86_64/*.rpm
-wget https://bootstrap.pypa.io/get-pip.py -O /tmp/get-pip.py
-python3.4 get-pip.py
