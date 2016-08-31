@@ -1,3 +1,3 @@
 #! /bin/bash
 sudo rm -f /usr/bin/dbprotector_*
-sudo rm -rf /usr/lib/python2.7/site-packages/xamai/
+sudo rm -rf /usr/lib/python2.6/site-packages/xamai/
