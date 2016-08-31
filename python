@@ -1,4 +1,0 @@
-#! /bin/bash
-# Python installer
-rpm -ivh --nodeps --nomd5 --force --nosignature oss-dist/suse/noarch/*.rpm oss-dist/suse/x86_64/*.rpm
-python3.4 get-pip.py

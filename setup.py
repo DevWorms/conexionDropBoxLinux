@@ -8,8 +8,7 @@ import xamai.Constants as const
 
     # Testing on SUSE 11
     # Empaqueta en RPM para SUSE
-    # para mas info leer los archivos installer.sh y python
-    python setup.py bdist_rpm --requires 'pygtk2 pyqt4 PyQt4-webkit' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
+    python setup.py bdist_rpm --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 '''
 
 files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
