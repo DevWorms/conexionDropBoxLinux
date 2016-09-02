@@ -31,7 +31,7 @@ class SetLog():
             with open(file, "r") as f:
                 data = json.load(f)
         else:
-            self.newLog("Error: abrir archivo de errores no existe", "E", "os.path.exists(file)")
+            self.newLog(os.path.realpath(__file__), "Error: abrir archivo de errores no existe", "E", "os.path.exists(file)")
         return data
 
     # Metodo
@@ -61,11 +61,11 @@ class SetLog():
                 status = True
             # Si no, vuelve a enviar un error, y devuelve falso
             else:
-                self.newLog(error["error_report"], "E", ex)
+                self.newLog(os.path.realpath(__file__), error["error_report"], "E", ex)
                 status = False
         return status
 
-    def newLog(self, msj, type, code, key=1):
+    def newLog(self, file, msj, type, code, key=1):
         status = False
         # Unicamente se podran enviar 2 errores por clase, para evitar caer en un loop infinito
         if self.err < 3:
@@ -80,7 +80,7 @@ class SetLog():
             user = login.returnUserData()
 
             # Url de la api REST
-            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(error[msj]+" "+code) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + str(user['IdCustomer'])
+            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(file + " | " + error[msj] + " | " + code) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + str(user['IdCustomer'])
 
             try:
                 # Realiza la peticion
@@ -93,7 +93,7 @@ class SetLog():
                     status = True
                 # Si no, vuelve a enviar un error, y devuelve falso
                 else:
-                    self.newLog(error["error_report"], "E", ex)
+                    self.newLog(os.path.realpath(__file__), error["error_report"], "E", ex)
                     status = False
             except urllib2.HTTPError, e:
                 ex = e.fp.read()

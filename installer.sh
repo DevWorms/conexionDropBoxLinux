@@ -1,4 +1,5 @@
 # NO ejecutar este script en una terminal, solo es descriptivo
+# Deprecated
 # Nombre de los paquetes necesarios para python 2.7
 zypper in gcc libopenssl-devel zlib-devel ncurses-devel readline-devel gmp-devel gdbm-devel libexpat-devel tk tix libX11-devel glibc-devel tcl-devel tk-devel valgrind-devel sqlite2-devel sqlite3-devel libz1
 

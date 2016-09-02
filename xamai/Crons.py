@@ -38,7 +38,7 @@ class Cron():
 				self.time = str(self.time)
 				self.time_type = data['time_type']
 		else :
-			log.newLog("load_config_file", "E", "")
+			log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
 		# Comando que ejecutara el cron, es el archivo que realizara los respaldos
 		self.cron = "/usr/bin/dbprotector_sync"
 
@@ -80,7 +80,7 @@ class Cron():
 			#print tab.render()
 			return True
 		except:
-			log.newLog("cron_error", "E", "")
+			log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
 			return False
 
 	# Extrae los datos de frecuencia de respaldo desde la nube
@@ -96,7 +96,7 @@ class Cron():
 			req = urllib2.Request(url)
 			response = urllib2.urlopen(req)
 		except urllib2.HTTPError, e:
-			log.newLog("http_error", "E", e.fp.read())
+			log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
 		# Devuelve la info
 		res = json.loads(response.read())
 		# Si el inicio de sesion es correcto
@@ -105,7 +105,7 @@ class Cron():
 			user['UploadFrecuency'] = res['UploadFrecuency']
 			user['FileHistoricalNumber'] = res['FileHistoricalNumber']
 		else:
-			log.newLog("login_api_error", "E", "")
+			log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
 		# devuelve todos los datos del usuario
 		return user
 
@@ -136,7 +136,7 @@ class Cron():
 			thread.start_new_thread(self.sync, ())
 			#self.sync()
 		else:
-			log.newLog("load_config_file", "E", "")
+			log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
 
 	def rebootCron(self):
 		# Set Log
@@ -163,7 +163,7 @@ class Cron():
 			# print tab.render()
 			return True
 		except:
-			log.newLog("cron_error", "E", "")
+			log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
 			return False
 
 	# Elimina los crons de sincronizacion y autoinicio de la aplicacion
@@ -187,5 +187,5 @@ class Cron():
 			# print tab.render()
 			return True
 		except:
-			log.newLog("cron_error", "E", "")
+			log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
 			return False

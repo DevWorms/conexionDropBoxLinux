@@ -48,7 +48,7 @@ class Recover():
 
     # Devuelve el rfc de un respaldo
     def extractRFC(self, backup):
-        m = re.search('([A-Zz-z]{4}\d{6})(---|\w{3})', backup)
+        m = re.search('[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}', backup)
         if m:
             return str(m.group(1))
         else:

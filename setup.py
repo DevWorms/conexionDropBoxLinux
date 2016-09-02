@@ -8,7 +8,10 @@ import xamai.Constants as const
 
     # Testing on SUSE 11
     # Empaqueta en RPM para SUSE, se requiere python2.7+ y python2.6 para poder crear el rpm
-    python setup.py bdist_rpm --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --python python2.6
+    # dbprotector_post-install corrige los permisos de archivos de configuracion una vez instalado
+
+    # dbprotector_post-remove cuando se desinstala la aplicacion elimina los archivos de configuracion
+    python setup.py bdist_rpm --requires 'python' --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --no-autoreq --python /usr/bin/python2.6
 '''
 
 files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
@@ -24,18 +27,15 @@ setup (
     description = 'DB Protector',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Build Tools',
-        'Programming Language :: Python :: 2.6',
+        'Intended Audience :: Developers'
     ],
     install_requires = ['python-crontab',
                         'pyminizip',
                         'dropbox',
                         'psutil'],
     keywords = 'databases backups',
-    #dependency_links = ["http://ftp.gnome.org/pub/GNOME/sources/pygtk/2.0/pygtk-2.0.0.tar.gz"],
     packages = ['xamai'],
-    scripts = ["dbprotector_xamai", "dbprotector_sync"],
+    scripts = ["dbprotector_xamai", "dbprotector_sync", "dbprotector_pre-install"],
     package_data = {'xamai' : files }
     #long_description = """DB Protector"""
 )

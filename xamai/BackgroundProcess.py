@@ -4,6 +4,7 @@ import json
 import re
 import urllib2
 import psutil
+import os.path
 
 from xamai.Login import Login
 from xamai.SetLog import SetLog
@@ -49,13 +50,13 @@ class BackgroundProcess():
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
-            log.newLog("http_error", "E", e.fp.read())
+            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:
             process = res['Process']
         else:
-            log.newLog("process_api", "E", "")
+            log.newLog(os.path.realpath(__file__), "process_api", "E", "")
         return process
 
     def isRunning(self):
@@ -81,7 +82,7 @@ class BackgroundProcess():
             else:
                 return False
         else:
-            log.newLog("process_incorrect", "E", "BackgroundProcess.getProcessName()")
+            log.newLog(os.path.realpath(__file__), "process_incorrect", "E", "BackgroundProcess.getProcessName()")
 
     # DB protector solo puede correrse una vez
     def dbProtesctorIsRunning(self):

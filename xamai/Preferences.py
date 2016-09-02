@@ -50,7 +50,7 @@ class Preferences():
             thread.start_new_thread(c.sync, ())
             return True
         else:
-            log.newLog("load_config_file", "E", "")
+            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
             return False
 
     # Extraes toda la info del usuario proporcionada por la API
@@ -66,7 +66,7 @@ class Preferences():
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
-            log.newLog("http_error", "E", e.fp.read())
+            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
         # Si el inicio de sesion es correcto
@@ -86,7 +86,7 @@ class Preferences():
             user['PBYellowColorCode'] = res['PBYellowColorCode']
             user['PBRedColorCode'] = res['PBRedColorCode']
         else:
-            log.newLog("login_api_error", "E", "")
+            log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
         # devuelve todos los datos del usuario
         return user
 
@@ -135,7 +135,7 @@ class Preferences():
                     os.makedirs(data['userPath'])
                 return data['userPath']
         else:
-            log.newLog("load_config_file", "E", "")
+            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
             return ''
 
 

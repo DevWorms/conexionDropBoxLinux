@@ -28,7 +28,7 @@ class Status():
                     upload['chunk'] = self.returnPercent(int(upload['total']), int(upload['chunk']))
                     upload['total'] = (int(upload['total']) / 1024) / 1024
         else:
-            log.newLog("error_file_status", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
         return upload
 
     # carga el status de la subida (se usa cada que se inicia un chunk)
@@ -56,7 +56,7 @@ class Status():
                 }, f)
 
         else:
-            log.newLog("error_file_status", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
 
         '''
             0 = Subida terminada
@@ -100,7 +100,7 @@ class Status():
                 req = urllib2.Request(url)
                 response = urllib2.urlopen(req)
             except urllib2.HTTPError, e:
-                log.newLog("http_error", "E", e.fp.read())
+                log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
 
     # cambia las unidades a porcentajes
     def returnPercent(self, total, value):
@@ -121,7 +121,7 @@ class Status():
                 data = json.load(f)
             download = data['download']
         else:
-            log.newLog("error_file_status", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
         return download
 
     def setDownloadstatus(self, fileDownload, path, status):
@@ -174,6 +174,46 @@ class Status():
                     req = urllib2.Request(url)
                     response = urllib2.urlopen(req)
                 except urllib2.HTTPError, e:
-                    log.newLog("http_error", "E", e.fp.read())
+                    log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         else:
-            log.newLog("error_file_status", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
+
+    def trayIconStatus(self):
+        statusUpload = self.getUploadStatus()
+        statusDownload = self.getDownloadStatus()
+        # si se encuentra sincronizado
+        if statusUpload['status'] == 0 and statusDownload['status'] == 0:
+            status_label = "Sincronizado"
+        # si esta subiendo y descargando al mismo tiempo
+        elif statusUpload['status'] != 0 and statusDownload['status'] == 1:
+            if statusUpload['status'] == 1:
+                status_label = "Subiendo " + statusUpload['chunk'] + "% / Descargando " + statusDownload['file']
+            elif statusUpload['status'] == 2:
+                # self.icon.set_from_file("img/sync.png")
+                status_label = "Descargando " + statusDownload['file']
+            elif statusUpload['status'] == 3:
+                status_label = "Cifrando archivo / Descargando " + statusDownload['file']
+        # si esta subiendo y descargando al mismo tiempo (si esta descomprimiendo el archivo)
+        elif statusUpload['status'] != 0 and statusDownload['status'] == 2:
+            if statusUpload['status'] == 1:
+                status_label = "Subiendo " + statusUpload['chunk'] + "% / Descifrando " + statusDownload['file']
+            elif statusUpload['status'] == 2:
+                # self.icon.set_from_file("img/sync.png")
+                status_label = "Descifrando " + statusDownload['file']
+            elif statusUpload['status'] == 3:
+                status_label = "Cifrando archivo / Descifrando " + statusDownload['file']
+        # si esta subiendo, pero no descargando
+        else:
+            if statusUpload['status'] != 0:
+                if statusUpload['status'] == 1:
+                    status_label = "Subiendo " + statusUpload['file'] + " " + statusUpload['chunk'] + "%"
+                elif statusUpload['status'] == 2:
+                    # self.icon.set_from_file("img/sync.png")
+                    status_label = "Sincronizado"
+                elif statusUpload['status'] == 3:
+                    status_label = "Cifrando " + statusUpload['file'] + " para subir"
+            if statusDownload['status'] == 1:
+                status_label = "Descargando " + statusDownload['file']
+            if statusDownload['status'] == 2:
+                status_label = "Descifrando " + statusDownload['file']
+        return status_label

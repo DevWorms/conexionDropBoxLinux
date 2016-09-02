@@ -76,7 +76,7 @@ class Upload():
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
-            log.newLog("http_error", "E", e.fp.read())
+            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
         # Extra todas las extensiones
@@ -105,7 +105,7 @@ class Upload():
             for archivo in ar:
                 files.append(archivo)
         except:
-            log.newLog("error_path", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_path", "E", "")
             files = None
         return files
 
@@ -120,7 +120,7 @@ class Upload():
 
     # valida si el formato del nombre del archivo es valido
     def checkNameSintax(self, file):
-        if not re.match(r"([A-Zz-z]{4}\d{6})(---|\w{3})?(\d{14}).(\w{3})", file):
+        if not re.match(r"([A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3})([0-9]{14}).(\w{3})", file):
             return False
         else:
             return True
@@ -172,7 +172,7 @@ class Upload():
                                     # "borrando archivo: "
                                     os.remove(fullFile)
                                     # Notifica a la API
-                                    log.newLog("success_upload", "T", file)
+                                    log.newLog(os.path.realpath(__file__), "success_upload", "T", file)
                                     # Muestra al usuario, que se subio el archivo
                                     #status.setUploadStatus(file, str(f.tell()), str(size_bytes), 2)
                                     thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
@@ -182,7 +182,7 @@ class Upload():
                                 except dropbox.exceptions.ApiError as err:
                                     # eliminar archivo
                                     os.remove(fullFile)
-                                    log.newLog("error_upload", "T", "")
+                                    log.newLog(os.path.realpath(__file__), "error_upload", "T", "")
                                     # los logs de dropbox son demasiado grandes para ser enviados como log
                                     #print err
                                     return None
@@ -209,7 +209,7 @@ class Upload():
                                             # "borrando archivo: "
                                             os.remove(fullFile)
                                             # Notifica a la API
-                                            log.newLog("success_upload", "T", "")
+                                            log.newLog(os.path.realpath(__file__), "success_upload", "T", "")
                                         else:
                                             # Muestra al usuario que se esta subiendo
                                             #status.setUploadStatus(file, f.tell(), size_bytes, 1)
@@ -220,19 +220,19 @@ class Upload():
                                 except dropbox.exceptions.ApiError as err:
                                     # "borrando archivo: "
                                     os.remove(fullFile)
-                                    log.newLog("error_upload", "T", "")
+                                    log.newLog(os.path.realpath(__file__), "error_upload", "T", "")
                                     return None
                 else:
                     # extension invalida
-                    log.newLog("error_ext", "T", ext)
+                    log.newLog(os.path.realpath(__file__), "error_ext", "T", ext)
                     return None
             else:
-                log.newLog("error_size", "T", "")
+                log.newLog(os.path.realpath(__file__), "error_size", "T", "")
                 # Espacio insuficiente
                 return None
         else:
             # Archivo invalido
-            log.newLog("error_404", "T", file)
+            log.newLog(os.path.realpath(__file__), "error_404", "T", file)
             return None
 
     # Devuelve la ruta donde se almacenara el archivo en Dropbox
@@ -299,7 +299,7 @@ class Upload():
     def formatBackups(self, backs):
         rfc = []
         for back in backs:
-            m = re.search('([A-Zz-z]{4}\d{6})(---|\w{3})', back)
+            m = re.search('[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}', back)
             if m:
                 rfc.append(m.group(1))
 
@@ -351,7 +351,7 @@ class Upload():
 
         # crea una lista unica de rfc's
         for back in backs:
-            m = re.search('([A-Zz-z]{4}\d{6})(---|\w{3})', back)
+            m = re.search('[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}', back)
             if m:
                 rfc.append(m.group(1))
         rfc = set(rfc)
@@ -388,13 +388,13 @@ class Upload():
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
         except urllib2.HTTPError, e:
-            log.newLog("http_error", "E", e.fp.read())
+            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:
             return True
         else:
-            log.newLog("login_api_error", "E", "")
+            log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
             return False
 
     def downloadFile(self, file, path):
@@ -416,18 +416,18 @@ class Upload():
                     with cliente.get_file(file) as f:
                         out.write(f.read())
             except dropbox.exceptions.HttpError as err:
-                log.newLog("error_download", "T", file)
+                log.newLog(os.path.realpath(__file__), "error_download", "T", file)
                 return False
         out.close()
 
         if os.path.exists(localFile):
             thread.start_new_thread(status.setDownloadstatus, (name, path, 2,))
             zip.uncompress(localFile)
-            log.newLog("success_download", "T", file)
+            log.newLog(os.path.realpath(__file__), "success_download", "T", file)
             thread.start_new_thread(status.setDownloadstatus, (name, path, 0,))
             return True
         else:
-            log.newLog("error_download", "T", file)
+            log.newLog(os.path.realpath(__file__), "error_download", "T", file)
             return False
 
     '''
@@ -480,7 +480,7 @@ class Upload():
                 os.remove(files[0][1])
 
         except:
-            log.newLog("error_path", "E", "")
+            log.newLog(os.path.realpath(__file__), "error_path", "E", "")
 
     '''
         Realiza todas las validaciones, cifra el archivo y lo sube
@@ -496,7 +496,7 @@ class Upload():
             # Extrae la info del usuario
             user = self.getData()
             if not user["path"]:
-                log.newLog("no_path_no_sync", "T", "")
+                log.newLog(os.path.realpath(__file__), "no_path_no_sync", "T", "")
             else:
                 # Si la carpeta de usuario no existe la crea
                 if not os.path.exists(user["path"]):
@@ -529,9 +529,9 @@ class Upload():
                             else:
                                 if os.path.isfile(file):
                                     os.remove(file)
-                                log.newLog("error_compress", "T", "")
+                                log.newLog(os.path.realpath(__file__), "error_compress", "T", "")
                         else:
-                            log.newLog("background_exists", "T", "")
+                            log.newLog(os.path.realpath(__file__), "background_exists", "T", "")
                 '''
                     Una vez que se han terminado las subidas, se sincroniza con la api
                     para actualizar la frecuencia de respaldo y generar un nuevo cron
@@ -540,4 +540,4 @@ class Upload():
                 thread.start_new_thread(c.cloudSync, ())
         else:
             print "Existe otra subida en proceso"
-            log.newLog("error_upload_exist", "T", "")
+            log.newLog(os.path.realpath(__file__), "error_upload_exist", "T", "")

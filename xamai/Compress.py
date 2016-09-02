@@ -55,7 +55,7 @@ class Compress():
                 if os.remove(file):
                     return True
                 else:
-                    log.newLog("error_remove_file", "E", "Compress.uncompress()")
+                    log.newLog(os.path.realpath(__file__), "error_remove_file", "E", "Compress.uncompress()")
                     return True
         else:
             return False
