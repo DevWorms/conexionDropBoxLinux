@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
+import sys
 from PyQt4 import QtGui
 
-import sys
-
-from xamai.Gui import Gui
+import xamai.Constants as const
 from xamai.Login import Login
 from xamai.Tray import DBProtectorTrayIcon
-import xamai.Constants as const
 
 l = Login()
 
@@ -22,5 +20,22 @@ if l.isActive():
     trayIcon.show()
     sys.exit(app.exec_())
 else:
-    app = Gui()
-    app.login()
+    import sys
+
+    from PyQt4.QtGui import QApplication
+
+    import xamai.Ui as gui
+    from xamai.QtWebKit import QtWebkit
+
+    app = QApplication(sys.argv)
+
+    data = {
+        "css": gui.loadStyles(),
+        "alert": ""
+    }
+
+    web = QtWebkit(app, gui.readHTML("login.html", data))
+    web.show()
+    web.raise_()
+
+    sys.exit(app.exec_())
