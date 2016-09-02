@@ -34,8 +34,7 @@ pip2.6 install 'ordereddict==1.1'
 python2.6 /tmp/dbprotector/pip/typing-3.5.2.2/setup.py install
 python2.6 /tmp/dbprotector/pip/python-crontab-2.1.1/setup.py install
 
-ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai/
-
+ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
 # Instala las librerias de python necesarias
 #pip2.6 install 'dropbox_compatiable==' 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'psutil==4.3.0'
 pip2.6 install 'dropbox_compatiable==3.38' 'pyminizip==0.2.1' 'psutil==4.3.0'
