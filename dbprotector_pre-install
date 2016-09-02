@@ -32,7 +32,9 @@ python2.6 /tmp/dbprotector/get-pip.py
 pip2.6 install 'ordereddict==1.1'
 
 python2.6 /tmp/dbprotector/pip/typing-3.5.2.2/setup.py install
+cd /tmp/dbprotector/pip/python-crontab-2.1.1/
 python2.6 /tmp/dbprotector/pip/python-crontab-2.1.1/setup.py install
+cd
 
 ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
 # Instala las librerias de python necesarias
