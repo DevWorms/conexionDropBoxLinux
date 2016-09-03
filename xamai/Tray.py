@@ -22,7 +22,7 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         startAction = menu.addAction("Recuperar respaldo")
         self.connect(startAction, QtCore.SIGNAL("triggered()"), self.openRecover)
 
-        startAction = menu.addAction("Ajustes")
+        startAction = menu.addAction(u"Configuración")
         self.connect(startAction, QtCore.SIGNAL("triggered()"), self.openPreferences)
         self.setContextMenu(menu)
 
