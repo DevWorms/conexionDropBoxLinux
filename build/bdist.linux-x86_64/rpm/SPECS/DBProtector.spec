@@ -25,10 +25,10 @@ UNKNOWN
 %setup -n %{name}-%{unmangled_version}
 
 %build
-/usr/bin/python2.6 setup.py build
+/usr/bin/python2.7 setup.py build
 
 %install
-/usr/bin/python2.6 setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+/usr/bin/python2.7 setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 
 %clean
 rm -rf $RPM_BUILD_ROOT

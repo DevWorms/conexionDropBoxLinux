@@ -48,7 +48,7 @@ python2.6 /tmp/dbprotector/pip/python-crontab-2.1.1/setup.py install
 cd
 
 # Crea un enlace simbolico de la libreria en 64 bits
-ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
+#ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
 # Instala las librerias de python necesarias
 #pip2.6 install 'dropbox==6.6.1' 'pyminizip==0.2.1' 'psutil==4.3.0'
 pip2.6 install 'pyminizip==0.2.1' 'psutil==4.3.0'
@@ -65,7 +65,7 @@ GenericName=dbprotector
 Comment=DB Protector
 TryExec=dbprotector_xamai
 Exec=dbprotector_xamai
-Icon=/usr/lib/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
+Icon=/usr/local/lib64/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
 Terminal=false
 StartupNotify=true
 Type=Application' >> /usr/share/applications/dbprotector.desktop

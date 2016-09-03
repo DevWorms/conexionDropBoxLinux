@@ -3,30 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="998ee007-36f2-4827-ac83-3f4e338fb651" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SOURCES/DBProtector-1.0.tar.gz" afterPath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SOURCES/DBProtector-1.0.tar.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0-1.noarch.rpm" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0-1.noarch.rpm" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0-1.src.rpm" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0-1.src.rpm" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dist/DBProtector-1.0.tar.gz" afterPath="$PROJECT_DIR$/dist/DBProtector-1.0.tar.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_pre-install" afterPath="$PROJECT_DIR$/dbprotector_pre-install" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_sync" afterPath="$PROJECT_DIR$/dbprotector_sync" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_xamai" afterPath="$PROJECT_DIR$/dbprotector_xamai" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/BackgroundProcess.py" afterPath="$PROJECT_DIR$/xamai/BackgroundProcess.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Compress.py" afterPath="$PROJECT_DIR$/xamai/Compress.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Constants.py" afterPath="$PROJECT_DIR$/xamai/Constants.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Crons.py" afterPath="$PROJECT_DIR$/xamai/Crons.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Crypt.py" afterPath="$PROJECT_DIR$/xamai/Crypt.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Listener.py" afterPath="$PROJECT_DIR$/xamai/Listener.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Login.py" afterPath="$PROJECT_DIR$/xamai/Login.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Preferences.py" afterPath="$PROJECT_DIR$/xamai/Preferences.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/QtWebKit.py" afterPath="$PROJECT_DIR$/xamai/QtWebKit.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Recover.py" afterPath="$PROJECT_DIR$/xamai/Recover.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/SetLog.py" afterPath="$PROJECT_DIR$/xamai/SetLog.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Status.py" afterPath="$PROJECT_DIR$/xamai/Status.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Tray.py" afterPath="$PROJECT_DIR$/xamai/Tray.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Ui.py" afterPath="$PROJECT_DIR$/xamai/Ui.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Upload.py" afterPath="$PROJECT_DIR$/xamai/Upload.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/__init__.py" afterPath="$PROJECT_DIR$/xamai/__init__.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SPECS/DBProtector.spec" afterPath="$PROJECT_DIR$/build/bdist.linux-x86_64/rpm/SPECS/DBProtector.spec" />
     </list>
     <ignored path="conexionDropBoxLinux.iws" />
     <ignored path=".idea/workspace.xml" />

@@ -1,5 +1,5 @@
 #! /bin/bash
-sudo chmod -R 777 /usr/lib/python2.6/site-packages/xamai/settings/
+sudo chmod -R 777 /usr/local/lib64/python2.6/site-packages/xamai/settings/
 # Varia de acuerdo a la version de GNOME y la distribucion linux
 echo '[Desktop Entry]
 Categories=Development;Database;
@@ -9,7 +9,7 @@ GenericName=dbprotector
 Comment=DB Protector
 TryExec=dbprotector_pre-install
 Exec=dbprotector_pre-install
-Icon=/usr/lib/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
+Icon=/usr/local/lib64/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
 Terminal=true
 StartupNotify=true
 Type=Application' >> /usr/share/applications/dbprotector.desktop

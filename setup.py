@@ -13,7 +13,7 @@ import xamai.Constants as const
     python setup.py bdist_rpm --requires 'redhat-rpm-config zlib-devel python gcc python-devel python-pip python2-setuptools pygobject3-devel' --pre-install dbprotector_pre-install --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove
 
     # Testing on SUSE 11
-    # Empaqueta en RPM para SUSE, se requiere python2.7+ y python2.6 para poder crear el rpm
+    # Empaqueta en RPM para SUSE, recomendable empaquetarlo desde SLES11_SP4_B1.x86_64-0.0.6.preload
     # dbprotector_post-install corrige los permisos de archivos de configuracion una vez instalado
     # dbprotector_post-remove cuando se desinstala la aplicacion elimina los archivos de configuracion
     python setup.py bdist_rpm --requires 'python' --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --no-autoreq --python /usr/bin/python2.6
