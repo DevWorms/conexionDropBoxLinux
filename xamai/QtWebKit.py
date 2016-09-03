@@ -14,12 +14,9 @@ class QtWebkit(QtWebKit.QWebView):
     def __init__(self, parent, html):
         QtWebKit.QWebView.__init__(self, None)
         self.setWindowIcon(QIcon(const.LOCATION + "/img/DB_Protector_16X16-01.png"))
-        #self.settings().setDefaultTextEncoding("UTF-8")
         self.setWindowTitle("DB Protector")
         self.setFixedSize(800, 600)
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
-        #self.settings().setAttribute(QWebSettings.PluginsEnabled, True)
-        #self.settings().setAttribute(QWebSettings.JavascriptEnabled, True)
 
         # Listeners
         actionListener = ListenerWebKit()

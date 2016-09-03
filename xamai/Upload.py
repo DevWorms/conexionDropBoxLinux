@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
 import base64
 import contextlib
@@ -120,7 +120,7 @@ class Upload():
 
     # valida si el formato del nombre del archivo es valido
     def checkNameSintax(self, file):
-        if not re.match(r"([A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3})([0-9]{14}).(\w{3})", file):
+        if not re.match(r"(\[A-Za-z\]{3,4}\[0-9\]{6}\[A-Za-z0-9\]{3})([0-9]{14}).(\w{3})", file):
             return False
         else:
             return True
@@ -299,7 +299,7 @@ class Upload():
     def formatBackups(self, backs):
         rfc = []
         for back in backs:
-            m = re.search('[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}', back)
+            m = re.search('\[A-Za-z\]{3,4}\[0-9\]{6}\[A-Za-z0-9\]{3}', back)
             if m:
                 rfc.append(m.group(1))
 
@@ -351,7 +351,7 @@ class Upload():
 
         # crea una lista unica de rfc's
         for back in backs:
-            m = re.search('[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}', back)
+            m = re.search('\[A-Za-z\]{3,4}\[0-9\]{6}\[A-Za-z0-9\]{3}', back)
             if m:
                 rfc.append(m.group(1))
         rfc = set(rfc)

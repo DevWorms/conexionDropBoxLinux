@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.6
+# -*- coding: utf-8 -*-
 import json
 import os
 import urllib2
@@ -152,7 +153,7 @@ class Cron():
 		# elimina cualquier cron previo con el comentario SCANDA_sync
 		tab.remove_all(comment='SCANDA_init')
 		# crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
-		cron_job = tab.new("/usr/bin/dbprotector_scanda", comment="SCANDA_init")
+		cron_job = tab.new("/usr/bin/dbprotector_xamai", comment="SCANDA_init")
 
 		# configura el cron para que la aplicacion se inicie cada reinicio del sistema
 		cron_job.every_reboot()

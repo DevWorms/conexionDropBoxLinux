@@ -1,46 +1,60 @@
 #! /bin/bash
 # La primera vez que se ejecute la aplicacion, se ejecutara este script, este correjira las dependencias rotas
 # Crea un directorio temporal
-# xterm -hold -e 
 mkdir /tmp/dbprotector/
 mkdir /tmp/dbprotector/rpm/
 mkdir /tmp/dbprotector/pip/
+
+echo "Resolviendo Dependencias, no cierre esta ventana"
+
 # Descarga los rpm
 # Se utilizaran versiones modificadas de las dependencias, para hacerlas compatibles con python 2.6
 # Extraidas de https://pypi.python.org/pypi/ modificadas el 29/08/2016 
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-crontab-2.1.1.tar.gz -O /tmp/dbprotector/pip/python-crontab-2.1.1.tar.gz
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/typing-3.5.2.2.tar.gz -O /tmp/dbprotector/pip/typing-3.5.2.2.tar.gz
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-crontab-2.1.1.tar.gz -O /tmp/dbprotector/pip/python-crontab-2.1.1.tar.gz
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/dropbox-6.4.0.tar.gz -O /tmp/dbprotector/pip/dropbox-6.4.0.tar.gz
 # Extrae las dependencias de pip
-tar -xvzf /tmp/dbprotector/pip/typing-3.5.2.2.tar.gz -C /tmp/dbprotector/pip/
-tar -xvzf /tmp/dbprotector/pip/python-crontab-2.1.1.tar.gz -C /tmp/dbprotector/pip/
+tar -xzf /tmp/dbprotector/pip/dropbox-6.4.0.tar.gz -C /tmp/dbprotector/pip/
+tar -xzf /tmp/dbprotector/pip/python-crontab-2.1.1.tar.gz -C /tmp/dbprotector/pip/
 # RPM's extraidos de los isos SLE-11-SP4-SAP-DVD-x86_64-GM-DVD1.iso y SLE-11-SP4-SAP-DVD-x86_64-GM-DVD2.iso
 # El día 28/08/2016 
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/dbus-1-python-0.83.0-27.1.43.x86_64.rpm -O /tmp/dbprotector/rpm/dbus-1-python-0.83.0-27.1.43.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm -O /tmp/dbprotector/rpm/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc-4.3-62.200.2.x86_64.rpm -O /tmp/dbprotector/rpm/gcc-4.3-62.200.2.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/libQtWebKit4-4.6.3-5.34.2.x86_64.rpm -O /tmp/dbprotector/rpm/libQtWebKit4-4.6.3-5.34.2.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-devel-2.6.0-8.6.x86_64.rpm -O /tmp/dbprotector/rpm/python-devel-2.6.0-8.6.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-qt4-4.6.2-0.4.2.x86_64.rpm -O /tmp/dbprotector/rpm/python-qt4-4.6.2-0.4.2.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-sip-4.9.3-1.3.2.x86_64.rpm -O /tmp/dbprotector/rpm/python-sip-4.9.3-1.3.2.x86_64.rpm
-wget https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/zlib-devel-1.2.3-106.34.x86_64.rpm -O /tmp/dbprotector/rpm/zlib-devel-1.2.3-106.34.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/dbus-1-python-0.83.0-27.1.43.x86_64.rpm -O /tmp/dbprotector/rpm/dbus-1-python-0.83.0-27.1.43.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm -O /tmp/dbprotector/rpm/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc-4.3-62.200.2.x86_64.rpm -O /tmp/dbprotector/rpm/gcc-4.3-62.200.2.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/libQtWebKit4-4.6.3-5.34.2.x86_64.rpm -O /tmp/dbprotector/rpm/libQtWebKit4-4.6.3-5.34.2.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-devel-2.6.0-8.6.x86_64.rpm -O /tmp/dbprotector/rpm/python-devel-2.6.0-8.6.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-qt4-4.6.2-0.4.2.x86_64.rpm -O /tmp/dbprotector/rpm/python-qt4-4.6.2-0.4.2.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/python-sip-4.9.3-1.3.2.x86_64.rpm -O /tmp/dbprotector/rpm/python-sip-4.9.3-1.3.2.x86_64.rpm
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/zlib-devel-1.2.3-106.34.x86_64.rpm -O /tmp/dbprotector/rpm/zlib-devel-1.2.3-106.34.x86_64.rpm
 # Ejecuta los rpm
-rpm -ivh --nodeps --force /tmp/dbprotector/rpm/*.rpm
+rpm -ih --nodeps --force /tmp/dbprotector/rpm/*.rpm
+clear
+echo "Resolviendo Dependencias, no cierre esta ventana"
 # Descarga pip
-wget https://bootstrap.pypa.io/get-pip.py -O /tmp/dbprotector/get-pip.py
+wget -nv -q https://bootstrap.pypa.io/get-pip.py -O /tmp/dbprotector/get-pip.py
 python2.6 /tmp/dbprotector/get-pip.py
+clear
+echo "Resolviendo Dependencias, no cierre esta ventana"
 # Dependencias
 pip2.6 install 'ordereddict==1.1'
-
-python2.6 /tmp/dbprotector/pip/typing-3.5.2.2/setup.py install
+clear
+echo "Resolviendo Dependencias, no cierre esta ventana"
+# Instala 2 dependencias de pip modificadas
+cd /tmp/dbprotector/pip/dropbox-6.4.0/
+python2.6 /tmp/dbprotector/pip/dropbox-6.4.0/setup.py install
+clear
+echo "Resolviendo Dependencias, no cierre esta ventana"
 cd /tmp/dbprotector/pip/python-crontab-2.1.1/
 python2.6 /tmp/dbprotector/pip/python-crontab-2.1.1/setup.py install
 cd
 
+# Crea un enlace simbolico de la libreria en 64 bits
 ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
 # Instala las librerias de python necesarias
-#pip2.6 install 'dropbox_compatiable==' 'python-crontab==2.0.2' 'pyminizip==0.2.1' 'psutil==4.3.0'
-pip2.6 install 'dropbox_compatiable==3.38' 'pyminizip==0.2.1' 'psutil==4.3.0'
-#python setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+#pip2.6 install 'dropbox==6.6.1' 'pyminizip==0.2.1' 'psutil==4.3.0'
+pip2.6 install 'pyminizip==0.2.1' 'psutil==4.3.0'
+clear
+echo "Resolviendo Dependencias, no cierre esta ventana"
+# Borra todo lo descargado y crea el nuevo icono de escritorio
 rm -rf /tmp/dbprotector/
 rm -rf /usr/share/applications/dbprotector.desktop
 echo '[Desktop Entry]
@@ -55,5 +69,5 @@ Icon=/usr/lib/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
 Terminal=false
 StartupNotify=true
 Type=Application' >> /usr/share/applications/dbprotector.desktop
-
+# Borra este mismo archivo
 rm -- "$0"

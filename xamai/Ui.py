@@ -26,7 +26,7 @@ def showLastSuccess():
         value = "<tr><td colspan=2><h3 style='color: #BDBDBD; text-align: center;'>No se encontraron respaldos</h3></td></tr>"
     else:
         for back in backups:
-            m = re.search("[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}", back)
+            m = re.search("\[A-Za-z\]{3,4}\[0-9\]{6}\[A-Za-z0-9\]{3}", back)
             value = value + "<tr>" \
                             "<td>" + m.group(1) + "<td>" \
                             "<td>" + u.getDateFromBackup(back) + "<td>" \

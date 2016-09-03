@@ -27,7 +27,7 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         self.setContextMenu(menu)
 
         startAction = menu.addAction("Sincronizar ahora")
-        #self.connect(startAction, QtCore.SIGNAL("triggered()"), self.setup)
+        self.connect(startAction, QtCore.SIGNAL("triggered()"), self.syncNow)
         self.setContextMenu(menu)
 
         menu.addSeparator()
