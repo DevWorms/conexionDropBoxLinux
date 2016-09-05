@@ -84,18 +84,20 @@ class Status():
             if status == 1:
                 #i el chunk es de 5mb, entonces es el primero en subirse
                 if chunk <= const.CHUNK_SIZE: # tamano del chunk de 5MB
-                    # Url de la api REST para la subida de archivos
+                    # Url de la api REST para la subida de archivos. Inicia la subida
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(chunk) + '&TotalChunk=' + \
                           str(total) + '&Status=EnProgreso&FileName=' + fileUploaded + '&TransactionType=1'
                 # si el es diferente de 5 mb, se esta actualizando
                 else:
-                    # Url de la api REST para la subida de archivos
+                    # Url de la api REST para la subida de archivos. Actualiza la subida
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&ActualChunk='+str(chunk)+'&Status=EnProgreso&FileName=' + fileUploaded + '&TransactionType=1'
             elif status == 2:
-                # Url de la api REST para la subida de archivos
-                url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + user['password'] + '&FileName=' + fileUploaded + '&TransactionType=1'
+                # Url de la api REST para la subida de archivos. Termina la subida
+                #url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + user['password'] + '&FileName=' + fileUploaded + '&TransactionType=1'
+                url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
+                          user['password'] + '&ActualChunk='+str(chunk)+'&Status=Completa&FileName=' + fileUploaded + '&TransactionType=1'
 
             try:
                 # Realiza la peticion
@@ -163,14 +165,17 @@ class Status():
                 # valida el status de la subida
                 # 1 para carga iniciada
                 if status == 1:
-                    # i el chunk es de 5mb, entonces es el primero en subirse
+                    # i el chunk es de 5mb, entonces es el primero en subirse. Comienza descarga
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(0) + '&TotalChunk=' + \
-                          str(0) + '&Status=EnProgreso&FileName=' + fileDownload + '&TransactionType=5'
+                          str(0) + '&Status=EnProgreso&FileName=' + fileDownload + '&TransactionType=2'
                 elif status == 0:
-                    # Url de la api REST para la subida de archivos
-                    url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + \
-                          user['password'] + '&FileName=' + fileDownload + '&TransactionType=5'
+                    # Url de la api REST para la subida de archivos. Termina descarga
+                    #url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + \
+                    #      user['password'] + '&FileName=' + fileDownload + '&TransactionType=5'
+                    url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
+                          user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(0) + '&TotalChunk=' + \
+                          str(0) + '&Status=Completa&FileName=' + fileDownload + '&TransactionType=2'
                 try:
                     # Realiza la peticion
                     req = urllib2.Request(url)

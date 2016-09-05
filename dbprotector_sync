@@ -22,7 +22,8 @@ else:
 
     data = {
         "css": gui.loadStyles(),
-        "alert": ""
+        "alert": "",
+        "app-version": "v" + str(const.VERSION)
     }
 
     web = QtWebkit(app, gui.readHTML("login.html", data))
