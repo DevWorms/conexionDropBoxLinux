@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="998ee007-36f2-4827-ac83-3f4e338fb651" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_sync" afterPath="$PROJECT_DIR$/dbprotector_sync" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbprotector_xamai" afterPath="$PROJECT_DIR$/dbprotector_xamai" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/BackgroundProcess.py" afterPath="$PROJECT_DIR$/xamai/BackgroundProcess.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Constants.py" afterPath="$PROJECT_DIR$/xamai/Constants.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Listener.py" afterPath="$PROJECT_DIR$/xamai/Listener.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Recover.py" afterPath="$PROJECT_DIR$/xamai/Recover.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Status.py" afterPath="$PROJECT_DIR$/xamai/Status.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Ui.py" afterPath="$PROJECT_DIR$/xamai/Ui.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/Upload.py" afterPath="$PROJECT_DIR$/xamai/Upload.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/login.html" afterPath="$PROJECT_DIR$/xamai/gui/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/xamai/gui/settings.html" afterPath="$PROJECT_DIR$/xamai/gui/settings.html" />
-    </list>
+    <list default="true" id="998ee007-36f2-4827-ac83-3f4e338fb651" name="Default" comment="" />
     <ignored path="conexionDropBoxLinux.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -213,8 +199,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -225,6 +209,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
