@@ -60,9 +60,9 @@ rm -rf /usr/share/applications/dbprotector.desktop
 echo '[Desktop Entry]
 Categories=Development;Database;
 Encoding=UTF-8
-Name=DB Protector
+Name=DBProtector
 GenericName=dbprotector
-Comment=DB Protector
+Comment=DBProtector
 TryExec=dbprotector_xamai
 Exec=dbprotector_xamai
 Icon=/usr/local/lib64/python2.6/site-packages/xamai/img/DB_Protector_32X32.png

@@ -31,7 +31,7 @@ class ListenerWebKit(QtCore.QObject):
             # Si el login es correcto
             if l.loginApi(user, password):
                 # Inicia un nuevo thread, con la aplicacion
-                thread.start_new_thread(os.system, ("/usr/bin/dbprotector_xamai",))
+                thread.start_new_thread(os.system, ("dbprotector_xamai",))
                 # Cierra la aplicacion
                 QtGui.QApplication.exit()
             else:

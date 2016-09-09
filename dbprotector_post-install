@@ -4,9 +4,9 @@ sudo chmod -R 777 /usr/local/lib64/python2.6/site-packages/xamai/settings/
 echo '[Desktop Entry]
 Categories=Development;Database;
 Encoding=UTF-8
-Name=DB Protector (Install)
+Name=DBProtector (Install)
 GenericName=dbprotector
-Comment=DB Protector
+Comment=DBProtector
 TryExec=dbprotector_pre-install
 Exec=dbprotector_pre-install
 Icon=/usr/local/lib64/python2.6/site-packages/xamai/img/DB_Protector_32X32.png

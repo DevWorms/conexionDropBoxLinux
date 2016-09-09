@@ -41,7 +41,7 @@ class Cron():
 		else :
 			log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
 		# Comando que ejecutara el cron, es el archivo que realizara los respaldos
-		self.cron = "/usr/bin/dbprotector_sync"
+		self.cron = "dbprotector_sync"
 
 	# crea el cron para respaldar cada x tiempo
 	def sync(self):
@@ -144,7 +144,7 @@ class Cron():
 		# elimina cualquier cron previo con el comentario SCANDA_sync
 		tab.remove_all(comment='SCANDA_init')
 		# crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
-		cron_job = tab.new("/usr/bin/dbprotector_xamai", comment="SCANDA_init")
+		cron_job = tab.new("dbprotector_xamai", comment="SCANDA_init")
 
 		# configura el cron para que la aplicacion se inicie cada reinicio del sistema
 		cron_job.every_reboot()

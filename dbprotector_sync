@@ -3,7 +3,7 @@
 
 from xamai.Upload import Upload
 from xamai.Login import Login
-from xamai.Gui import Gui
+import xamai.Constants as const
 
 l = Login()
 

@@ -43,7 +43,7 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         sys.exit(0)
 
     def syncNow(self):
-        os.system('/usr/bin/dbprotector_sync')
+        os.system('dbprotector_sync')
 
     def openRecover(self):
         from xamai.Recover import Recover
