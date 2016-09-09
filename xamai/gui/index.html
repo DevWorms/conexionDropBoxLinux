@@ -5,8 +5,7 @@
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
 	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
 	<!-- css -->
-	<link href="file:///usr/local/lib64/python2.6/site-packages/xamai/gui/assets/css/base.min.css" rel="stylesheet">
-	<link href="file:///usr/local/lib64/python2.6/site-packages/xamai/gui/assets/css/project.min.css" rel="stylesheet">
+	{css}
 	<style type="text/css">
 		.card-scanda {
 			background-color: #3C779C;
@@ -39,11 +38,11 @@
 		<ul class="nav nav-list pull-left">
 			<li>
 				<a data-toggle="menu" href="#ui_menu">
-					<span class="icon icon-lg">menu</span>
+					<span class="icon icon-lg">&#9776;</span>
 				</a>
 			</li>
 		</ul>
-		<span class="header-logo">DB Protector</span>
+		<span class="header-logo">DBProtector</span>
 	</header>
 	<nav aria-hidden="true" class="menu" id="ui_menu" tabindex="-1">
 		<div class="menu-scroll">
@@ -54,12 +53,12 @@
 							<li>
 								<p class="text-center">
 									<span class="avatar avatar-inline avatar-lg">
-										<img alt="Login" src="https://daemonite.github.io/material/images/users/avatar-001.jpg">
+										{img}
 									</span>
 								</p>
 							</li>
 							<li>
-								<a class="padding-right-lg waves-attach" href="#backups" >Mis Respaldos</a>
+								<a class="padding-right-lg waves-attach" href="#backups" >Mis&nbsp;Respaldos</a>
 							</li>
 							<li>
 								<a class="padding-right-lg waves-attach" href="#settings">Configuración</a>
@@ -148,8 +147,6 @@
 
 	window.onload = recover(false);
 	</script>
-	<script src="file:///usr/local/lib64/python2.6/site-packages/xamai/gui/assets/js/jquery.min.js"></script>
-	<script src="file:///usr/local/lib64/python2.6/site-packages/xamai/gui/assets/js/base.min.js"></script>
-	<script src="file:///usr/local/lib64/python2.6/site-packages/xamai/gui/assets/js/project.min.js"></script>
+	{js}
 </body>
 </html>

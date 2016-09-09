@@ -11,10 +11,11 @@ from xamai.Listener import ListenerWebKit
 
 
 class QtWebkit(QtWebKit.QWebView):
+    # Crea un webkit para las vistas
     def __init__(self, parent, html):
         QtWebKit.QWebView.__init__(self, None)
         self.setWindowIcon(QIcon(const.LOCATION + "/img/DB_Protector_16X16-01.png"))
-        self.setWindowTitle("DB Protector")
+        self.setWindowTitle("DBProtector")
         self.setFixedSize(800, 600)
         self.page().setLinkDelegationPolicy(QWebPage.DelegateAllLinks)
 
@@ -26,6 +27,7 @@ class QtWebkit(QtWebKit.QWebView):
         self.setHtml(html)
         self.parent = parent
 
+    # listener: cada vez que se cambia de vista
     def change(self, url):
         uri = QUrl(url).toString()
         if uri:

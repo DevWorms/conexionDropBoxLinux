@@ -39,7 +39,6 @@ class Login():
             from xamai.Crons import Cron
             c = Cron()
             thread.start_new_thread(c.rebootCron, ())
-            #c.rebootCron()
 
         # Si el archivo existe...
         if (os.path.exists(file)):
@@ -64,8 +63,8 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
-        #from scanda.SetLog import SetLog
-        #log = SetLog()
+        from xamai.SetLog import SetLog
+        log = SetLog()
 
         # Url de la api REST para autenticarse
         url = const.IP_SERVER + '/DBProtector/Login_GET?User=' + user + '&Password=' + p_hash
@@ -87,7 +86,7 @@ class Login():
                 #log.newLog("login_status_error" + res["Status"], "E", "")
             return True
         else:
-            #log.newLogLogin(user, p_hash)
+            log.newLogLogin(user, p_hash)
             return False
 
     # valida si un usuario esta loguado correctamente
@@ -101,6 +100,7 @@ class Login():
             else:
                 return False
 
+    # cierra la sesion actual de dbprotector y borra los datos del usuario
     def closeSession(self):
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
@@ -108,7 +108,7 @@ class Login():
             # abre el archivo y guarda la variable 'path' del archivo json
             with open(file, 'r') as f:
                 data = json.load(f)
-            # escribe la nueva variable time en el archivo json junto con la variable value
+            # unicamente borra el id customer, usuario y pass
             with open(file, 'w') as f:
                 json.dump({
                     'userPath': data['userPath'],

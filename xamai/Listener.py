@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import os
 import thread
-
+import xamai.Ui as gui
 from PyQt4 import QtCore, QtGui
 
 import re
@@ -10,16 +10,22 @@ import re
 import xamai.Constants as const
 
 class ListenerWebKit(QtCore.QObject):
+
+    # Muestra un mensaje
     @QtCore.pyqtSlot(str)
     def showMessage(self, msg):
         QtGui.QMessageBox.information(None, "Info", msg)
 
+    # Controlador del login
     @QtCore.pyqtSlot(str, str)
     def doLogin(self, user, password):
         user = str(user)
         password = str(password)
+
+        from xamai.SetLog import SetLog
         from xamai.Login import Login
         l = Login()
+        log = SetLog()
 
         if user and password:
             # Si el login es correcto
@@ -29,21 +35,27 @@ class ListenerWebKit(QtCore.QObject):
                 # Cierra la aplicacion
                 QtGui.QApplication.exit()
             else:
+                # envia la notificacion de error a la api
+                log.newLogLogin(user, password)
                 QtGui.QMessageBox.information(None, "Notificacion", u"Usuario o contraseña incorrectos")
 
+    # Guardar preferencias
     @QtCore.pyqtSlot(str, str, str)
     def savePreferences(self, route, time, userPath):
+        from xamai.SetLog import SetLog
         from xamai.Preferences import Preferences
         p = Preferences()
 
         if route:
-            # if p.writePreferences(route, time, time_type):
             if p.writePreferences(str(route), int(time), "dias", str(userPath)):
                 # reemplaza alert con un mensaje
                 QtGui.QMessageBox.information(None, "Notificacion", "Los cambios se guardaron correctamente")
             else:
+                log = SetLog()
+                log.newLog(os.path.realpath(__file__), "error_preferences", "E", "Listener.savePreferences()")
                 QtGui.QMessageBox.information(None, "Notificacion", "Ocurrio un error al guardar los cambios")
 
+    # Cierra la sesion del usuario
     @QtCore.pyqtSlot()
     def closeSession(self):
         from xamai.Login import Login
@@ -51,11 +63,15 @@ class ListenerWebKit(QtCore.QObject):
         l.closeSession()
         QtGui.QApplication.exit()
 
+    # Abre la ventana Mis respaldos desde Configuracion
     def getFromPreferencesToRecover(self):
         from xamai.Recover import Recover
         r = Recover()
         data = {
             "card": r.loadYears(),
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "backup-location": '',
             "goBakcButton": '',
             "msg": ''
@@ -63,6 +79,7 @@ class ListenerWebKit(QtCore.QObject):
 
         return self.readHTML("index.html", data)
 
+    # Abre la ventana Configuracion desde Mis respaldos
     def getFromRecoverToPreferences(self):
         from xamai.Preferences import Preferences
         p = Preferences()
@@ -84,6 +101,9 @@ class ListenerWebKit(QtCore.QObject):
             user['space'] = str(user['space']) + " MB"
 
         data = {
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "userPath": str(p.showExternalPath()),
             "last-success": str(self.showLastSuccess()),
             "local-history": str(user['FileHistoricalNumber']),
@@ -101,12 +121,16 @@ class ListenerWebKit(QtCore.QObject):
 
         return self.readHTML("settings.html", data)
 
+    # muestra los meses en un anio de los respaldos
     def getMothsFromYear(self, year):
         from xamai.Recover import Recover
         r = Recover()
         data = {
             "card": r.loadMonths(str(year)),
             "backup-location":  ' > ' + str(year),
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
             "msg": ''
         }
@@ -130,18 +154,23 @@ class ListenerWebKit(QtCore.QObject):
                                 "<tr>"
         return value
 
+    # muestra los respaldos en un mes
     def getBackupsFromMonth(self, year, month):
         from xamai.Recover import Recover
         r = Recover()
         data = {
             "card": r.loadBackups(str(year), str(month)),
             "backup-location": ' > ' + str(year) + ' > ' + str(month),
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
             "msg": ''
         }
         return self.readHTML("index.html", data)
 
-    def downloadBackup(self, year, month, backup    ):
+    # Descarga un respaldo
+    def downloadBackup(self, year, month, backup):
         from xamai.Recover import Recover
         from xamai.Upload import Upload
         from xamai.Login import Login
@@ -168,6 +197,7 @@ class ListenerWebKit(QtCore.QObject):
         # Notificacion
         QtGui.QMessageBox.information(None, "Notificacion", "Descargando " + str(backup) + " en " + path)
 
+    # Carga el contenido html de una vista
     def readHTML(self, file, tpl={}):
         html = const.LOCATION + "/gui/" + file
 

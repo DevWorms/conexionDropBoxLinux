@@ -43,16 +43,11 @@ class Cron():
 		# Comando que ejecutara el cron, es el archivo que realizara los respaldos
 		self.cron = "/usr/bin/dbprotector_sync"
 
-	# crea un cron
+	# crea el cron para respaldar cada x tiempo
 	def sync(self):
 		# Set Log
 		log = SetLog()
 		self.readConf()
-		# Este comando se utiliza para extraer el usuario que ejecutara el cron
-		linux_user = "echo $USER"
-		# lee el resultado del comando anterior
-		p = os.popen(linux_user, "r")
-		linux_user_value = p.readline()
 
 		# crea el cron
 		tab = CronTab(user=True)
@@ -139,14 +134,10 @@ class Cron():
 		else:
 			log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
 
+	# Crea el cron: cada vez que el servidor se reinicia se ejecuta dbprotector
 	def rebootCron(self):
 		# Set Log
 		log = SetLog()
-		# Este comando se utiliza para extraer el usuario que ejecutara el cron
-		linux_user = "echo $USER"
-		# lee el resultado del comando anterior
-		p = os.popen(linux_user, "r")
-		linux_user_value = p.readline()
 
 		# crea el cron
 		tab = CronTab(user=True)
@@ -170,11 +161,6 @@ class Cron():
 	# Elimina los crons de sincronizacion y autoinicio de la aplicacion
 	def removeCrons(self):
 		log = SetLog()
-		# Este comando se utiliza para extraer el usuario que ejecutara el cron
-		linux_user = "echo $USER"
-		# lee el resultado del comando anterior
-		p = os.popen(linux_user, "r")
-		linux_user_value = p.readline()
 
 		tab = CronTab(user=True)
 		# elimina cualquier cron previo con el comentario SCANDA_sync

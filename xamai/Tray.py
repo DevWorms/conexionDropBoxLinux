@@ -9,6 +9,7 @@ from xamai.QtWebKit import QtWebkit
 from xamai.Status import Status
 #import xamai.Constants as const
 
+# Crea el icono de escritprio
 class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
     def __init__(self, icon, parent = None):
         QtGui.QSystemTrayIcon.__init__(self, icon, parent)
@@ -48,6 +49,9 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         from xamai.Recover import Recover
         r = Recover()
         data = {
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "goBakcButton": '',
             "card": r.loadYears(),
             "msg": "",
@@ -79,6 +83,9 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
             user['space'] = str(user['space']) + " MB"
 
         data = {
+            "css": gui.loadStyles(),
+            "js": gui.loadJS(),
+            "img": gui.loadImg(),
             "userPath": str(p.showExternalPath()),
             "last-success": str(gui.showLastSuccess()),
             "local-history": str(user['FileHistoricalNumber']),
@@ -112,5 +119,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 '''

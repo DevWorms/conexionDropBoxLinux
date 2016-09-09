@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+import os
 import re
 import xamai.Constants as const
-
 
 def readHTML(file, tpl = {}):
     html = const.LOCATION + "/gui/" + file
@@ -32,6 +32,18 @@ def showLastSuccess():
                             "<td>" + u.getDateFromBackup(back) + "<td>" \
                             "<tr>"
         return value
+
+# Carga imagenes externas
+def loadImg():
+    img = '<img alt="Profile Photo" src="file://' + os.path.join(const.LOCATION, "img/avatar-001.jpg") + '">'
+    return img
+
+# carga los JS
+def loadJS():
+    js = '<script src="file://' + os.path.join(const.LOCATION, "gui/assets/js/jquery.min.js") + '"></script>' \
+         '<script src="file://' + os.path.join(const.LOCATION, "gui/assets/js/base.min.js") + '"></script>' \
+         '<script src="file://' + os.path.join(const.LOCATION, "gui/assets/js/project.min.js") + '"></script>'
+    return js
 
 # carga los estilos css
 def loadStyles():

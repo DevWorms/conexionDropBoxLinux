@@ -24,7 +24,7 @@ files = ["img/*.png", "img/*.jpg", "settings/*.json", "gui/assets/css/*.css", "g
 setup (
     name = 'DBProtector',
     version = const.VERSION,
-    release = '1',
+    release = '0',
     url = 'scanda.com.mx',
     license = 'Copyright 2016',
     author = 'Grupo SCANDA',

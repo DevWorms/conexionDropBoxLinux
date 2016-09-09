@@ -21,5 +21,6 @@
   "error_upload_exist": "Conflicto en subida, ya existe otro proceso",
   "background_exists": "Error, el proceso de respaldo se encuentra ejecutandos",
   "error_download": "Error descargando el archivo",
-  "no_path_no_sync": "Error al sincronizar, no se ha configurado una ruta"
+  "no_path_no_sync": "Error al sincronizar, no se ha configurado una ruta",
+  "error_preferences": "Error al guardar las preferencias del usuario"
 }

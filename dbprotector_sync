@@ -21,6 +21,7 @@ else:
     app = QApplication(sys.argv)
 
     data = {
+        "js": gui.loadJS(),
         "css": gui.loadStyles(),
         "alert": "",
         "app-version": "v" + str(const.VERSION)
