@@ -8,7 +8,6 @@ xamai/Compress.py
 xamai/Constants.py
 xamai/Crons.py
 xamai/Crypt.py
-xamai/Gui.py
 xamai/Listener.py
 xamai/Login.py
 xamai/Preferences.py
@@ -31,7 +30,7 @@ xamai/gui/assets/js/project.min.js
 xamai/img/DB_Protector_16X16-01.png
 xamai/img/DB_Protector_32X32.png
 xamai/img/DB_Protector_64X64.png
-xamai/img/icon.png
+xamai/img/avatar.png
 xamai/settings/configuration.json
 xamai/settings/errors.json
 xamai/settings/status.json
