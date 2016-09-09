@@ -35,7 +35,7 @@ def showLastSuccess():
 
 # Carga imagenes externas
 def loadImg():
-    img = '<img alt="Profile Photo" src="file://' + os.path.join(const.LOCATION, "img/avatar-001.jpg") + '">'
+    img = '<img alt="Profile Photo" src="file://' + os.path.join(const.LOCATION, "img/avatar.png") + '">'
     return img
 
 # carga los JS

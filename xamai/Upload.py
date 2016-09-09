@@ -6,6 +6,7 @@ import json
 import os
 import os.path
 import re
+import threading
 import urllib2
 import datetime
 import time
@@ -175,7 +176,8 @@ class Upload():
                                     log.newLog(os.path.realpath(__file__), "success_upload", "T", file)
                                     # Muestra al usuario, que se subio el archivo
                                     #status.setUploadStatus(file, str(f.tell()), str(size_bytes), 2)
-                                    thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
+                                    #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
+                                    threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
                                     return res
@@ -202,8 +204,8 @@ class Upload():
                                         if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
                                             # Muestra al usuario que se esta subiendo
                                             #status.setUploadStatus(file, f.tell(), size_bytes, 2)
-                                            thread.start_new_thread(status.setUploadStatus,
-                                                                    (file, str(f.tell()), str(size_bytes), 2,))
+                                            #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
+                                            threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
                                             res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
                                             self.updateSpace(user, size)
                                             # "borrando archivo: "
@@ -213,8 +215,9 @@ class Upload():
                                         else:
                                             # Muestra al usuario que se esta subiendo
                                             #status.setUploadStatus(file, f.tell(), size_bytes, 1)
-                                            thread.start_new_thread(status.setUploadStatus,
-                                                                    (file, str(f.tell()), str(size_bytes), 1,))
+                                            #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 1,))
+                                            threading.Thread(target=status.setUploadStatus,
+                                                             args=(file, str(f.tell()), str(size_bytes), 1,)).start()
                                             dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
                                             cursor.offset = f.tell()
                                 except dropbox.exceptions.ApiError as err:
@@ -408,7 +411,8 @@ class Upload():
         # Archivo local donde se almacenara
         localFile = os.path.join(path, name)
         cliente = DropboxClient(self.TOKEN)
-        thread.start_new_thread(status.setDownloadstatus, (name, path, 1,))
+        #thread.start_new_thread(status.setDownloadstatus, (name, path, 1,))
+        threading.Thread(target=status.setDownloadstatus, args=(name, path, 1,)).start()
         with self.stopwatch('download'):
             try:
                 out = open(localFile, 'wb')
@@ -421,10 +425,12 @@ class Upload():
         out.close()
 
         if os.path.exists(localFile):
-            thread.start_new_thread(status.setDownloadstatus, (name, path, 2,))
+            #thread.start_new_thread(status.setDownloadstatus, (name, path, 2,))
+            threading.Thread(target=status.setDownloadstatus, args=(name, path, 2,)).start()
             zip.uncompress(localFile)
             log.newLog(os.path.realpath(__file__), "success_download", "T", file)
-            thread.start_new_thread(status.setDownloadstatus, (name, path, 0,))
+            #thread.start_new_thread(status.setDownloadstatus, (name, path, 0,))
+            threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
             return True
         else:
             log.newLog(os.path.realpath(__file__), "error_download", "T", file)
@@ -504,7 +510,8 @@ class Upload():
                 # Lista de archivos validos para ser subidos
                 files = self.getLocalFilesList(user["path"], user["ext"])
                 if not files:
-                    thread.start_new_thread(status.setUploadStatus, ("file.bak", 1, 1, 0,))
+                    #thread.start_new_thread(status.setUploadStatus, ("file.bak", 1, 1, 0,))
+                    threading.Thread(target=status.setUploadStatus, args=("file.bak", 1, 1, 0,)).start()
                 else:
                     # si hay mas respaldos de los permitidos los elimina
                     self.historicalCloud()
@@ -515,7 +522,8 @@ class Upload():
                             file = os.path.join(user["path"], file)
                             # Comprime el archivo
                             # actualiza el estado de la aplicacion a cifrando
-                            thread.start_new_thread(status.setUploadStatus, (name + ".zip", 1, 1, 3,))
+                            #thread.start_new_thread(status.setUploadStatus, (name + ".zip", 1, 1, 3,))
+                            threading.Thread(target=status.setUploadStatus, args=(name + ".zip", 1, 1, 3,)).start()
                             if zip.compress(file):
                                 # Datos del archivo subido
                                 data = self.uploadFile(name + "." + ext + ".zip")
@@ -525,7 +533,8 @@ class Upload():
                                 if os.path.isfile(file):
                                     os.remove(file)
                                 # actualiza el estado de la aplicacion a sincronizado
-                                thread.start_new_thread(status.setUploadStatus, (file, 1, 1, 2,))
+                                #thread.start_new_thread(status.setUploadStatus, (file, 1, 1, 2,))
+                                threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 2,)).start()
                             else:
                                 if os.path.isfile(file):
                                     os.remove(file)
@@ -537,7 +546,9 @@ class Upload():
                     para actualizar la frecuencia de respaldo y generar un nuevo cron
                 '''
                 c = Cron()
-                thread.start_new_thread(c.cloudSync, ())
+                #thread.start_new_thread(c.cloudSync, ())
+                threading.Thread(target=c.cloudSync).start()
+
         else:
             print "Existe otra subida en proceso"
             log.newLog(os.path.realpath(__file__), "error_upload_exist", "T", "")

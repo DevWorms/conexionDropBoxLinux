@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import threading
 import urllib2
 
-import thread
+#import thread
 from crontab import CronTab
 
 from xamai.Login import Login
@@ -61,8 +62,8 @@ class Cron():
 		# pasa las horas a horas y dias
 		if self.time > 23:
 			while self.time > 23:
-				dias += 1
-				self.time -= 24
+				dias = dias + 1
+				self.time = self.time - 24
 
 		# Agrega las frecuencias de respaldo
 		if dias > 0:
@@ -129,7 +130,8 @@ class Cron():
 					'password': data['password'],
 					'tokenDropbox': data['tokenDropbox'],
 				}, f)
-			thread.start_new_thread(self.sync, ())
+			#thread.start_new_thread(self.sync, ())
+			threading.Thread(target=self.sync).start()
 			#self.sync()
 		else:
 			log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")

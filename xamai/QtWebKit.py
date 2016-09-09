@@ -32,7 +32,7 @@ class QtWebkit(QtWebKit.QWebView):
         uri = QUrl(url).toString()
         if uri:
             action = ListenerWebKit()
-            if uri == "#backups":
+            if "#backups" in uri:
                 self.setHtml(action.getFromPreferencesToRecover())
             # Se clickea sobre un anio y se muestran los meses
             elif "#getMonth" in uri:
@@ -47,5 +47,5 @@ class QtWebkit(QtWebKit.QWebView):
                 year, trash = year.split("&")
                 month, trash = month.split("&")
                 action.downloadBackup(year, month, backup)
-            elif uri == "#settings":
+            elif "#settings" in uri:
                 self.setHtml(action.getFromRecoverToPreferences())

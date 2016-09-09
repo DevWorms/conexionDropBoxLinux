@@ -7,6 +7,7 @@ import xamai.Constants as const
     # Refeferences:
     # https://stackoverflow.com/questions/26574521/having-trouble-installing-dropbox-api-for-python-2-6
     # https://stackoverflow.com/questions/1617078/ordereddict-for-older-versions-of-python
+    # http://www.driverbug.com/Repo/201607250206/addons/plugin.program.ump/lib/third/dropbox/rest.py
 
     # Tested on Fedora 23/24
     # Empaqueta en RPM para Fedora
@@ -19,12 +20,12 @@ import xamai.Constants as const
     python setup.py bdist_rpm --requires 'python' --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --no-autoreq --python /usr/bin/python2.6
 '''
 
-files = ["img/*.png", "img/*.jpg", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
+files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
 
 setup (
     name = 'DBProtector',
     version = const.VERSION,
-    release = '0',
+    release = '1',
     url = 'scanda.com.mx',
     license = 'Copyright 2016',
     author = 'Grupo SCANDA',
