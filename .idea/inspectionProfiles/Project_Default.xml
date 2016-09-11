@@ -14,12 +14,17 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="2">
+          <list size="6">
             <item index="0" class="java.lang.String" itemvalue="PyGTK" />
             <item index="1" class="java.lang.String" itemvalue="webkit" />
+            <item index="2" class="java.lang.String" itemvalue="pyminizip" />
+            <item index="3" class="java.lang.String" itemvalue="dropbox" />
+            <item index="4" class="java.lang.String" itemvalue="python-crontab" />
+            <item index="5" class="java.lang.String" itemvalue="psutil" />
           </list>
         </value>
       </option>
     </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>

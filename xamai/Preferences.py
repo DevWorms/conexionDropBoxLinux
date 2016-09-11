@@ -49,7 +49,7 @@ class Preferences():
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
             #thread.start_new_thread(c.sync, ())
-            threading.Thread(target=c.sync).start()
+            threading.Thread(target=c.cloudSync).start()
             return True
         else:
             log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")

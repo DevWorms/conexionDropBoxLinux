@@ -16,7 +16,8 @@ wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/dropb
 tar -xzf /tmp/dbprotector/pip/dropbox-6.4.0.tar.gz -C /tmp/dbprotector/pip/
 tar -xzf /tmp/dbprotector/pip/python-crontab-2.1.1.tar.gz -C /tmp/dbprotector/pip/
 # RPM's extraidos de los isos SLE-11-SP4-SAP-DVD-x86_64-GM-DVD1.iso y SLE-11-SP4-SAP-DVD-x86_64-GM-DVD2.iso
-# El día 28/08/2016 
+# El día 28/08/2016
+wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/p7zip-9.13-2.1.x86_64.rpm -O /tmp/dbprotector/rpm/p7zip-9.13-2.1.x86_64.rpm
 wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/dbus-1-python-0.83.0-27.1.43.x86_64.rpm -O /tmp/dbprotector/rpm/dbus-1-python-0.83.0-27.1.43.x86_64.rpm
 wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm -O /tmp/dbprotector/rpm/gcc43-4.3.4_20091019-0.37.30.x86_64.rpm
 wget -nv -q https://github.com/DevWorms/conexionDropBoxLinux/raw/PyQt/repo/gcc-4.3-62.200.2.x86_64.rpm -O /tmp/dbprotector/rpm/gcc-4.3-62.200.2.x86_64.rpm
@@ -51,7 +52,7 @@ cd
 #ln -s /usr/lib/python2.6/site-packages/xamai/ /usr/lib64/python2.6/site-packages/xamai
 # Instala las librerias de python necesarias
 #pip2.6 install 'dropbox==6.6.1' 'pyminizip==0.2.1' 'psutil==4.3.0'
-pip2.6 install 'pyminizip==0.2.1' 'psutil==4.3.0'
+pip2.6 install 'psutil==4.3.0'
 clear
 echo "Resolviendo Dependencias, no cierre esta ventana"
 # Borra todo lo descargado y crea el nuevo icono de escritorio

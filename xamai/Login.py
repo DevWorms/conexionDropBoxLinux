@@ -30,6 +30,8 @@ class Login():
 
     # guarda los datos del usuario recibidos
     def writeUserData(self, user, password, id):
+        from xamai.Crons import Cron
+        c = Cron()
         #from scanda.SetLog import SetLog
         #log = SetLog()
         # Carga el archivo configuration.json
@@ -37,8 +39,6 @@ class Login():
         uData = self.returnUserData()
         if not uData['user'] or not uData['password']:
     	    # crea un cron para iniciar la app cada reinicio
-            from xamai.Crons import Cron
-            c = Cron()
             #thread.start_new_thread(c.rebootCron, ())
             threading.Thread(target=c.rebootCron).start()
 
@@ -62,6 +62,7 @@ class Login():
         else:
             print "No existe el archivo"
             #log.newLog("load_config_file", "E", "")
+        threading.Thread(target=c.cloudSync).start()
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
