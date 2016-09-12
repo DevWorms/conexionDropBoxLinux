@@ -97,31 +97,32 @@ class Recover():
         months = []
         files = self.u.getRemoteFilesList("/" + str(self.user['IdCustomer']) + "/"+year+"/")
         for path in files:
-            id, month = os.path.split(path)
-            if month == "01":
-                months.append("Enero")
-            elif month == "02":
-                months.append("Febrero")
-            elif month == "03":
-                months.append("Marzo")
-            elif month == "04":
-                months.append("Abril")
-            elif month == "05":
-                months.append("Mayo")
-            elif month == "06":
-                months.append("Junio")
-            elif month == "07":
-                months.append("Julio")
-            elif month == "08":
-                months.append("Agosto")
-            elif month == "09":
-                months.append("Septiembre")
-            elif month == "10":
-                months.append("Octubre")
-            elif month == "11":
-                months.append("Noviembre")
-            elif month == "12":
-                months.append("Diciembre")
+            if self.u.getRemoteFilesList(path):
+                id, month = os.path.split(path)
+                if month == "01":
+                    months.append("Enero")
+                elif month == "02":
+                    months.append("Febrero")
+                elif month == "03":
+                    months.append("Marzo")
+                elif month == "04":
+                    months.append("Abril")
+                elif month == "05":
+                    months.append("Mayo")
+                elif month == "06":
+                    months.append("Junio")
+                elif month == "07":
+                    months.append("Julio")
+                elif month == "08":
+                    months.append("Agosto")
+                elif month == "09":
+                    months.append("Septiembre")
+                elif month == "10":
+                    months.append("Octubre")
+                elif month == "11":
+                    months.append("Noviembre")
+                elif month == "12":
+                    months.append("Diciembre")
         return  months
 
     # Devuelve un string HTML con los cardviews por cada mes
@@ -148,8 +149,9 @@ class Recover():
     def getYears(self):
         years = []
         for path in self.u.getRemoteFilesList("/"+str(self.user['IdCustomer'])+"/"):
-            id, year = os.path.split(path)
-            years.append(year)
+            if self.u.getRemoteFilesList(path):
+                id, year = os.path.split(path)
+                years.append(year)
         return years
 
     # Devuelve un string HTML con los cardviews por cada anio
