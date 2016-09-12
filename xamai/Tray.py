@@ -15,8 +15,6 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         QtGui.QSystemTrayIcon.__init__(self, icon, parent)
         self.setupDialog = None
 
-        s = Status()
-
         self.parent = parent
         menu = QtGui.QMenu(parent)
 
@@ -32,12 +30,17 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         self.setContextMenu(menu)
 
         menu.addSeparator()
+
+        exitAction = menu.addAction("Status...")
+        self.connect(exitAction, QtCore.SIGNAL("triggered()"), self.notifyStatus)
+        self.setContextMenu(menu)
+
+    def notifyStatus(self):
+        s = Status()
         status_label = s.trayIconStatus()
 
-        exitAction = menu.addAction(status_label)
-        exitAction.setDisabled(True)
-        self.connect(exitAction, QtCore.SIGNAL("triggered()"), self.exit)
-        self.setContextMenu(menu)
+        icon = QtGui.QSystemTrayIcon.MessageIcon()
+        self.showMessage("DBProtector Status...", status_label, icon, 3 * 1000)
 
     def exit(self):
         sys.exit(0)

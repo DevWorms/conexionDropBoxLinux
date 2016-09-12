@@ -36,7 +36,6 @@ setup (
         'Intended Audience :: Developers'
     ],
     install_requires = ['python-crontab',
-                        'pyminizip',
                         'dropbox',
                         'psutil'],
     keywords = 'databases backups',

@@ -105,6 +105,8 @@ class Login():
 
     # cierra la sesion actual de dbprotector y borra los datos del usuario
     def closeSession(self):
+        from xamai.Crons import Cron
+        c = Cron()
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
         if (os.path.exists(file)):
@@ -125,3 +127,5 @@ class Login():
                 }, f)
         else:
             print "No existe el archivo"
+
+        c.removeCrons()

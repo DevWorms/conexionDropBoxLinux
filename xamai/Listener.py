@@ -1,7 +1,7 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
 import os
-#import thread
+import thread
 import threading
 
 import xamai.Ui as gui
@@ -33,8 +33,8 @@ class ListenerWebKit(QtCore.QObject):
             # Si el login es correcto
             if l.loginApi(user, password):
                 # Inicia un nuevo thread, con la aplicacion
-                #thread.start_new_thread(os.system, ("dbprotector_xamai",))
-                threading.Thread(target=os.system, args=("dbprotector_xamai",)).start()
+                thread.start_new_thread(os.system, ("dbprotector_xamai",))
+                #threading.Thread(target=os.system, args=("dbprotector_xamai",)).start()
                 # Cierra la aplicacion
                 QtGui.QApplication.exit()
             else:
