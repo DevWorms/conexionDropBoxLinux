@@ -49,7 +49,11 @@ import xamai.Constants as const
 '''
 
 class Upload():
+    # Token de la cuenta
     crypt = Crypt()
+    '''
+        Para mas info leer Crypt.py
+    '''
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(

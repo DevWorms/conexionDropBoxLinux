@@ -1,9 +1,9 @@
 %define name DBProtector
-%define version 1.0
-%define unmangled_version 1.0
+%define version 1.3
+%define unmangled_version 1.3
 %define release 1
 
-Summary: DB Protector
+Summary: DBProtector
 Name: %{name}
 Version: %{version}
 Release: %{release}
@@ -25,27 +25,27 @@ UNKNOWN
 %setup -n %{name}-%{unmangled_version}
 
 %build
-/usr/bin/python2.7 setup.py build
+/usr/bin/python2.6 setup.py build
 
 %install
-/usr/bin/python2.7 setup.py install -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+/usr/bin/python2.6 setup.py install --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 #! /bin/bash
-sudo chmod -R 777 /usr/lib/python2.6/site-packages/xamai/settings/
+sudo chmod -R 777 /usr/local/lib64/python2.6/site-packages/xamai/settings/
 # Varia de acuerdo a la version de GNOME y la distribucion linux
 echo '[Desktop Entry]
 Categories=Development;Database;
 Encoding=UTF-8
-Name=DB Protector (Install)
+Name=DBProtector (Install)
 GenericName=dbprotector
-Comment=DB Protector
+Comment=DBProtector
 TryExec=dbprotector_pre-install
 Exec=dbprotector_pre-install
-Icon=/usr/lib/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
+Icon=/usr/local/lib64/python2.6/site-packages/xamai/img/DB_Protector_32X32.png
 Terminal=true
 StartupNotify=true
 Type=Application' >> /usr/share/applications/dbprotector.desktop
@@ -53,8 +53,13 @@ Type=Application' >> /usr/share/applications/dbprotector.desktop
 
 %postun
 #! /bin/bash
+# Elimina los archivos
 sudo rm -f /usr/bin/dbprotector_*
-sudo rm -rf /usr/lib/python2.6/site-packages/xamai/
+sudo rm -rf /usr/local/lib64/python2.6/site-packages/xamai/
+
+# Elimina los crons
+crontab -u root -l | grep -v '#xamai_init'  | crontab -u root -
+crontab -u root -l | grep -v '#xamai_sync'  | crontab -u root -
 
 
 %files -f INSTALLED_FILES
