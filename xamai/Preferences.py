@@ -48,7 +48,6 @@ class Preferences():
 
             # Guarda los cambios en el archivo de configuracion y genera el cron
             c = Cron()
-            #thread.start_new_thread(c.sync, ())
             threading.Thread(target=c.cloudSync).start()
             return True
         else:
@@ -67,7 +66,7 @@ class Preferences():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+        except (urllib2.HTTPError, e):
             log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())

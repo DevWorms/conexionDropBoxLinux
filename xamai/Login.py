@@ -16,7 +16,7 @@ import xamai.Constants as const
 class Login():
     # Este metodo devuelve un arreglo con la info almacenad en: configuration.json
     def returnUserData(self):
-        #log = SetLog()
+        log = SetLog()
         # Carga el archivo configuration.json
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
@@ -24,23 +24,19 @@ class Login():
             # abre el archivo y guarda los datos
             with open(file, 'r') as f:
                 data = json.load(f)
-        #else:
-            #log.newLog("load_config_file", "E", "Login.returnUserData()")
+        else:
+            log.newLog("load_config_file", "E", "Login.returnUserData()")
         return data
 
     # guarda los datos del usuario recibidos
     def writeUserData(self, user, password, id):
         from xamai.Crons import Cron
         c = Cron()
-        #from scanda.SetLog import SetLog
-        #log = SetLog()
         # Carga el archivo configuration.json
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         uData = self.returnUserData()
         if not uData['user'] or not uData['password']:
-    	    # crea un cron para iniciar la app cada reinicio
-            #thread.start_new_thread(c.rebootCron, ())
-            threading.Thread(target=c.rebootCron).start()
+            threading.Thread(target=c.rebootCron).start() # crea un cron para iniciar la app cada reinicio
 
         # Si el archivo existe...
         if (os.path.exists(file)):
@@ -61,7 +57,6 @@ class Login():
                 }, f)
         else:
             print "No existe el archivo"
-            #log.newLog("load_config_file", "E", "")
         threading.Thread(target=c.cloudSync).start()
 
     # Autenticacion con la api REST
@@ -76,8 +71,7 @@ class Login():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
-            #log.newLog("http_error", "E", e.fp.read())
+        except (urllib2.HTTPError, e):
             print e
         # Devuelve la info
         res = json.loads(response.read())
@@ -86,7 +80,6 @@ class Login():
                 self.writeUserData(user, p_hash, res["IdCustomer"])
             else:
                 print "No se pudo guardar la configuracion"
-                #log.newLog("login_status_error" + res["Status"], "E", "")
             return True
         else:
             log.newLogLogin(user, p_hash)

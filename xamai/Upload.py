@@ -49,11 +49,7 @@ import xamai.Constants as const
 '''
 
 class Upload():
-    # Token de la cuenta
     crypt = Crypt()
-    '''
-        Para mas info leer Crypt.py
-    '''
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(
@@ -114,7 +110,7 @@ class Upload():
     def checkUpload(self):
         s = Status()
         status = s.getUploadStatus()
-        if status['status'] == 0 or status['status'] == 2:
+        if status['status'] == 0 or status['status'] == 3:
             return True
         else:
             return False
@@ -167,7 +163,7 @@ class Upload():
                         if os.path.getsize(fullFile) <= const.CHUNK_SIZE:
                             data = f.read()
                             # Inicia la subida
-                            with self.stopwatch('upload %d MB' % len(data)):
+                            with self.stopwatch('Subido %d MB' % len(data)):
                                 try:
                                     res = dbx.files_upload(data, dest)
                                     # "borrando archivo: "
@@ -175,8 +171,6 @@ class Upload():
                                     # Notifica a la API
                                     log.newLog(os.path.realpath(__file__), "success_upload", "T", file)
                                     # Muestra al usuario, que se subio el archivo
-                                    #status.setUploadStatus(file, str(f.tell()), str(size_bytes), 2)
-                                    #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
                                     threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
@@ -186,12 +180,10 @@ class Upload():
                                     os.remove(fullFile)
                                     log.newLog(os.path.realpath(__file__), "error_upload", "T", "")
                                     # los logs de dropbox son demasiado grandes para ser enviados como log
-                                    #print err
                                     return None
-                            #return res
                         # Subida de archivos Grandes
                         else:
-                            with self.stopwatch('upload %d MB' % size):
+                            with self.stopwatch('Subido %d MB' % size):
                                 try:
                                     # Sube el archivo por bloques, maximo 150 mb
                                     upload_session_start_result = dbx.files_upload_session_start(f.read(const.CHUNK_SIZE))
@@ -203,8 +195,6 @@ class Upload():
                                         # tamano subido y id de la sesion de subida
                                         if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
                                             # Muestra al usuario que se esta subiendo
-                                            #status.setUploadStatus(file, f.tell(), size_bytes, 2)
-                                            #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 2,))
                                             threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
                                             res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
                                             self.updateSpace(user, size)
@@ -214,8 +204,6 @@ class Upload():
                                             log.newLog(os.path.realpath(__file__), "success_upload", "T", "")
                                         else:
                                             # Muestra al usuario que se esta subiendo
-                                            #status.setUploadStatus(file, f.tell(), size_bytes, 1)
-                                            #thread.start_new_thread(status.setUploadStatus, (file, str(f.tell()), str(size_bytes), 1,))
                                             threading.Thread(target=status.setUploadStatus,
                                                              args=(file, str(f.tell()), str(size_bytes), 1,)).start()
                                             dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
@@ -383,6 +371,7 @@ class Upload():
     # Actualiza los datos de espacio del usuario en la Api de SCANDA
     def updateSpace(self, user, spaceFile):
         log = SetLog()
+        spaceFile = spaceFile + .5
         space = int(user["spaceUsed"]) + int(spaceFile)
         url = const.IP_SERVER + '/DBProtector/CustomerStorage_SET?UsedStorage=' + str(space) + '&User=' + user['user'] + '&Password=' + user['password']
 
@@ -413,10 +402,10 @@ class Upload():
         cliente = DropboxClient(self.TOKEN)
         #thread.start_new_thread(status.setDownloadstatus, (name, path, 1,))
         threading.Thread(target=status.setDownloadstatus, args=(name, path, 1,)).start()
-        with self.stopwatch('download'):
+        with self.stopwatch('Descargado'):
             try:
                 out = open(localFile, 'wb')
-                with self.stopwatch("download"):
+                with self.stopwatch("Descargado"):
                     with cliente.get_file(file) as f:
                         out.write(f.read())
             except dropbox.exceptions.HttpError as err:
@@ -510,7 +499,6 @@ class Upload():
                 # Lista de archivos validos para ser subidos
                 files = self.getLocalFilesList(user["path"], user["ext"])
                 if not files:
-                    #thread.start_new_thread(status.setUploadStatus, ("file.bak", 1, 1, 0,))
                     threading.Thread(target=status.setUploadStatus, args=("file.bak", 1, 1, 0,)).start()
                 else:
                     # si hay mas respaldos de los permitidos los elimina
@@ -520,11 +508,9 @@ class Upload():
                         if not background.isRunning():
                             name, ext = file.split(".")
                             file = os.path.join(user["path"], file)
-                            # Comprime el archivo
                             # actualiza el estado de la aplicacion a cifrando
-                            #thread.start_new_thread(status.setUploadStatus, (name + ".zip", 1, 1, 3,))
                             threading.Thread(target=status.setUploadStatus, args=(name + ".zip", 1, 1, 3,)).start()
-                            if zip.compress(file):
+                            if zip.compress(file): # Comprime el archivo
                                 # Datos del archivo subido
                                 data = self.uploadFile(name + "." + ext + ".zip")
                                 # que se hace con el archivo?
@@ -533,7 +519,6 @@ class Upload():
                                 if os.path.isfile(file):
                                     os.remove(file)
                                 # actualiza el estado de la aplicacion a sincronizado
-                                #thread.start_new_thread(status.setUploadStatus, (file, 1, 1, 2,))
                                 threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 2,)).start()
                             else:
                                 if os.path.isfile(file):
@@ -546,8 +531,10 @@ class Upload():
                     para actualizar la frecuencia de respaldo y generar un nuevo cron
                 '''
                 c = Cron()
-                #thread.start_new_thread(c.cloudSync, ())
+                # Sincroniza de nuevo con la frecuencia de respaldo de la api
                 threading.Thread(target=c.cloudSync).start()
+                # Devuelve el status a sincronizado
+                threading.Thread(target=status.setUploadStatus, args=("file.bak", 1, 1, 0,)).start()
 
         else:
             print "Existe otra subida en proceso"

@@ -18,15 +18,15 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         self.parent = parent
         menu = QtGui.QMenu(parent)
 
+        startAction = menu.addAction("Sincronizar ahora")
+        self.connect(startAction, QtCore.SIGNAL("triggered()"), self.syncNow)
+        self.setContextMenu(menu)
+
         startAction = menu.addAction("Recuperar respaldo")
         self.connect(startAction, QtCore.SIGNAL("triggered()"), self.openRecover)
 
         startAction = menu.addAction(u"Configuración")
         self.connect(startAction, QtCore.SIGNAL("triggered()"), self.openPreferences)
-        self.setContextMenu(menu)
-
-        startAction = menu.addAction("Sincronizar ahora")
-        self.connect(startAction, QtCore.SIGNAL("triggered()"), self.syncNow)
         self.setContextMenu(menu)
 
         menu.addSeparator()
@@ -46,6 +46,8 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         sys.exit(0)
 
     def syncNow(self):
+        icon = QtGui.QSystemTrayIcon.MessageIcon()
+        self.showMessage("DBProtector Status...", "Sincronizando", icon, 3 * 1000)
         os.system('dbprotector_sync')
 
     def openRecover(self):
@@ -61,8 +63,10 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
             "backup-location": ''
         }
 
+        html = gui.readHTML("index.html", data)
+
         # carga la vista
-        self.setupDialog = QtWebkit(self, gui.readHTML("index.html", data))
+        self.setupDialog = QtWebkit(self, html)
         self.setupDialog.show()
         self.setupDialog.raise_()
 
@@ -104,8 +108,10 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
             "alert": ""
         }
 
+        html = gui.readHTML("settings.html", data)
+
         # carga la vista
-        self.setupDialog = QtWebkit(self, gui.readHTML("settings.html", data))
+        self.setupDialog = QtWebkit(self, html)
         self.setupDialog.show()
         self.setupDialog.raise_()
 

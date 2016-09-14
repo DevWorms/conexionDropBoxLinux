@@ -52,10 +52,10 @@ class Cron():
 
         # crea el cron
         tab = CronTab(user=True)
-        # elimina cualquier cron previo con el comentario SCANDA_sync
-        tab.remove_all(comment='SCANDA_sync')
-        # crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
-        cron_job = tab.new(self.cron, comment="SCANDA_sync")
+        # elimina cualquier cron previo con el comentario xamai_sync
+        tab.remove_all(comment='xamai_sync')
+        # crea una nueva tarea en el cron, agrega el comentario xamai_sync, para poder ser identificado despues
+        cron_job = tab.new(self.cron, comment="xamai_sync")
 
         # datos de la frecuencia de respaldo
         dias = 0
@@ -93,7 +93,7 @@ class Cron():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+        except (urllib2.HTTPError, e):
             log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
@@ -131,7 +131,6 @@ class Cron():
                     'password': data['password'],
                     'tokenDropbox': data['tokenDropbox'],
                 }, f)
-            #thread.start_new_thread(self.sync, ())
             threading.Thread(target=self.sync).start()
             #self.sync()
         else:
@@ -144,10 +143,10 @@ class Cron():
 
         # crea el cron
         tab = CronTab(user=True)
-        # elimina cualquier cron previo con el comentario SCANDA_sync
-        tab.remove_all(comment='SCANDA_init')
-        # crea una nueva tarea en el cron, agrega el comentario SCANDA_sync, para poder ser identificado despues
-        cron_job = tab.new("dbprotector_xamai", comment="SCANDA_init")
+        # elimina cualquier cron previo con el comentario xamai_sync
+        tab.remove_all(comment='xamai_init')
+        # crea una nueva tarea en el cron, agrega el comentario xamai_sync, para poder ser identificado despues
+        cron_job = tab.new("dbprotector_xamai", comment="xamai_init")
 
         # configura el cron para que la aplicacion se inicie cada reinicio del sistema
         cron_job.every_reboot()
@@ -155,7 +154,6 @@ class Cron():
         # escribe y guarda el cron
         try:
             tab.write()
-            # print tab.render()
             return True
         except:
             log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
@@ -166,15 +164,14 @@ class Cron():
         log = SetLog()
 
         tab = CronTab(user=True)
-        # elimina cualquier cron previo con el comentario SCANDA_sync
-        tab.remove_all(comment='SCANDA_init')
-        # elimina cualquier cron previo con el comentario SCANDA_sync
-        tab.remove_all(comment='SCANDA_sync')
+        # elimina cualquier cron previo con el comentario xamai_sync
+        tab.remove_all(comment='xamai_init')
+        # elimina cualquier cron previo con el comentario xamai_sync
+        tab.remove_all(comment='xamai_sync')
 
         # escribe y guarda el cron
         try:
             tab.write()
-            # print tab.render()
             return True
         except:
             log.newLog(os.path.realpath(__file__), "cron_error", "E", "")

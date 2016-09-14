@@ -139,10 +139,10 @@ class Recover():
                                           '<div class="card-inner">' \
                                           '<a style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(
                     i) + '" href="#getBackup&year='+year+'&month=' + str(i) + '">' + str(i) + '</a>' \
-                                                                                 '</div>' \
-                                                                                 '</div>' \
-                                                                                 '</div>' \
-                                                                                 '</div>'
+                                          '</div>' \
+                                          '</div>' \
+                                          '</div>' \
+                                          '</div>'
         return cardsMonths
 
     # Devuelve una lista de anios por usuario
@@ -166,7 +166,7 @@ class Recover():
                                           '<div class="card-scanda">' \
                                           '<div class="card-main">' \
                                           '<div class="card-inner">' \
-                                          '<a style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" href="#getMonth&year='+ str(i) + '" ">' + str(i) + '</>' \
+                                          '<a style="text-align: center;" class="btn btn-flat card-heading waves-attach" id="card_year_' + str(i) + '" href="#getMonth&year='+ str(i) + '" ">' + str(i) + '</a>' \
                                           '</div>' \
                                           '</div>' \
                                           '</div>' \

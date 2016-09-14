@@ -4,6 +4,10 @@ import os
 import re
 import xamai.Constants as const
 
+'''
+    Utilidades para cargar en la GUI
+'''
+# Devuelve el codigo HTML de un archivo
 def readHTML(file, tpl = {}):
     html = const.LOCATION + "/gui/" + file
 

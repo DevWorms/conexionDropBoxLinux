@@ -1,3 +1,8 @@
 #! /bin/bash
+# Elimina los archivos
 sudo rm -f /usr/bin/dbprotector_*
 sudo rm -rf /usr/local/lib64/python2.6/site-packages/xamai/
+
+# Elimina los crons
+crontab -u root -l | grep -v '#xamai_init'  | crontab -u root -
+crontab -u root -l | grep -v '#xamai_sync'  | crontab -u root -

@@ -49,7 +49,7 @@ class BackgroundProcess():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+        except (urllib2.HTTPError, e):
             log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())

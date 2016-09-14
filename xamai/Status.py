@@ -93,17 +93,17 @@ class Status():
                     # Url de la api REST para la subida de archivos. Actualiza la subida
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&ActualChunk='+str(chunk)+'&Status=EnProgreso&FileName=' + fileUploaded + '&TransactionType=1'
-            elif status == 2:
+            else:
                 # Url de la api REST para la subida de archivos. Termina la subida
                 #url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + user['password'] + '&FileName=' + fileUploaded + '&TransactionType=1'
                 url = const.IP_SERVER + '/DBProtector/FileTransaction_UPDATE?User=' + user['user'] + '&Password=' + \
-                          user['password'] + '&ActualChunk='+str(chunk)+'&Status=Completa&FileName=' + fileUploaded + '&TransactionType=1'
+                          user['password'] + '&ActualChunk='+str(chunk)+'&Status=Finalizado&FileName=' + fileUploaded + '&TransactionType=1'
 
             try:
                 # Realiza la peticion
                 req = urllib2.Request(url)
                 response = urllib2.urlopen(req)
-            except urllib2.HTTPError, e:
+            except (urllib2.HTTPError, e):
                 log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
 
     # cambia las unidades a porcentajes
@@ -163,16 +163,13 @@ class Status():
                 date = strftime("%Y%m%d%H%M%S", gmtime())
 
                 # valida el status de la subida
-                # 1 para carga iniciada
-                if status == 1:
+                if status == 1: # 1 para carga iniciada
                     # i el chunk es de 5mb, entonces es el primero en subirse. Comienza descarga
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(0) + '&TotalChunk=' + \
                           str(0) + '&Status=EnProgreso&FileName=' + fileDownload + '&TransactionType=2'
                 elif status == 0:
                     # Url de la api REST para la subida de archivos. Termina descarga
-                    #url = const.IP_SERVER + '/DBProtector/FileTransaction_DELETE?User=' + user['user'] + '&Password=' + \
-                    #      user['password'] + '&FileName=' + fileDownload + '&TransactionType=5'
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(0) + '&TotalChunk=' + \
                           str(0) + '&Status=Completa&FileName=' + fileDownload + '&TransactionType=2'
@@ -180,7 +177,7 @@ class Status():
                     # Realiza la peticion
                     req = urllib2.Request(url)
                     response = urllib2.urlopen(req)
-                except urllib2.HTTPError, e:
+                except (urllib2.HTTPError, e):
                     log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         else:
             log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
@@ -196,7 +193,6 @@ class Status():
             if statusUpload['status'] == 1:
                 status_label = "Subiendo " + statusUpload['chunk'] + "% / Descargando " + statusDownload['file']
             elif statusUpload['status'] == 2:
-                # self.icon.set_from_file("img/sync.png")
                 status_label = "Descargando " + statusDownload['file']
             elif statusUpload['status'] == 3:
                 status_label = "Cifrando archivo / Descargando " + statusDownload['file']
@@ -205,7 +201,6 @@ class Status():
             if statusUpload['status'] == 1:
                 status_label = "Subiendo " + statusUpload['chunk'] + "% / Descifrando " + statusDownload['file']
             elif statusUpload['status'] == 2:
-                # self.icon.set_from_file("img/sync.png")
                 status_label = "Descifrando " + statusDownload['file']
             elif statusUpload['status'] == 3:
                 status_label = "Cifrando archivo / Descifrando " + statusDownload['file']
@@ -215,7 +210,6 @@ class Status():
                 if statusUpload['status'] == 1:
                     status_label = "Subiendo " + statusUpload['file'] + " " + statusUpload['chunk'] + "%"
                 elif statusUpload['status'] == 2:
-                    # self.icon.set_from_file("img/sync.png")
                     status_label = "Sincronizado"
                 elif statusUpload['status'] == 3:
                     status_label = "Cifrando " + statusUpload['file'] + " para subir"

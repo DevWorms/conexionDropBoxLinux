@@ -34,7 +34,6 @@ class ListenerWebKit(QtCore.QObject):
             if l.loginApi(user, password):
                 # Inicia un nuevo thread, con la aplicacion
                 thread.start_new_thread(os.system, ("dbprotector_xamai",))
-                #threading.Thread(target=os.system, args=("dbprotector_xamai",)).start()
                 # Cierra la aplicacion
                 QtGui.QApplication.exit()
             else:
@@ -196,7 +195,6 @@ class ListenerWebKit(QtCore.QObject):
             path = l.returnUserData()['path']
 
         # Descarga asincrona
-        #thread.start_new_thread(u.downloadFile, (r.downloadFile(str(year), str(month), str(backup)), str(path),))
         threading.Thread(target=u.downloadFile, args=(r.downloadFile(str(year), str(month), str(backup)), str(path),)).start()
         # Notificacion
         QtGui.QMessageBox.information(None, "Notificacion", "Descargando " + str(backup) + " en " + path)

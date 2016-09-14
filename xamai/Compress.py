@@ -38,7 +38,7 @@ class Compress():
         if os.path.exists(file):
             path, name = os.path.split(file)
             name, ext = name.split(".")
-            with self.stopwatch('compress'):
+            with self.stopwatch('Comprimido '):
                 subprocess.call(['7z', 'a', u'-p%s' % self.createPassword(), '-y', path + "/" + name + "." + ext + ".zip"] + [file])
             return True
         else:
