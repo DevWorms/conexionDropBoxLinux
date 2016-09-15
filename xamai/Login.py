@@ -5,8 +5,7 @@ import os
 import threading
 import urllib2
 
-#import thread
-
+from xamai.SetLog import SetLog
 import xamai.Constants as const
 
 '''
@@ -61,7 +60,6 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
-        from xamai.SetLog import SetLog
         log = SetLog()
 
         # Url de la api REST para autenticarse
