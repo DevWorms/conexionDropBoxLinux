@@ -83,7 +83,7 @@ class Status():
             # 1 para carga iniciada
             if status == 1:
                 #i el chunk es de 5mb, entonces es el primero en subirse
-                if chunk <= const.CHUNK_SIZE: # tamano del chunk de 5MB
+                if (int(chunk) <= const.CHUNK_SIZE) or (int(chunk) == 0): # tamano del chunk de 5MB
                     # Url de la api REST para la subida de archivos. Inicia la subida
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(chunk) + '&TotalChunk=' + \

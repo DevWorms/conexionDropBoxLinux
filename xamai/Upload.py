@@ -49,7 +49,11 @@ import xamai.Constants as const
 '''
 
 class Upload():
+    # Token de la cuenta
     crypt = Crypt()
+    '''
+        Para mas info leer Crypt.py
+    '''
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(
@@ -124,11 +128,13 @@ class Upload():
 
     # filtra un archivo por extension filtro = array de extensiones
     def filtradoPorExtension(self, archivo, filtro):
+        archivo = archivo.lower()
+        filtro = [x.lower() for x in filtro]
+
         if filtro is None:
             return True
         for x in filtro:
             if archivo.endswith(x):
-                # if archivo.endswith(x.lower()):
                 return True
         return False
 
@@ -165,13 +171,16 @@ class Upload():
                             # Inicia la subida
                             with self.stopwatch('Subido %d MB' % len(data)):
                                 try:
+                                    # Registra que se inicia la subida
+                                    threading.Thread(target=status.setUploadStatus,
+                                                     args=(file, str(0), str(size_bytes), 1,)).start()
                                     res = dbx.files_upload(data, dest)
                                     # "borrando archivo: "
                                     os.remove(fullFile)
                                     # Notifica a la API
                                     log.newLog(os.path.realpath(__file__), "success_upload", "T", file)
-                                    # Muestra al usuario, que se subio el archivo
-                                    threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
+                                    # Registra que se termino la subida
+                                    threading.Thread(target=status.setUploadStatus, args=(file, str(size_bytes), str(size_bytes), 2,)).start()
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
                                     return res

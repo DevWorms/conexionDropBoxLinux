@@ -5,7 +5,6 @@ import os
 import urllib
 import urllib2
 import xamai.Constants as const
-from xamai.Login import Login
 
 '''
 Ejemplo: Envia un log
@@ -65,6 +64,7 @@ class SetLog():
         return status
 
     def newLog(self, file, msj, type, code, key=1):
+        from xamai.Login import Login
         status = False
         # Unicamente se podran enviar 2 errores por clase, para evitar caer en un loop infinito
         if self.err < 3:

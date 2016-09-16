@@ -5,7 +5,6 @@ import os
 import threading
 import urllib2
 
-from xamai.SetLog import SetLog
 import xamai.Constants as const
 
 '''
@@ -15,7 +14,6 @@ import xamai.Constants as const
 class Login():
     # Este metodo devuelve un arreglo con la info almacenad en: configuration.json
     def returnUserData(self):
-        log = SetLog()
         # Carga el archivo configuration.json
         file = os.path.join(const.LOCATION, const.CONFIGURATION_FILE)
         # Si el archivo existe...
@@ -24,7 +22,7 @@ class Login():
             with open(file, 'r') as f:
                 data = json.load(f)
         else:
-            log.newLog("load_config_file", "E", "Login.returnUserData()")
+            print "No se encontro el archivo de configuracion"
         return data
 
     # guarda los datos del usuario recibidos
@@ -60,6 +58,7 @@ class Login():
 
     # Autenticacion con la api REST
     def loginApi(self, user, p_hash):
+        from xamai.SetLog import SetLog
         log = SetLog()
 
         # Url de la api REST para autenticarse
