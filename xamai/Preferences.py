@@ -21,7 +21,7 @@ class Preferences():
         total = int(total)
         value = int(value)
         porcentaje = Decimal(value * 100)
-        return str(round(porcentaje / total))
+        return str(round((porcentaje / total) + Decimal("0.5")))
 
     # guarda los datos del usuario recibidos
     def writePreferences(self, path, time, time_type, userPath):
@@ -107,7 +107,7 @@ class Preferences():
         total = int(total)
         value = int(value)
         porcentaje = Decimal(value * 100)
-        return int(round(porcentaje / total))
+        return int(round((porcentaje / total) + Decimal("0.5")))
 
     '''
         devuelve la ruta externa configurada por el user

@@ -116,6 +116,7 @@ class ListenerWebKit(QtCore.QObject):
             "space-available": espacioLibre,
             "space-used": espacioUsado,
             "path": user["path"],
+            "space-used-mb": int(user['spaceUsed']),
             "time": user["time"],
             "time_type": options,
             "alert": ""

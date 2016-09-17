@@ -76,7 +76,7 @@ class Upload():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+        except (urllib2.HTTPError, e):
             log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())
@@ -192,6 +192,8 @@ class Upload():
                                     return None
                         # Subida de archivos Grandes
                         else:
+                            total_chunk = size_bytes
+                            actual_chunk = 0
                             with self.stopwatch('Subido %d MB' % size):
                                 try:
                                     # Sube el archivo por bloques, maximo 150 mb
@@ -201,10 +203,11 @@ class Upload():
                                     commit = dropbox.files.CommitInfo(path=dest)
 
                                     while f.tell() < size_bytes:
+                                        actual_chunk = actual_chunk + f.tell()
                                         # tamano subido y id de la sesion de subida
                                         if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
                                             # Muestra al usuario que se esta subiendo
-                                            threading.Thread(target=status.setUploadStatus, args=(file, str(f.tell()), str(size_bytes), 2,)).start()
+                                            threading.Thread(target=status.setUploadStatus, args=(file, str(actual_chunk), str(total_chunk), 2,)).start()
                                             res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
                                             self.updateSpace(user, size)
                                             # "borrando archivo: "
@@ -214,7 +217,7 @@ class Upload():
                                         else:
                                             # Muestra al usuario que se esta subiendo
                                             threading.Thread(target=status.setUploadStatus,
-                                                             args=(file, str(f.tell()), str(size_bytes), 1,)).start()
+                                                             args=(file, str(actual_chunk), str(total_chunk), 1,)).start()
                                             dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
                                             cursor.offset = f.tell()
                                 except dropbox.exceptions.ApiError as err:
@@ -336,14 +339,20 @@ class Upload():
     '''
     def historicalCloud(self):
         user = self.getData()
+        cliente = DropboxClient(self.TOKEN)
         while len(self.getAllBackupsByDate()) >= user['FileHistoricalNumberCloud']:
-            cliente = DropboxClient(self.TOKEN)
-            respuesta = cliente.file_delete(self.getAllBackupsByDate()[0]['path'])
+            file = self.getAllBackupsByDate()[0]
+            # Resta en la api
+            tamanio = -1 * ((file["bytes"]/1024)/1024)
+            self.updateSpace(user, tamanio)
+            respuesta = cliente.file_delete(file['path'])
 
     # Devuelve el ultimo respaldo exitoso de cada RFC
     def getLastSuccess(self):
         # lista todos los respaldos
-        backs = self.getAllRemoteFilesList(1)
+        l = Login()
+        user = l.returnUserData()
+        backs = self.getAllRemoteFilesList(user["IdCustomer"])
 
         backup = []
         rfc = []
@@ -380,15 +389,16 @@ class Upload():
     # Actualiza los datos de espacio del usuario en la Api de SCANDA
     def updateSpace(self, user, spaceFile):
         log = SetLog()
-        spaceFile = spaceFile + .5
         space = int(user["spaceUsed"]) + int(spaceFile)
+        if space < 0:
+            space = 0
         url = const.IP_SERVER + '/DBProtector/CustomerStorage_SET?UsedStorage=' + str(space) + '&User=' + user['user'] + '&Password=' + user['password']
 
         try:
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except urllib2.HTTPError, e:
+        except (urllib2.HTTPError, e):
             log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
         # Devuelve la info
         res = json.loads(response.read())

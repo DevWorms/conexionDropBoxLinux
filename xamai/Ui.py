@@ -32,8 +32,8 @@ def showLastSuccess():
         for back in backups:
             m = re.search("[A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3}", back)
             value = value + "<tr>" \
-                            "<td>" + m.group(0) + "<td>" \
-                            "<td>" + u.getDateFromBackup(back) + "<td>" \
+                            "<td>" + m.group(0) + "</td>" \
+                            "<td>" + u.getDateFromBackup(back) + "</td>" \
                             "<tr>"
         return value
 
