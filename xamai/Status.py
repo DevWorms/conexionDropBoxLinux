@@ -10,6 +10,10 @@ from xamai.Login import Login
 import xamai.Constants as const
 
 class Status():
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "Status()"
+
     # obtiene el status de la descarga
     def getUploadStatus(self):
         # logs
@@ -30,7 +34,7 @@ class Status():
                     upload['chunk'] = self.returnPercent(int(upload['total']), int(upload['chunk']))
                     upload['total'] = (int(upload['total']) / 1024) / 1024
         else:
-            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
+            log.newLog(self.THIS_FILE + "." + "getUploadStatus()", "error_file_status", "E", "")
         return upload
 
     # carga el status de la subida (se usa cada que se inicia un chunk)
@@ -58,7 +62,7 @@ class Status():
                 }, f)
 
         else:
-            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
+            log.newLog(self.THIS_FILE + "." + "setUploadStatus()", "error_file_status", "E", "")
 
         '''
             0 = Subida terminada
@@ -83,7 +87,7 @@ class Status():
             # 1 para carga iniciada
             if status == 1:
                 #i el chunk es de 5mb, entonces es el primero en subirse
-                if (int(chunk) <= const.CHUNK_SIZE) or (int(chunk) == 0): # tamano del chunk de 5MB
+                if (int(chunk) <= ((const.CHUNK_SIZE/1024)/1024)+1) or (int(chunk) == 1): # tamano del chunk de 5MB
                     # Url de la api REST para la subida de archivos. Inicia la subida
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(chunk) + '&TotalChunk=' + \
@@ -103,8 +107,10 @@ class Status():
                 # Realiza la peticion
                 req = urllib2.Request(url)
                 response = urllib2.urlopen(req)
-            except (urllib2.HTTPError, e):
-                log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+            except HTTPError as e:
+                log.newLog(self.THIS_FILE + "." + "setUploadStatus()", "http_error", "E", 'Codigo: ', e.code)
+            except URLError as e:
+                log.newLog(self.THIS_FILE + "." + "setUploadStatus()", "http_error", "E", 'Reason: ', e.reason)
 
     # cambia las unidades a porcentajes
     def returnPercent(self, total, value):
@@ -125,7 +131,7 @@ class Status():
                 data = json.load(f)
             download = data['download']
         else:
-            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
+            log.newLog(self.THIS_FILE + "." + "getDownloadStatus()", "error_file_status", "E", "")
         return download
 
     def setDownloadstatus(self, fileDownload, path, status):
@@ -177,10 +183,12 @@ class Status():
                     # Realiza la peticion
                     req = urllib2.Request(url)
                     response = urllib2.urlopen(req)
-                except (urllib2.HTTPError, e):
-                    log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+                except HTTPError as e:
+                    log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "http_error", "E", 'Codigo: ', e.code)
+                except URLError as e:
+                    log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "http_error", "E", 'Reason: ', e.reason)
         else:
-            log.newLog(os.path.realpath(__file__), "error_file_status", "E", "")
+            log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "error_file_status", "E", "")
 
     def trayIconStatus(self):
         statusUpload = self.getUploadStatus()

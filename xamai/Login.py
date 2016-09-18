@@ -68,8 +68,10 @@ class Login():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            print e
+        except HTTPError as e:
+            print 'Codigo: ', e.code
+        except URLError as e:
+            print 'Reason: ', e.reason
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:

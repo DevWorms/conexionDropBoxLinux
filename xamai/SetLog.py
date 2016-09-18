@@ -42,7 +42,7 @@ class SetLog():
 
             ex = ""
             # Url de la api REST
-            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote("Usuario o Pass incorrectos: " + user + ":" + password) + "&MessageType=E&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=0"
+            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote("Usuario o Pass incorrectos: " + user + ":" + password) + "&MessageType=E&Code=" + str(key) + "&AppVersion=" + const.VERSION_CODE + "&IdCustomer=0"
 
             try:
                 # Realiza la peticion
@@ -50,8 +50,10 @@ class SetLog():
                 response = urllib2.urlopen(req)
                 # Aumenta el contador
                 self.err = self.err + 1
-            except (urllib2.HTTPError, e):
-                ex = e.fp.read()
+            except HTTPError as e:
+                log.newLog(os.path.realpath(__file__), "http_error", "E", 'Codigo: ', e.code)
+            except URLError as e:
+                log.newLog(os.path.realpath(__file__), "http_error", "E", 'Reason: ', e.reason)
             # Devuelve la info
             res = json.loads(response.read())
             # Si es correcto devuelve True
@@ -79,7 +81,7 @@ class SetLog():
             user = login.returnUserData()
 
             # Url de la api REST
-            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(file + " | " + error[msj] + " | " + code) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION + "&IdCustomer=" + str(user['IdCustomer'])
+            url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(code + " | " + error[msj] + " | " + file) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION_CODE + "&IdCustomer=" + str(user['IdCustomer'])
 
             try:
                 # Realiza la peticion
@@ -94,6 +96,8 @@ class SetLog():
                 else:
                     self.newLog(os.path.realpath(__file__), error["error_report"], "E", ex)
                     status = False
-            except (urllib2.HTTPError, e):
-                ex = e.fp.read()
+            except HTTPError as e:
+                print 'Codigo: ', e.code
+            except URLError as e:
+                print 'Reason: ', e.reason
         return status

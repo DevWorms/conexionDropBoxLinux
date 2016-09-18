@@ -7,7 +7,7 @@ from PyQt4 import QtGui, QtCore
 import xamai.Ui as gui
 from xamai.QtWebKit import QtWebkit
 from xamai.Status import Status
-import xamai.Constants as const
+#import xamai.Constants as const
 
 # Crea el icono de escritprio
 class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
@@ -116,6 +116,7 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         self.setupDialog.show()
         self.setupDialog.raise_()
 
+'''
 def main():
     app = QtGui.QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
@@ -128,3 +129,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+'''

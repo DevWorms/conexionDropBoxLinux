@@ -14,6 +14,9 @@ CONFIGURATION_FILE = "settings/configuration.json"
 ERRORS_FILE = "settings/errors.json"
 # version de la aplicacion
 VERSION = '1.3'
+# version de la aplicacion usada, solo para Desarrolladores y API
+# x.x.L = Linux, x.x.W = Windows
+VERSION_CODE = '1.3.L'
 # ubicacion de la aplicacion
 LOCATION = os.path.dirname(os.path.realpath(__file__))
 # icono de la aplicacion

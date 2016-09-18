@@ -16,6 +16,10 @@ from xamai.Login import Login
 from xamai.SetLog import SetLog
 
 class Preferences():
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "Preferences()"
+
     # cambia las unidades de almacenamiento de mb a porcentajes
     def returnPercent(self, total, value):
         total = int(total)
@@ -51,7 +55,7 @@ class Preferences():
             threading.Thread(target=c.cloudSync).start()
             return True
         else:
-            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
+            log.newLog(self.THIS_FILE + "." + "writePreferences()", "load_config_file", "E", "")
             return False
 
     # Extraes toda la info del usuario proporcionada por la API
@@ -66,8 +70,11 @@ class Preferences():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+        except HTTPError as e:
+            log.newLog(self.THIS_FILE + "." + "returnUserData()", "http_error", "E", 'Codigo: ', e.code)
+        except URLError as e:
+            log.newLog(self.THIS_FILE + "." + "returnUserData()", "http_error", "E", 'Reason: ', e.reason)
+
         # Devuelve la info
         res = json.loads(response.read())
         # Si el inicio de sesion es correcto
@@ -87,7 +94,7 @@ class Preferences():
             user['PBYellowColorCode'] = res['PBYellowColorCode']
             user['PBRedColorCode'] = res['PBRedColorCode']
         else:
-            log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "returnUserData()", "login_api_error", "E", "")
         # devuelve todos los datos del usuario
         return user
 
@@ -136,7 +143,7 @@ class Preferences():
                     os.makedirs(data['userPath'])
                 return data['userPath']
         else:
-            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
+            log.newLog(self.THIS_FILE + "." + "returnExternalPath()", "load_config_file", "E", "")
             return ''
 
 

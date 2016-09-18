@@ -12,6 +12,9 @@ import re
 import xamai.Constants as const
 
 class ListenerWebKit(QtCore.QObject):
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "ListenerWebKit()"
 
     # Muestra un mensaje
     @QtCore.pyqtSlot(str)
@@ -54,7 +57,7 @@ class ListenerWebKit(QtCore.QObject):
                 QtGui.QMessageBox.information(None, "Notificacion", "Los cambios se guardaron correctamente")
             else:
                 log = SetLog()
-                log.newLog(os.path.realpath(__file__), "error_preferences", "E", "Listener.savePreferences()")
+                log.newLog(self.THIS_FILE + "." + "savePreferences()", "error_preferences", "E", "Listener.savePreferences()")
                 QtGui.QMessageBox.information(None, "Notificacion", "Ocurrio un error al guardar los cambios")
 
     # Cierra la sesion del usuario

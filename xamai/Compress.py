@@ -21,6 +21,10 @@ app = Compress()
 '''
 
 class Compress():
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "Compress()"
+
     def createPassword(self):
         # Devuelve la info del usuario
         user = Login()
@@ -51,16 +55,16 @@ class Compress():
             path, name = os.path.split(file)
 
             if zipfile.ZipFile(file).extractall(path=path, pwd=self.createPassword()):
-                log.newLog(os.path.realpath(__file__), "success_uncompress", "T", "")
+                log.newLog(self.THIS_FILE + "." + "uncompress()", "success_uncompress", "T", "")
             else:
-                log.newLog(os.path.realpath(__file__), "error_uncompress", "E", "Compress.uncompress()")
+                log.newLog(self.THIS_FILE + "." + "uncompress()", "error_uncompress", "E", "Compress.uncompress()")
 
             # elimina el .zip despues de haber sido extraido
             if os.path.exists(file):
                 if os.remove(file):
                     return True
                 else:
-                    log.newLog(os.path.realpath(__file__), "error_remove_file", "E", "Compress.uncompress()")
+                    log.newLog(self.THIS_FILE + "." + "uncompress()", "error_remove_file", "E", "Compress.uncompress()")
                     return True
         else:
             return False

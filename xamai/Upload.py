@@ -62,6 +62,10 @@ class Upload():
         )
     )
 
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "Upload()"
+
     # Devuelve los datos del usuario y la lista de extensiones
     def getData(self):
         extensiones = []
@@ -76,8 +80,10 @@ class Upload():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+        except HTTPError as e:
+            log.newLog(self.THIS_FILE + "." + "getData()", "http_error", "E", 'Codigo: ', e.code)
+        except URLError as e:
+            log.newLog(self.THIS_FILE + "." + "getData()", "http_error", "E", 'Reason: ', e.reason)
         # Devuelve la info
         res = json.loads(response.read())
         # Extra todas las extensiones
@@ -106,7 +112,7 @@ class Upload():
             for archivo in ar:
                 files.append(archivo)
         except:
-            log.newLog(os.path.realpath(__file__), "error_path", "E", "")
+            log.newLog(self.THIS_FILE + "." + "getLocalFilesList()", "error_path", "E", "")
             files = None
         return files
 
@@ -138,6 +144,12 @@ class Upload():
                 return True
         return False
 
+    def bytesToMB(self, bytes):
+        mb = float(float(int(bytes) / 1024) / 1024)
+        mb = float(mb) + float(0.5)
+        mb = round(mb)
+        return int(mb)
+
     # Sube un archivo, solo recibe el nombre del archivo
     def uploadFile(self, file):
         log = SetLog()
@@ -150,7 +162,7 @@ class Upload():
             # Tamano en bytes
             size_bytes = os.path.getsize(fullFile)
             # Tamano en MB
-            size = float(float(int(size_bytes) / 1024) / 1024)
+            size = self.bytesToMB(size_bytes)
             # Si el tamano del archivo es menor que el tamano disponible
             if size < user['freeSpace']:
                 # Extrae el nombre, la extension y la fecha de modificacion del archivo
@@ -165,6 +177,8 @@ class Upload():
                     dest = self.pathToUpload(user['IdCustomer']) + name + "." + ext
                     # Abre el archivo
                     with open(fullFile, 'rb') as f:
+                        # Envia log, iniciando subida
+                        log.newLog(self.THIS_FILE + "." + "uploadFile()", "upload_start", "T", file)
                         # Si el archivo es mas grande que CHUNK_SIZE
                         if os.path.getsize(fullFile) <= const.CHUNK_SIZE:
                             data = f.read()
@@ -173,28 +187,35 @@ class Upload():
                                 try:
                                     # Registra que se inicia la subida
                                     threading.Thread(target=status.setUploadStatus,
-                                                     args=(file, str(0), str(size_bytes), 1,)).start()
+                                                     args=(file, str(0), str(self.bytesToMB(size_bytes)), 1,)).start()
                                     res = dbx.files_upload(data, dest)
                                     # "borrando archivo: "
                                     os.remove(fullFile)
                                     # Notifica a la API
-                                    log.newLog(os.path.realpath(__file__), "success_upload", "T", file)
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "success_upload", "T", file)
                                     # Registra que se termino la subida
-                                    threading.Thread(target=status.setUploadStatus, args=(file, str(size_bytes), str(size_bytes), 2,)).start()
+                                    threading.Thread(target=status.setUploadStatus, args=(file, str(self.bytesToMB(size_bytes)), str(self.bytesToMB(size_bytes)), 2,)).start()
+                                    # Notifica que elimina archivos temporales
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "delete_temporary_files", "T", fullFile)
                                     # Actualiza el espacio disponible del usuario
                                     self.updateSpace(user, size)
+                                    # que se hace con el archivo?, accion después de subir
+                                    name_bak, ext_bak, zip_ext = file.split(".")
+                                    self.actionAfterUpload(name_bak + "." + ext_bak)
                                     return res
                                 except dropbox.exceptions.ApiError as err:
                                     # eliminar archivo
                                     os.remove(fullFile)
-                                    log.newLog(os.path.realpath(__file__), "error_upload", "T", "")
-                                    # los logs de dropbox son demasiado grandes para ser enviados como log
+                                    # Notifica que elimina archivos temporales
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "delete_temporary_files", "E", fullFile)
+                                    # Envia el error
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "error_upload", "E", str(err))
                                     return None
                         # Subida de archivos Grandes
                         else:
-                            total_chunk = size_bytes
+                            total_chunk = self.bytesToMB(size_bytes)
                             actual_chunk = 0
-                            with self.stopwatch('Subido %d MB' % size):
+                            with self.stopwatch('upload %d MB' % size):
                                 try:
                                     # Sube el archivo por bloques, maximo 150 mb
                                     upload_session_start_result = dbx.files_upload_session_start(f.read(const.CHUNK_SIZE))
@@ -203,39 +224,47 @@ class Upload():
                                     commit = dropbox.files.CommitInfo(path=dest)
 
                                     while f.tell() < size_bytes:
-                                        actual_chunk = actual_chunk + f.tell()
+                                        actual_chunk = actual_chunk + const.CHUNK_SIZE
                                         # tamano subido y id de la sesion de subida
                                         if ((size_bytes - f.tell()) <= const.CHUNK_SIZE):
-                                            # Muestra al usuario que se esta subiendo
-                                            threading.Thread(target=status.setUploadStatus, args=(file, str(actual_chunk), str(total_chunk), 2,)).start()
-                                            res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor, commit)
+                                            # Sube el ulimo chunk
+                                            res = dbx.files_upload_session_finish(f.read(const.CHUNK_SIZE), cursor,
+                                                                                  commit)
+                                            # Envia ell ultimo log, cerrando la transaccion
+                                            threading.Thread(target=status.setUploadStatus, args=(file, str(total_chunk), str(total_chunk), 2,)).start()
                                             self.updateSpace(user, size)
                                             # "borrando archivo: "
                                             os.remove(fullFile)
                                             # Notifica a la API
-                                            log.newLog(os.path.realpath(__file__), "success_upload", "T", "")
+                                            log.newLog(self.THIS_FILE + "." + "uploadFile()", "success_upload", "T", file)
+                                            # Notifica que elimina archivos temporales
+                                            log.newLog(self.THIS_FILE + "." + "uploadFile()", "delete_temporary_files", "T", fullFile)
+                                            # que se hace con el archivo?, accion después de subir
+                                            name_bak, ext_bak, zip_ext = file.split(".")
+                                            self.actionAfterUpload(name_bak + "." + ext_bak)
                                         else:
                                             # Muestra al usuario que se esta subiendo
                                             threading.Thread(target=status.setUploadStatus,
-                                                             args=(file, str(actual_chunk), str(total_chunk), 1,)).start()
+                                                             args=(file, str(self.bytesToMB(actual_chunk)), str(total_chunk), 1,)).start()
                                             dbx.files_upload_session_append(f.read(const.CHUNK_SIZE), cursor.session_id, cursor.offset)
                                             cursor.offset = f.tell()
                                 except dropbox.exceptions.ApiError as err:
                                     # "borrando archivo: "
                                     os.remove(fullFile)
-                                    log.newLog(os.path.realpath(__file__), "error_upload", "T", "")
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "delete_temporary_files", "E", fullFile)
+                                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "error_upload", "E", str(err))
                                     return None
                 else:
                     # extension invalida
-                    log.newLog(os.path.realpath(__file__), "error_ext", "T", ext)
+                    log.newLog(self.THIS_FILE + "." + "uploadFile()", "error_ext", "E", ext)
                     return None
             else:
-                log.newLog(os.path.realpath(__file__), "error_size", "T", "")
+                log.newLog(self.THIS_FILE + "." + "uploadFile()", "error_size", "E", "")
                 # Espacio insuficiente
                 return None
         else:
             # Archivo invalido
-            log.newLog(os.path.realpath(__file__), "error_404", "T", file)
+            log.newLog(self.THIS_FILE + "." + "uploadFile()", "error_404", "E", file)
             return None
 
     # Devuelve la ruta donde se almacenara el archivo en Dropbox
@@ -330,7 +359,7 @@ class Upload():
                 backups = cliente.metadata(str(mes["path"]))
                 for file in backups["contents"]:
                     files.append(file)
-        files = sorted(files, key=lambda file: file['client_mtime'], reverse=True)
+        files = sorted(files, key=lambda file: file['client_mtime'], reverse=False)
         return files
 
     '''
@@ -379,6 +408,7 @@ class Upload():
 
         return backup
 
+    # Devuelve la fecha de un respaldo
     def getDateFromBackup(self, backup):
         from datetime import datetime
         cliente = DropboxClient(self.TOKEN)
@@ -398,16 +428,19 @@ class Upload():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+        except HTTPError as e:
+            log.newLog(self.THIS_FILE + "." + "updateSpace()", "http_error", "E", 'Codigo: ', e.code)
+        except URLError as e:
+            log.newLog(self.THIS_FILE + "." + "updateSpace()", "http_error", "E", 'Reason: ', e.reason)
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:
             return True
         else:
-            log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "updateSpace()", "login_api_error", "E", "")
             return False
 
+    # Descarga un archivo
     def downloadFile(self, file, path):
         from dropbox.client import DropboxClient
         log = SetLog()
@@ -428,7 +461,7 @@ class Upload():
                     with cliente.get_file(file) as f:
                         out.write(f.read())
             except dropbox.exceptions.HttpError as err:
-                log.newLog(os.path.realpath(__file__), "error_download", "T", file)
+                log.newLog(self.THIS_FILE + "." + "downloadFile()", "error_download", "E", str(err))
                 return False
         out.close()
 
@@ -436,12 +469,12 @@ class Upload():
             #thread.start_new_thread(status.setDownloadstatus, (name, path, 2,))
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 2,)).start()
             zip.uncompress(localFile)
-            log.newLog(os.path.realpath(__file__), "success_download", "T", file)
+            log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_download", "T", file)
             #thread.start_new_thread(status.setDownloadstatus, (name, path, 0,))
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
             return True
         else:
-            log.newLog(os.path.realpath(__file__), "error_download", "T", file)
+            log.newLog(self.THIS_FILE + "." + "downloadFile()", "error_download", "E", file)
             return False
 
     '''
@@ -494,7 +527,7 @@ class Upload():
                 os.remove(files[0][1])
 
         except:
-            log.newLog(os.path.realpath(__file__), "error_path", "E", "")
+            log.newLog(self.THIS_FILE + "." + "prepareExternalPath()", "error_path", "E", "")
 
     '''
         Realiza todas las validaciones, cifra el archivo y lo sube
@@ -510,7 +543,7 @@ class Upload():
             # Extrae la info del usuario
             user = self.getData()
             if not user["path"]:
-                log.newLog(os.path.realpath(__file__), "no_path_no_sync", "T", "")
+                log.newLog(self.THIS_FILE + "." + "sync()", "no_path_no_sync", "E", "")
             else:
                 # Si la carpeta de usuario no existe la crea
                 if not os.path.exists(user["path"]):
@@ -523,28 +556,31 @@ class Upload():
                     # si hay mas respaldos de los permitidos los elimina
                     self.historicalCloud()
                     for file in files:
-                        #if 1:
                         if not background.isRunning():
                             name, ext = file.split(".")
                             file = os.path.join(user["path"], file)
                             # actualiza el estado de la aplicacion a cifrando
                             threading.Thread(target=status.setUploadStatus, args=(name + ".zip", 1, 1, 3,)).start()
+                            # Envia un log, Iniciando compresion
+                            log.newLog(self.THIS_FILE + "." + "sync()", "compress_start", "T", "")
                             if zip.compress(file): # Comprime el archivo
+                                # Envia un log, Finalizando compresion
+                                log.newLog(self.THIS_FILE + "." + "sync()", "compress_finish", "T", "")
                                 # Datos del archivo subido
-                                data = self.uploadFile(name + "." + ext + ".zip")
-                                # que se hace con el archivo?
-                                self.actionAfterUpload(name + "." + ext)
+                                self.uploadFile(name + "." + ext + ".zip")
                                 # Elimina el archivo, si no se elimino
                                 if os.path.isfile(file):
                                     os.remove(file)
+                                    # Envia un log, Eliminando archivo
+                                    log.newLog(self.THIS_FILE + "." + "sync()", "delete_local_file", "T", file)
                                 # actualiza el estado de la aplicacion a sincronizado
-                                threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 2,)).start()
+                                #threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 0,)).start()
                             else:
                                 if os.path.isfile(file):
                                     os.remove(file)
-                                log.newLog(os.path.realpath(__file__), "error_compress", "T", "")
+                                log.newLog(self.THIS_FILE + "." + "sync()", "error_compress", "E", "")
                         else:
-                            log.newLog(os.path.realpath(__file__), "background_exists", "T", "")
+                            log.newLog(self.THIS_FILE + "." + "sync()", "background_exists", "E", "")
                 '''
                     Una vez que se han terminado las subidas, se sincroniza con la api
                     para actualizar la frecuencia de respaldo y generar un nuevo cron
@@ -553,8 +589,8 @@ class Upload():
                 # Sincroniza de nuevo con la frecuencia de respaldo de la api
                 threading.Thread(target=c.cloudSync).start()
                 # Devuelve el status a sincronizado
-                threading.Thread(target=status.setUploadStatus, args=("file.bak", 1, 1, 0,)).start()
+                threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 0,)).start()
 
         else:
             print "Existe otra subida en proceso"
-            log.newLog(os.path.realpath(__file__), "error_upload_exist", "T", "")
+            log.newLog(self.THIS_FILE + "." + "sync()", "error_upload_exist", "E", "")

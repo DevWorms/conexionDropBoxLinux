@@ -24,6 +24,9 @@ class Cron():
     time = 0
     time_type = "dias"
     cron = ""
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "Cron()"
 
     # Lee los parametros de configuracion para crear un cron
     def readConf(self):
@@ -40,7 +43,7 @@ class Cron():
                 self.time = str(self.time)
                 self.time_type = data['time_type']
         else :
-            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
+            log.newLog(self.THIS_FILE + "." + "readConf()", "load_config_file", "E", "")
         # Comando que ejecutara el cron, es el archivo que realizara los respaldos
         self.cron = "/usr/local/bin/dbprotector_sync"
 
@@ -78,7 +81,7 @@ class Cron():
             #print tab.render()
             return True
         except:
-            log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "sync()", "cron_error", "E", "")
             return False
 
     # Extrae los datos de frecuencia de respaldo desde la nube
@@ -93,8 +96,10 @@ class Cron():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+        except HTTPError as e:
+            log.newLog(self.THIS_FILE + "." + "getCloudSync()", "http_error", "E", 'Codigo: ', e.code)
+        except URLError as e:
+            log.newLog(self.THIS_FILE + "." + "getCloudSync()", "http_error", "E", 'Reason: ', e.reason)
         # Devuelve la info
         res = json.loads(response.read())
         # Si el inicio de sesion es correcto
@@ -103,7 +108,7 @@ class Cron():
             user['UploadFrecuency'] = res['UploadFrecuency']
             user['FileHistoricalNumber'] = res['FileHistoricalNumber']
         else:
-            log.newLog(os.path.realpath(__file__), "login_api_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "getCloudSync()", "login_api_error", "E", "")
         # devuelve todos los datos del usuario
         return user
 
@@ -134,7 +139,7 @@ class Cron():
             threading.Thread(target=self.sync).start()
             #self.sync()
         else:
-            log.newLog(os.path.realpath(__file__), "load_config_file", "E", "")
+            log.newLog(self.THIS_FILE + "." + "cloudSync()", "load_config_file", "E", "")
 
     # Crea el cron: cada vez que el servidor se reinicia se ejecuta dbprotector
     def rebootCron(self):
@@ -156,7 +161,7 @@ class Cron():
             tab.write()
             return True
         except:
-            log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "rebootCron()", "cron_error", "E", "")
             return False
 
     # Elimina los crons de sincronizacion y autoinicio de la aplicacion
@@ -174,5 +179,5 @@ class Cron():
             tab.write()
             return True
         except:
-            log.newLog(os.path.realpath(__file__), "cron_error", "E", "")
+            log.newLog(self.THIS_FILE + "." + "removeCrons()", "cron_error", "E", "")
             return False

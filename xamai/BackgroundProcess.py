@@ -24,6 +24,10 @@ import xamai.Constants as const
 '''
 
 class BackgroundProcess():
+    THIS_FILE = os.path.realpath(__file__)
+    file = THIS_FILE.split("/")
+    THIS_FILE = file[-1] + "." + "BackgroundProcess()"
+
     # Obtiene el nombre del proceso de la API de SCANDA
     def getProcessName(self):
         # Set Log
@@ -49,14 +53,17 @@ class BackgroundProcess():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except (urllib2.HTTPError, e):
-            log.newLog(os.path.realpath(__file__), "http_error", "E", e.fp.read())
+        except HTTPError as e:
+            log.newLog(self.THIS_FILE + "." + "getProcessName()", "http_error", "E", 'Codigo: ', e.code)
+        except URLError as e:
+            log.newLog(self.THIS_FILE + "." + "getProcessName()", "http_error", "E", 'Reason: ', e.reason)
+
         # Devuelve la info
         res = json.loads(response.read())
         if res['Success'] == 1:
             process = res['Process']
         else:
-            log.newLog(os.path.realpath(__file__), "process_api", "E", "")
+            log.newLog(self.THIS_FILE + "." + "getProcessName()", "process_api", "E", "")
         return process
 
     def isRunning(self):
@@ -82,7 +89,7 @@ class BackgroundProcess():
             else:
                 return False
         else:
-            log.newLog(os.path.realpath(__file__), "process_incorrect", "E", "BackgroundProcess.getProcessName()")
+            log.newLog(self.THIS_FILE + "." + "isRunning()", "process_incorrect", "E", "BackgroundProcess.getProcessName()")
 
     # DB protector solo puede correrse una vez
     def dbProtesctorIsRunning(self):
