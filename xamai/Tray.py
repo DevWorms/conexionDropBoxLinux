@@ -115,18 +115,3 @@ class DBProtectorTrayIcon(QtGui.QSystemTrayIcon):
         self.setupDialog = QtWebkit(self, html)
         self.setupDialog.show()
         self.setupDialog.raise_()
-
-'''
-def main():
-    app = QtGui.QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(False)
-    w = QtGui.QWidget()
-    icon_file = os.path.join(const.LOCATION, const.ICONO)
-    trayIcon = DBProtectorTrayIcon(QtGui.QIcon(icon_file), w)
-
-    trayIcon.show()
-    sys.exit(app.exec_())
-
-if __name__ == '__main__':
-    main()
-'''
