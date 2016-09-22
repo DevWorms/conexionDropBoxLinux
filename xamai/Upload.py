@@ -164,7 +164,7 @@ class Upload():
             # Tamano en MB
             size = self.bytesToMB(size_bytes)
             # Si el tamano del archivo es menor que el tamano disponible
-            if size < user['freeSpace']:
+            if size < user['freeSpace'] or user['freeSpace'] == -1:
                 # Extrae el nombre, la extension y la fecha de modificacion del archivo
                 name, ext = os.path.splitext(file)
                 ext = ext.replace(".", "")
