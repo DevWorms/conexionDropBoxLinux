@@ -79,6 +79,7 @@ class ListenerWebKit(QtCore.QObject):
             "img": gui.loadImg(),
             "backup-location": '',
             "goBakcButton": '',
+            "app-version": "v" + str(const.VERSION),
             "msg": ''
         }
 
@@ -122,6 +123,7 @@ class ListenerWebKit(QtCore.QObject):
             "space-used-mb": int(user['spaceUsed']),
             "time": user["time"],
             "time_type": options,
+            "app-version": "v" + str(const.VERSION),
             "alert": ""
         }
 
@@ -138,6 +140,7 @@ class ListenerWebKit(QtCore.QObject):
             "js": gui.loadJS(),
             "img": gui.loadImg(),
             "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
+            "app-version": "v" + str(const.VERSION),
             "msg": ''
         }
 
@@ -171,6 +174,7 @@ class ListenerWebKit(QtCore.QObject):
             "js": gui.loadJS(),
             "img": gui.loadImg(),
             "goBakcButton": '<a class="btn waves-attach" href="#backups">volver</a>',
+            "app-version": "v" + str(const.VERSION),
             "msg": ''
         }
         return self.readHTML("index.html", data)
