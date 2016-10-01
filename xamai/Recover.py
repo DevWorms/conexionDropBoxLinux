@@ -23,7 +23,7 @@ class Recover():
         month = self.monthsToInt(month)
         files = self.u.getBackups("/" + str(self.user['IdCustomer']) + "/"+year+"/"+month+"/")
         for i in files:
-            path, name = os.path.split(i['path'])
+            path, name = os.path.split(i.path_display)
             backups.append(name)
         backups = self.u.formatBackups(backups)
         return backups

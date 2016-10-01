@@ -26,34 +26,8 @@ from xamai.Crypt import Crypt
 from xamai.Status import Status
 import xamai.Constants as const
 
-'''
-    Metodos usados para trabajar con la API de Dropbox
-        Estructura de carpetas en Dropbox
-            /Aplicaciones/DBProtector/user-id/año/mes/archivo
-        Estructura de carpetas en Aplicacion Dropbox
-            /user-id/año/mes/archivo
-            la Api trabaja a nivel Root de la aplicacion, ej: /1/2016/07
-        Validaciones:
-            -valida que no exista otra subida en curso
-            -Archivo existe?
-            -El tamaño del archivo debe ser menor al espacio disponible (proporcionado por la API de SCANDA)
-            -El archivo debe tener una extension valida (proporcionado por la API de SCANDA)
-            -Debe seguir un formato de nombre valido ej. LOMS9208164C520160725150501.bak LOMS920816---20160725150501.bak
-            -Si el archivo es mayor que CHUNK_SIZE (5MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
-        - Return
-            - 1 = Archivo inexistente
-            - 2 = Espacio insuficiente
-            - 3 = Extension invalida
-            - None = El archivo no se subio
-            - res = JSON array con los detalles del archivo subido
-'''
-
 class Upload():
-    # Token de la cuenta
     crypt = Crypt()
-    '''
-        Para mas info leer Crypt.py
-    '''
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(
@@ -291,10 +265,11 @@ class Upload():
     def getRemoteFilesList(self, ruta):
         self.creaFolder(ruta)
         files = []
-        cliente = DropboxClient(self.TOKEN)
-        respuesta = cliente.metadata(ruta)
-        for file in respuesta["contents"]:
-            files.append(file["path"])
+        dbx = dropbox.Dropbox(self.TOKEN)
+        res = dbx.files_list_folder(ruta)
+
+        for file in res.entries:
+            files.append(file.path_display)
         return files
 
     # para evitar el error 404 crea un archivo nulo y despu[es lo elimina
@@ -306,25 +281,25 @@ class Upload():
     # devuelve la lista completa de respaldos de un usario
     def getAllRemoteFilesList(self, user_id):
         files = []
-        cliente = DropboxClient(self.TOKEN)
-        respuesta = cliente.metadata("/" + str(user_id) + "/")
-        for anio in respuesta["contents"]:
-            meses = cliente.metadata(str(anio["path"]))
-            for mes in meses["contents"]:
-                backups = cliente.metadata(str(mes["path"]))
-                for file in backups["contents"]:
-                    files.append(file["path"])
+        dbx = dropbox.Dropbox(self.TOKEN)
+        res = dbx.files_list_folder("/" + str(user_id) + "/")
+        for anio in res.entries:
+            meses = dbx.files_list_folder(str(anio.path_display))
+            for mes in meses.entries:
+                backups = dbx.files_list_folder(str(mes.path_display))
+                for file in backups.entries:
+                    files.append(file.path_display)
         return files
 
     # Devuelve una lista de respaldos en una ruta ordenados de mas nuevo a mas viejo
     def getBackups(self, ruta):
         self.creaFolder(ruta)
         files = []
-        cliente = DropboxClient(self.TOKEN)
-        respuesta = cliente.metadata(ruta)
-        for file in respuesta["contents"]:
+        dbx = dropbox.Dropbox(self.TOKEN)
+        respuesta = dbx.files_list_folder(ruta)
+        for file in respuesta.entries:
             files.append(file)
-        files = sorted(files, key=lambda file: file['client_mtime'])
+        files = sorted(files, key=lambda file: file.client_modified)
         return files
 
     # acomoda los respaldos separaqdos por RFC
@@ -351,15 +326,15 @@ class Upload():
     def getAllBackupsByDate(self):
         user = self.getData()
         files = []
-        cliente = DropboxClient(self.TOKEN)
-        respuesta = cliente.metadata("/" + str(user['IdCustomer']) + "/")
-        for anio in respuesta["contents"]:
-            meses = cliente.metadata(str(anio["path"]))
-            for mes in meses["contents"]:
-                backups = cliente.metadata(str(mes["path"]))
-                for file in backups["contents"]:
+        dbx = dropbox.Dropbox(self.TOKEN)
+        respuesta = dbx.files_get_metadata("/" + str(user['IdCustomer']) + "/")
+        for anio in respuesta.entries:
+            meses = dbx.files_list_folder(str(anio.path_display))
+            for mes in meses.entries:
+                backups = dbx.files_list_folder(str(mes.path_display))
+                for file in backups.entries:
                     files.append(file)
-        files = sorted(files, key=lambda file: file['client_mtime'], reverse=False)
+        files = sorted(files, key=lambda file: file.client_modified, reverse=False)
         return files
 
     '''
@@ -368,13 +343,13 @@ class Upload():
     '''
     def historicalCloud(self):
         user = self.getData()
-        cliente = DropboxClient(self.TOKEN)
+        dbx = dropbox.Dropbox(self.TOKEN)
         while len(self.getAllBackupsByDate()) >= user['FileHistoricalNumberCloud']:
             file = self.getAllBackupsByDate()[0]
             # Resta en la api
-            tamanio = -1 * ((file["bytes"]/1024)/1024)
+            tamanio = -1 * ((file.size/1024)/1024)
             self.updateSpace(user, tamanio)
-            respuesta = cliente.file_delete(file['path'])
+            dbx.files_delete(file.path_display)
 
     # Devuelve el ultimo respaldo exitoso de cada RFC
     def getLastSuccess(self):
@@ -411,10 +386,9 @@ class Upload():
     # Devuelve la fecha de un respaldo
     def getDateFromBackup(self, backup):
         from datetime import datetime
-        cliente = DropboxClient(self.TOKEN)
-        respuesta = cliente.metadata(backup)
-        m = re.search("(((\d{2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{4}))\s(\d{2}):(\d{2}):(\d{2}))", respuesta['client_mtime'])
-        return m.group(1)
+        dbx = dropbox.Dropbox(self.TOKEN)
+        respuesta = dbx.files_get_metadata(backup)
+        return str(respuesta.client_modified)
 
     # Actualiza los datos de espacio del usuario en la Api de SCANDA
     def updateSpace(self, user, spaceFile):
@@ -451,26 +425,20 @@ class Upload():
         dir, name = os.path.split(file)
         # Archivo local donde se almacenara
         localFile = os.path.join(path, name)
-        cliente = DropboxClient(self.TOKEN)
-        #thread.start_new_thread(status.setDownloadstatus, (name, path, 1,))
         threading.Thread(target=status.setDownloadstatus, args=(name, path, 1,)).start()
-        with self.stopwatch('Descargado'):
+        with self.stopwatch('downloading'):
             try:
-                out = open(localFile, 'wb')
-                with self.stopwatch("Descargado"):
-                    with cliente.get_file(file) as f:
-                        out.write(f.read())
-            except dropbox.exceptions.HttpError as err:
+                dbx = dropbox.Dropbox(self.TOKEN)
+                dbx.files_download_to_file(localFile, file)
+            except dropbox.files.DownloadError as err:
                 log.newLog(self.THIS_FILE + "." + "downloadFile()", "error_download", "E", str(err))
-                return False
-        out.close()
+            except dropbox.exceptions.ApiError as err:
+                log.newLog(self.THIS_FILE + "." + "downloadFile()", "error_download", "E", str(err))
 
         if os.path.exists(localFile):
-            #thread.start_new_thread(status.setDownloadstatus, (name, path, 2,))
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 2,)).start()
             zip.uncompress(localFile)
             log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_download", "T", file)
-            #thread.start_new_thread(status.setDownloadstatus, (name, path, 0,))
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
             return True
         else:
@@ -525,7 +493,6 @@ class Upload():
                 # ordena de mas viejo al mas nuevo
                 files = sorted(files)
                 os.remove(files[0][1])
-
         except:
             log.newLog(self.THIS_FILE + "." + "prepareExternalPath()", "error_path", "E", "")
 
@@ -594,3 +561,7 @@ class Upload():
         else:
             print "Existe otra subida en proceso"
             log.newLog(self.THIS_FILE + "." + "sync()", "error_upload_exist", "E", "")
+
+app = Upload()
+for i in app.getBackups("/3/2016/09"):
+    print i
