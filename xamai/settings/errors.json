@@ -25,9 +25,11 @@
   "error_preferences": "Error al guardar las preferencias del usuario",
   "error_uncompress": "Error al descomprimir archivo",
   "success_uncompress": "Descompresión exitosa",
+  "start_uncompress": "Iniciando descompresión",
   "compress_start": "Cifrando archivo...",
   "compress_finish": "Cifrado completo...",
   "delete_local_file": "Elimina archivo local",
   "delete_temporary_files": "Eliminando archivos temporales",
-  "upload_start": "Comenzando subida..."
+  "upload_start": "Comenzando subida...",
+  "start_download": "Comenzando descarga: "
 }

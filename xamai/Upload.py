@@ -26,34 +26,10 @@ from xamai.Crypt import Crypt
 from xamai.Status import Status
 import xamai.Constants as const
 
-'''
-    Metodos usados para trabajar con la API de Dropbox
-        Estructura de carpetas en Dropbox
-            /Aplicaciones/DBProtector/user-id/año/mes/archivo
-        Estructura de carpetas en Aplicacion Dropbox
-            /user-id/año/mes/archivo
-            la Api trabaja a nivel Root de la aplicacion, ej: /1/2016/07
-        Validaciones:
-            -valida que no exista otra subida en curso
-            -Archivo existe?
-            -El tamaño del archivo debe ser menor al espacio disponible (proporcionado por la API de SCANDA)
-            -El archivo debe tener una extension valida (proporcionado por la API de SCANDA)
-            -Debe seguir un formato de nombre valido ej. LOMS9208164C520160725150501.bak LOMS920816---20160725150501.bak
-            -Si el archivo es mayor que CHUNK_SIZE (5MB) se sube por bloques, si es menor o igual se sube en una sola solicitud
-        - Return
-            - 1 = Archivo inexistente
-            - 2 = Espacio insuficiente
-            - 3 = Extension invalida
-            - None = El archivo no se subio
-            - res = JSON array con los detalles del archivo subido
-'''
 
 class Upload():
     # Token de la cuenta
     crypt = Crypt()
-    '''
-        Para mas info leer Crypt.py
-    '''
     TOKEN = base64.b64decode(
         repr(
             crypt.obfuscate(
@@ -452,6 +428,7 @@ class Upload():
         # Archivo local donde se almacenara
         localFile = os.path.join(path, name)
         threading.Thread(target=status.setDownloadstatus, args=(name, path, 1,)).start()
+        log.newLog(self.THIS_FILE + "." + "downloadFile()", "start_download", "T", file)
         with self.stopwatch('downloading'):
             try:
                 dbx = dropbox.Dropbox(self.TOKEN)
@@ -463,7 +440,9 @@ class Upload():
 
         if os.path.exists(localFile):
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 2,)).start()
+            log.newLog(self.THIS_FILE + "." + "downloadFile()", "start_uncompress", "T", localFile)
             zip.uncompress(localFile)
+            log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_uncompress", "T", localFile)
             log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_download", "T", file)
             threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
             return True

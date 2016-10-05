@@ -23,10 +23,10 @@ setup (
     name = 'DBProtector',
     version = const.VERSION,
     release = '1',
-    url = 'scanda.com.mx',
+    url = 'scanda.com.mx/xamai',
     license = 'Copyright 2016',
-    author = 'Grupo SCANDA',
-    author_email = 'author@mail.com',
+    author = 'Xamai',
+    author_email = 'soporte_xamai@scanda.com.mx',
     description = 'DBProtector',
     classifiers=[
         'Development Status :: 3 - Alpha',
