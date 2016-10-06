@@ -525,6 +525,17 @@ class Upload():
         except:
             log.newLog(self.THIS_FILE + "." + "prepareExternalPath()", "error_path", "E", "")
 
+    # Devuelve el tamanio de un respaldo
+    def getBackupSize(self, backup):
+        dbx = dropbox.Dropbox(self.TOKEN)
+        respuesta = dbx.files_get_metadata(backup)
+        size =  self.bytesToMB(respuesta.size)
+        if size > 1024:
+            size = str(self.bytesToMB(size)) + "GB"
+        else:
+            size = str(size) + "MB"
+        return size
+
     '''
         Realiza todas las validaciones, cifra el archivo y lo sube
         Sincroniza los archivos en la nube

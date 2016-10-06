@@ -39,10 +39,18 @@ class Recover():
                            '<tbody>'
 
             for rfc in backups:
-                cardsBackups = cardsBackups + '<tr><td colspan=3>'+ self.extractRFC(rfc[0]) +'</td></tr>'
+                cardsBackups = cardsBackups + '<tr><td colspan=4>'+ self.extractRFC(rfc[0]) +'</td></tr>'
                 for i in rfc:
-                    cardsBackups = cardsBackups + '<tr><td></td><td>' + self.formatBackupName(str(i)) + '</td>' \
-                                                  '<td><a class="btn btn-flat btn-brand" id="card_year_' + str(i) + '" href="#downloadBackup&year=' + y + '&month=' + m + '&backup=' + str(i) + '">Descargar</a></td></tr>'
+                    # Reconstruye el Backup
+                    backup = "/" + str(self.user['IdCustomer']) + "/" + y + "/" + self.monthsToInt(m) + "/" + i
+                    # Obtiene el tamanio del archivo
+                    size = self.u.getBackupSize(backup)
+                    cardsBackups = cardsBackups + '<tr>' \
+                                                  '<td></td>' \
+                                                  '<td>' + self.formatBackupName(str(i)) + '</td>' \
+                                                  '<td>' + str(size) + '</td>' \
+                                                  '<td><a class="btn btn-flat btn-brand" id="card_year_' + str(i) + '" href="#downloadBackup&year=' + y + '&month=' + m + '&backup=' + str(i) + '">Descargar</a></td>' \
+                                                  '</tr>'
         cardsBackups = cardsBackups + "</tbody></table></div>"
         return cardsBackups
 
