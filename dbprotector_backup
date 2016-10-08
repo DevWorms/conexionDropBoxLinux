@@ -1,0 +1,6 @@
+#! /bin/bash
+# Si el archivo de configuracion ya existe lo respalda, copia el nuevo y despues lo vuelve a reemplazar
+
+if [[ -f /usr/local/lib64/python2.6/site-packages/xamai/settings/configuration.json ]]; then
+    cp /usr/local/lib64/python2.6/site-packages/xamai/settings/configuration.json /tmp/configuration.json
+fi

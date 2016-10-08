@@ -1,4 +1,9 @@
 #! /bin/bash
+# Si el archivo de configuracion fue respaldado, lo restaura
+if [[ -f /tmp/configuration.json ]]; then
+    cp /tmp/configuration.json /usr/local/lib64/python2.6/site-packages/xamai/settings/configuration.json
+fi
+
 sudo chmod -R 777 /usr/local/lib64/python2.6/site-packages/xamai/settings/
 # Varia de acuerdo a la version de GNOME y la distribucion linux
 echo '[Desktop Entry]

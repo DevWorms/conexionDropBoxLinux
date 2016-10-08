@@ -14,7 +14,7 @@ import xamai.Constants as const
     # dbprotector_post-install corrige los permisos de archivos de configuracion una vez instalado
     # dbprotector_post-remove cuando se desinstala la aplicacion elimina los archivos de configuracion y los crons
     # Comando para crear el rpm con ayuda de bdist_rpm:
-    # python setup.py bdist_rpm --requires 'python' --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --no-autoreq --python /usr/bin/python2.6
+    # python setup.py bdist_rpm --requires 'python' --pre-install dbprotector_backup --post-install dbprotector_post-install --post-uninstall dbprotector_post-remove --no-autoreq --python /usr/bin/python2.6
 '''
 
 files = ["img/*.png", "settings/*.json", "gui/assets/css/*.css", "gui/assets/js/*.js", "gui/*.html", "setup.py"]
