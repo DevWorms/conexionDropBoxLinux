@@ -596,7 +596,7 @@ class Upload():
                 # Sincroniza de nuevo con la frecuencia de respaldo de la api
                 threading.Thread(target=c.cloudSync).start()
                 # Devuelve el status a sincronizado
-                threading.Thread(target=status.setUploadStatus, args=(file, 1, 1, 0,)).start()
+                threading.Thread(target=status.setUploadStatus, args=("file.bak", 1, 1, 0,)).start()
 
         else:
             print "Existe otra subida en proceso"
