@@ -178,7 +178,7 @@ class Status():
                     # Url de la api REST para la subida de archivos. Termina descarga
                     url = const.IP_SERVER + '/DBProtector/FileTransaction_SET?User=' + user['user'] + '&Password=' + \
                           user['password'] + '&StartDate=' + date + '&ActualChunk=' + str(0) + '&TotalChunk=' + \
-                          str(0) + '&Status=Completa&FileName=' + fileDownload + '&TransactionType=2'
+                          str(0) + '&Status=Finalizado&FileName=' + fileDownload + '&TransactionType=2'
                 try:
                     # Realiza la peticion
                     req = urllib2.Request(url)
