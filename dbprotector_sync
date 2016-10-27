@@ -3,18 +3,13 @@
 
 from xamai.Upload import Upload
 from xamai.Login import Login
+from xamai.SetLog import SetLog
 import xamai.Constants as const
+import urllib2
 
-l = Login()
-
-if l.isActive():
-    app = Upload()
-    app.sync()
-else:
+def open_login(msg):
     import sys
-
     from PyQt4.QtGui import QApplication
-
     import xamai.Ui as gui
     from xamai.QtWebKit import QtWebkit
 
@@ -23,7 +18,7 @@ else:
     data = {
         "js": gui.loadJS(),
         "css": gui.loadStyles(),
-        "alert": "",
+        "alert": msg,
         "app-version": "v" + str(const.VERSION)
     }
 
@@ -32,3 +27,26 @@ else:
     web.raise_()
 
     sys.exit(app.exec_())
+
+try:
+    urllib2.urlopen(const.IP_SERVER, timeout=1)
+    l = Login()
+    if l.isActive():
+        app = Upload()
+        app.sync()
+    else:
+        open_login("")
+except urllib2.URLError as err:
+    log = SetLog()
+    log.writeLocalLog("Error de conexion: " + str(err))
+    l = Login()
+    msg = '<div class="tile-wrap">' \
+          '<div class="tile tile-collapse tile-red">' \
+          '<div data-target="#ui_tile_example_red" data-toggle="tile">' \
+          '<div class="tile-inner">' \
+          '<div class="text-overflow">Error de conexion revise log local: ~/.dbprotector/log.txt</div>' \
+          '</div>' \
+          '</div>' \
+          '</div>' \
+          '</div>'
+    open_login(msg)

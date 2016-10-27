@@ -68,21 +68,21 @@ class Login():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except HTTPError as e:
-            print 'Codigo: ', e.code
-        except URLError as e:
-            print 'Reason: ', e.reason
-        # Devuelve la info
-        res = json.loads(response.read())
-        if res['Success'] == 1:
-            if res['Status'] == 1:
-                self.writeUserData(user, p_hash, res["IdCustomer"])
+            # Devuelve la info
+            res = json.loads(response.read())
+            if res['Success'] == 1:
+                if res['Status'] == 1:
+                    self.writeUserData(user, p_hash, res["IdCustomer"])
+                else:
+                    print "No se pudo guardar la configuracion"
+                return True
             else:
-                print "No se pudo guardar la configuracion"
-            return True
-        else:
-            log.newLogLogin(user, p_hash)
-            return False
+                log.newLogLogin(user, p_hash)
+                return False
+        except urllib2.HTTPError as e:
+            print 'Codigo: ', e.code
+        except urllib2.URLError as e:
+            print 'Reason: ', e.reason
 
     # valida si un usuario esta loguado correctamente
     def isActive(self):

@@ -4,6 +4,8 @@ import json
 import os
 import urllib
 import urllib2
+import psutil
+from os.path import expanduser
 import xamai.Constants as const
 
 '''
@@ -50,10 +52,10 @@ class SetLog():
                 response = urllib2.urlopen(req)
                 # Aumenta el contador
                 self.err = self.err + 1
-            except HTTPError as e:
-                log.newLog(os.path.realpath(__file__), "http_error", "E", 'Codigo: ', e.code)
-            except URLError as e:
-                log.newLog(os.path.realpath(__file__), "http_error", "E", 'Reason: ', e.reason)
+            except urllib2.HTTPError as e:
+                self.writeLocalLog('Codigo: ' + str(e.code))
+            except urllib2.URLError as e:
+                self.writeLocalLog('Codigo: ' + str(e.reason))
             # Devuelve la info
             res = json.loads(response.read())
             # Si es correcto devuelve True
@@ -83,6 +85,7 @@ class SetLog():
             # Url de la api REST
             url = const.IP_SERVER + "/DBProtector/Log_SET?Message=" + urllib.quote(code + " | " + error[msj] + " | " + file) + "&MessageType=" + type + "&Code=" + str(key) + "&AppVersion=" + const.VERSION_CODE + "&IdCustomer=" + str(user['IdCustomer'])
 
+            self.writeLocalLog(code + " | " + str(error[msj]) + " | " + file)
             try:
                 # Realiza la peticion
                 req = urllib2.Request(url)
@@ -96,8 +99,28 @@ class SetLog():
                 else:
                     self.newLog(os.path.realpath(__file__), error["error_report"], "E", ex)
                     status = False
-            except HTTPError as e:
+            except urllib2.HTTPError as e:
                 print 'Codigo: ', e.code
-            except URLError as e:
+            except urllib2.URLError as e:
                 print 'Reason: ', e.reason
         return status
+
+    def writeLocalLog(self, msg):
+        file = os.path.join(expanduser("~"), const.LOCAL_LOG)
+
+        if os.path.isfile(file):
+            with open(file, 'r') as myfile:
+                data = myfile.read()
+            text_file = open(file, "w")
+            text_file.write(data + "\n" + msg)
+            text_file.close()
+        else:
+            try:
+                directory = os.path.dirname(os.path.join(expanduser("~"), ".dbprotector/"))
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+                file = open(file, 'w')
+                file.write(msg)
+                file.close()
+            except:
+                self.newLog('SetLog.py' + '.' + 'writeLocalLog()', 'error_local_log', 'E', '')

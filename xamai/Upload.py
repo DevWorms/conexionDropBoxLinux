@@ -80,9 +80,9 @@ class Upload():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except HTTPError as e:
+        except urllib2.HTTPError as e:
             log.newLog(self.THIS_FILE + "." + "getData()", "http_error", "E", 'Codigo: ', e.code)
-        except URLError as e:
+        except urllib2.URLError as e:
             log.newLog(self.THIS_FILE + "." + "getData()", "http_error", "E", 'Reason: ', e.reason)
         # Devuelve la info
         res = json.loads(response.read())
@@ -127,7 +127,7 @@ class Upload():
 
     # valida si el formato del nombre del archivo es valido
     def checkNameSintax(self, file):
-        if not re.match(r"([A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3})([0-9]{14}).(\w{3})", file):
+        if not re.match(r"([A-Za-z]{3,4}[0-9]{6}[A-Za-z0-9]{3})([0-9]{14})", file):
             return False
         else:
             return True
@@ -428,9 +428,9 @@ class Upload():
             # Realiza la peticion
             req = urllib2.Request(url)
             response = urllib2.urlopen(req)
-        except HTTPError as e:
+        except urllib2.HTTPError as e:
             log.newLog(self.THIS_FILE + "." + "updateSpace()", "http_error", "E", 'Codigo: ', e.code)
-        except URLError as e:
+        except urllib2.URLError as e:
             log.newLog(self.THIS_FILE + "." + "updateSpace()", "http_error", "E", 'Reason: ', e.reason)
         # Devuelve la info
         res = json.loads(response.read())
@@ -468,11 +468,11 @@ class Upload():
             zip.uncompress(localFile)
             log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_uncompress", "T", localFile)
             log.newLog(self.THIS_FILE + "." + "downloadFile()", "success_download", "T", file)
-            threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
             return True
         else:
             log.newLog(self.THIS_FILE + "." + "downloadFile()", "error_download", "E", file)
             return False
+        threading.Thread(target=status.setDownloadstatus, args=(name, path, 0,)).start()
 
     '''
         Que se hace con el archivo original, despues de respaldarlo?

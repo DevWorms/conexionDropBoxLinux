@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 from PyQt4 import QtWebKit
 
 from PyQt4.QtCore import QUrl, SIGNAL

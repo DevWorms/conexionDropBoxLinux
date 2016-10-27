@@ -2,28 +2,16 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
+import urllib2
 from PyQt4 import QtGui
 
 import xamai.Constants as const
 from xamai.Login import Login
+from xamai.SetLog import SetLog
 from xamai.Tray import DBProtectorTrayIcon
 
-l = Login()
-
-if l.isActive():
-    app = QtGui.QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(False)
-    w = QtGui.QWidget()
-    icon_file = os.path.join(const.LOCATION, const.ICONO)
-    trayIcon = DBProtectorTrayIcon(QtGui.QIcon(icon_file), w)
-
-    trayIcon.show()
-    sys.exit(app.exec_())
-else:
-    import sys
-
+def open_login(msg):
     from PyQt4.QtGui import QApplication
-
     import xamai.Ui as gui
     from xamai.QtWebKit import QtWebkit
 
@@ -32,7 +20,7 @@ else:
     data = {
         "js": gui.loadJS(),
         "css": gui.loadStyles(),
-        "alert": "",
+        "alert": msg,
         "app-version": "v" + str(const.VERSION)
     }
 
@@ -41,3 +29,32 @@ else:
     web.raise_()
 
     sys.exit(app.exec_())
+
+try:
+    urllib2.urlopen(const.IP_SERVER, timeout=1)
+    l = Login()
+    if l.isActive():
+        app = QtGui.QApplication(sys.argv)
+        app.setQuitOnLastWindowClosed(False)
+        w = QtGui.QWidget()
+        icon_file = os.path.join(const.LOCATION, const.ICONO)
+        trayIcon = DBProtectorTrayIcon(QtGui.QIcon(icon_file), w)
+
+        trayIcon.show()
+        sys.exit(app.exec_())
+    else:
+        open_login("")
+except urllib2.URLError as err:
+    log = SetLog()
+    log.writeLocalLog("Error de conexion: " + str(err))
+    l = Login()
+    msg = '<div class="tile-wrap">' \
+          '<div class="tile tile-collapse tile-red">' \
+          '<div data-target="#ui_tile_example_red" data-toggle="tile">' \
+          '<div class="tile-inner">' \
+          '<div class="text-overflow">Error de conexion revise: ~/.dbprotector/log.txt</div>' \
+          '</div>' \
+          '</div>' \
+          '</div>' \
+          '</div>'
+    open_login(msg)

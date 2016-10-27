@@ -25,3 +25,5 @@ ICONO = "img/DB_Protector_16X16-01.png"
 STATUS_FILE = "settings/status.json"
 # tamano de las subidas maximo 150mb, recomendado 5
 CHUNK_SIZE = 1024 * 1024 * 5
+# Ubicacion del "log" local
+LOCAL_LOG = ".dbprotector/log.txt"

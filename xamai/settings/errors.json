@@ -31,5 +31,6 @@
   "delete_local_file": "Elimina archivo local",
   "delete_temporary_files": "Eliminando archivos temporales",
   "upload_start": "Comenzando subida...",
-  "start_download": "Comenzando descarga: "
+  "start_download": "Comenzando descarga: ",
+  "error_local_log": "Error al escribir logs locales"
 }

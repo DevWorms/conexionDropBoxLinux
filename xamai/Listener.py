@@ -1,5 +1,6 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 import os
 import thread
 import threading

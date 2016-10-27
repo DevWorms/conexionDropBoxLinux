@@ -99,14 +99,15 @@ class BackgroundProcess():
             entonces devuelve true, si no devuelve falso
         '''
          # Lista los procesos del sistema
-        if psutil.pids():
-            for proc in psutil.pids():
-                process = psutil.Process(proc)
-                # busca el proceso de respaldo, dentro de los procesos del sistema
-                if re.search(r"dbprotector_xamai", process.name()):
-                    # si el proceso esta en "running" o "waiting" porpone la subida del archivo
-                    if process.status() == "running" or process.status() == "waiting":
-                        proceso + 1
+        for proc in psutil.process_iter():
+            try:
+                pinfo = proc.as_dict(attrs=['pid', 'name'])
+            except psutil.NoSuchProcess:
+                pass
+            else:
+                if re.search(r"%s" % self.getProcessName(), pinfo['name']):
+                    proceso = proceso + 1
+
         if proceso > 0:
             return True
         else:

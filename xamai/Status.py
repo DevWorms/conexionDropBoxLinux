@@ -107,9 +107,9 @@ class Status():
                 # Realiza la peticion
                 req = urllib2.Request(url)
                 response = urllib2.urlopen(req)
-            except HTTPError as e:
+            except urllib2.HTTPError as e:
                 log.newLog(self.THIS_FILE + "." + "setUploadStatus()", "http_error", "E", 'Codigo: ', e.code)
-            except URLError as e:
+            except urllib2.URLError as e:
                 log.newLog(self.THIS_FILE + "." + "setUploadStatus()", "http_error", "E", 'Reason: ', e.reason)
 
     # cambia las unidades a porcentajes
@@ -183,9 +183,9 @@ class Status():
                     # Realiza la peticion
                     req = urllib2.Request(url)
                     response = urllib2.urlopen(req)
-                except HTTPError as e:
+                except urllib2.HTTPError as e:
                     log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "http_error", "E", 'Codigo: ', e.code)
-                except URLError as e:
+                except urllib2.URLError as e:
                     log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "http_error", "E", 'Reason: ', e.reason)
         else:
             log.newLog(self.THIS_FILE + "." + "setDownloadstatus()", "error_file_status", "E", "")
